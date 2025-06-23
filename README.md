@@ -1,7 +1,7 @@
 # Healing Stones
 
 <div align="center">
-    Puzzle2.jpg.jpeg <img src="ChoreoAI_Zixuan_Wang/assets/logo.png" width=90% />
+   <img src="humanai-foundation/HealingStones/blob/main/Puzzle2.jpg.jpeg" width=90% />
     Reconstructing Digitized Cultural Heritage Artifacts with Artificial Intelligence.
 
 </div>
