@@ -1,7 +1,7 @@
 # Healing Stones
 
 <div align="center">
-   <img src="humanai-foundation/HealingStones/blob/main/Puzzle2.jpg.jpeg" width=90% />
+   <img src="Puzzle2.jpg.jpeg" width=30% />
     Reconstructing Digitized Cultural Heritage Artifacts with Artificial Intelligence.
 
 </div>
