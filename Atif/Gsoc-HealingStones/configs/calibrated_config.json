@@ -1,0 +1,65 @@
+{
+  "color_extraction": {
+    "color_tolerance": 0.4,
+    "min_cluster_size": 30,
+    "clustering_eps": 0.01,
+    "clustering_min_samples": 10,
+    "blue_range": {
+      "min": [
+        0,
+        7,
+        213
+      ],
+      "max": [
+        45,
+        67,
+        255
+      ]
+    },
+    "green_range": {
+      "min": [
+        0,
+        223,
+        0
+      ],
+      "max": [
+        52,
+        255,
+        34
+      ]
+    },
+    "red_range": {
+      "min": [
+        133,
+        0,
+        0
+      ],
+      "max": [
+        255,
+        220,
+        147
+      ]
+    }
+  },
+  "matching": {
+    "min_similarity": 0.5,
+    "use_optimal_matching": true,
+    "similarity_weights": {
+      "normal_similarity": 0.25,
+      "area_similarity": 0.15,
+      "shape_similarity": 0.2,
+      "curvature_similarity": 0.15,
+      "boundary_similarity": 0.15,
+      "size_similarity": 0.1
+    }
+  },
+  "alignment": {
+    "icp_max_iterations": 100,
+    "icp_threshold": 0.02,
+    "optimization_method": "BFGS"
+  },
+  "visualization": {
+    "show_step_by_step": false,
+    "save_images": true
+  }
+}
