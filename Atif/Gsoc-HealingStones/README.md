@@ -105,7 +105,7 @@ Latest reconstruction pipeline
 
 ## What’s Left to Do
 
-### 🎯 Immediate Priorities
+### Immediate Priorities
 
 1. **Deep Learning Integration**
     - Implement graph neural network for fragment relationship prediction
@@ -133,7 +133,7 @@ Latest reconstruction pipeline
 
 ## Key Challenges & Learnings
 
-### 🚧 Technical Challenges Overcome
+### Technical Challenges Overcome
 
 1. **Limited Dataset and Deep Learning Overfitting**
     - Extremely small dataset (only a few Mayan stele fragments available) caused severe overfitting in initial deep learning approaches
@@ -162,13 +162,13 @@ Latest reconstruction pipeline
     - **Solution**: Robust preprocessing pipeline with mesh validation and repair
     - **Learning**: Archaeological data has unique characteristics (weathering, scanning artifacts) requiring specialized handling
 
-### 💡 Archaeological Domain Insights
+### Archaeological Domain Insights
 
 1. **Break Surface Characteristics**: Real fractures don’t always have perfectly matching geometry due to weathering and material loss
 2. **Scale Considerations**: Fragment sizes vary dramatically, requiring scale-invariant features
 3. **Assembly Ambiguity**: Multiple valid local arrangements may exist, requiring global optimization
 
-### 🛠️ Software Engineering Learnings
+### Software Engineering Learnings
 
 1. **Modular Design Benefits**: Clean separation allowed rapid iteration on individual components
 2. **Configuration Management**: Essential for managing complex algorithmic parameter spaces
