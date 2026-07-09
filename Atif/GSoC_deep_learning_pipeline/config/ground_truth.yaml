@@ -1,0 +1,24 @@
+# Phase 3: Ground Truth Generation Configuration
+
+# Input directories (from Phase 1 and Phase 2)
+dataset_dir: dataset/
+patches_dir: patches/
+
+# Output directory
+output_dir: pairs/
+
+# Fragment adjacency threshold (from Phase 3.0.1 measurements)
+# Recommendation: 3.67 mm (3× mean point spacing of 1.22mm)
+adjacency_threshold_mm: 3.67
+
+# Contact region threshold
+# Points within this distance are considered part of contact region
+contact_threshold_mm: 3.0
+
+# Minimum contact overlap for positive pairs
+# Fraction of patch points that must be in contact region
+min_contact_overlap: 0.3
+
+# Positive:Negative ratio [hard_negative_ratio, random_negative_ratio]
+# Example: [1, 1] means 1× hard negatives and 1× random negatives per positive
+positive_negative_ratio: [1, 1]

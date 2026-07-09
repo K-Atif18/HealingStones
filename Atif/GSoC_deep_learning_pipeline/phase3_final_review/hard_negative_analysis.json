@@ -1,0 +1,57 @@
+{
+  "target_fragment": "fragment_caesar_fragment_1",
+  "n_patches": 1000,
+  "pipeline_stages": {
+    "stage1_all_pairs": 499500,
+    "stage2_after_distance_filter": 426409,
+    "stage3_after_overlap_filter_estimate": 426409,
+    "final_hard_negatives": 0
+  },
+  "diagnosis": {
+    "fragment_max_extent_mm": 62.7,
+    "distance_threshold_mm": 16.0,
+    "threshold_pct_of_extent": 25.5,
+    "mean_patches_within_threshold": 49.0,
+    "pct_close_pairs": 4.9,
+    "mean_overlap_in_far_pairs": 0.0,
+    "root_causes": []
+  },
+  "alternative_strategies": [
+    {
+      "name": "Relaxed same-fragment (distance 10mm, allow 10% overlap)",
+      "feasibility": "HIGH",
+      "rationale": "Lowering threshold to 10mm (1.25\u00d7 radius) significantly increases candidates. Allowing 10% source-index overlap retains distinctiveness while being achievable.",
+      "risk": "Partial overlap means some patch geometry is shared \u2014 mild label noise.",
+      "recommended": true
+    },
+    {
+      "name": "Cross-fragment wrong-zone (adjacent fragment, non-contact patches)",
+      "feasibility": "HIGH",
+      "rationale": "Take patch from contact zone of fragment A, pair with non-contact patch of adjacent fragment B. These are hard because they come from adjacent fragments but are geometrically misaligned.",
+      "risk": "Requires contact-zone labels to be accurate (which they are).",
+      "recommended": true
+    },
+    {
+      "name": "Curvature-similar patches from non-adjacent fragments",
+      "feasibility": "MEDIUM",
+      "rationale": "Find patches with similar normal_variance/curvature across non-adjacent fragments. These confuse the network because they look similar but never match.",
+      "risk": "Requires computing per-patch similarity without deep features (use geometry stats).",
+      "recommended": true
+    },
+    {
+      "name": "FPFH-similar patches",
+      "feasibility": "LOW (requires Phase 4)",
+      "rationale": "Best hard negatives but requires FPFH descriptors from Phase 4 first.",
+      "risk": "Circular dependency on Phase 4.",
+      "recommended": false
+    },
+    {
+      "name": "Symmetry-based (left/right face regions)",
+      "feasibility": "LOW",
+      "rationale": "Caesar bust may have near-symmetric regions. These are confusing.",
+      "risk": "Requires detecting symmetric regions \u2014 non-trivial.",
+      "recommended": false
+    }
+  ],
+  "recommendation": "Use strategy 1 (relaxed same-fragment) + strategy 2 (cross-fragment wrong-zone). These are achievable without Phase 4 and produce genuinely hard negatives."
+}

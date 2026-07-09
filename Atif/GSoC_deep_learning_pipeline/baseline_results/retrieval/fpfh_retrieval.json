@@ -1,0 +1,43 @@
+{
+  "pair_separability": {
+    "n_pairs_evaluated": 200000,
+    "n_positive": 99741,
+    "n_negative": 100259,
+    "roc_auc": 0.7082786978043327,
+    "average_precision": 0.7112167660185639,
+    "mean_distance_positive": 0.4073382132443678,
+    "mean_distance_negative": 0.5531496071294053,
+    "stratified": {
+      "high_overlap_positives": {
+        "n_positive": 37018,
+        "roc_auc": 0.735767433555692,
+        "average_precision": 0.5543897206573855
+      },
+      "low_overlap_positives": {
+        "n_positive": 10443,
+        "roc_auc": 0.707222614027199,
+        "average_precision": 0.23220567398971886
+      },
+      "high_overlap_threshold": 0.6,
+      "low_overlap_threshold": 0.35,
+      "note": "High-overlap positives straddle the break surface (complementary geometry); a lower AUC here than for low-overlap positives is the expected similarity-vs-complementarity blind spot."
+    }
+  },
+  "ranking": {
+    "n_queries": 800,
+    "gallery_size": 6822,
+    "mAP": 0.10939850865058914,
+    "precision_at_k": {
+      "1": 0.13,
+      "5": 0.12275,
+      "10": 0.120125,
+      "20": 0.11625
+    },
+    "recall_at_k": {
+      "1": 0.00042236742672015096,
+      "5": 0.002014530232863716,
+      "10": 0.004025274522448655,
+      "20": 0.007934765631277424
+    }
+  }
+}

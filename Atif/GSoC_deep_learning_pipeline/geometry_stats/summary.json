@@ -1,0 +1,30 @@
+{
+  "fragment_count": 7,
+  "total_points": 16835,
+  "point_spacing": {
+    "mean_across_fragments_mm": 1.223985072230938,
+    "std_across_fragments_mm": 0.024715433826532907,
+    "min_mm": 1.1853809609370787,
+    "max_mm": 1.2680703990919768
+  },
+  "curvature": {
+    "mean_across_fragments": 0.22289714149837203,
+    "std_across_fragments": 0.04584461942310061,
+    "min": 0.1732997343801825,
+    "max": 0.3219363626843237
+  },
+  "normal_variance": {
+    "mean_across_fragments": 0.10112484720566296,
+    "std_across_fragments": 0.03764791207352542,
+    "min": 0.04978541626896656,
+    "max": 0.1788432754742327
+  },
+  "recommendations": {
+    "adjacency_threshold_mm": {
+      "conservative": 2.447970144461876,
+      "moderate": 3.671955216692814,
+      "inclusive": 6.11992536115469,
+      "reasoning": "Based on 2\u00d7, 3\u00d7, 5\u00d7 mean point spacing"
+    }
+  }
+}

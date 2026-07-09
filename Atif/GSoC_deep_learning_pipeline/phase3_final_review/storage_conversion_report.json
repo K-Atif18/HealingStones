@@ -1,0 +1,46 @@
+{
+  "json_sizes_mb": {
+    "positive_pairs": 405.5,
+    "random_negative_pairs": 393.9,
+    "hard_negative_pairs": 0.0,
+    "total": 799.4
+  },
+  "npz_output": {
+    "path": "/home/kira/Desktop/Healing_Stones/phase3_final_review/pairs.npz",
+    "size_mb": 7.6,
+    "compression_ratio": 104.7
+  },
+  "timing": {
+    "json_load_seconds": 6.8,
+    "npz_load_seconds": 0.0,
+    "load_speedup_x": 676.0
+  },
+  "pair_counts": {
+    "positive": 719279,
+    "random_negative": 719270,
+    "hard_negative": 0,
+    "total": 1438549
+  },
+  "fragment_vocabulary": [
+    "fragment_caesar_fragment_1",
+    "fragment_caesar_fragment_2",
+    "fragment_caesar_fragment_3",
+    "fragment_caesar_fragment_4",
+    "fragment_caesar_fragment_5",
+    "fragment_caesar_fragment_6",
+    "fragment_caesar_fragment_7"
+  ],
+  "array_schema": {
+    "fragment_vocab": "str array of fragment IDs (index mapping)",
+    "fragment_A_idx": "int8 \u2014 index into fragment_vocab",
+    "fragment_B_idx": "int8 \u2014 index into fragment_vocab",
+    "patch_A_ids": "int32 \u2014 patch ID within fragment A",
+    "patch_B_ids": "int32 \u2014 patch ID within fragment B",
+    "labels": "int8 \u2014 1=positive, -1=random_neg, -2=hard_neg",
+    "contact_overlap_A": "float32 \u2014 fraction of patch A in contact zone",
+    "contact_overlap_B": "float32 \u2014 fraction of patch B in contact zone",
+    "center_dist_mm": "float32 \u2014 Euclidean distance between patch centres"
+  },
+  "integrity_check": "PASSED",
+  "recommendation": "Use pairs.npz exclusively for Phase 5 training. Original JSON files may be retained as backup but should NOT be loaded during training due to 50\u00d7+ slower load time."
+}

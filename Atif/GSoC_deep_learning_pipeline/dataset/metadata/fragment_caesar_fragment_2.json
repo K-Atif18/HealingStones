@@ -1,0 +1,32 @@
+{
+  "fragment_id": "fragment_caesar_fragment_2",
+  "source_filename": "caesar_fragment_2.ply",
+  "units": "mm",
+  "vertex_count": 194369,
+  "face_count": 388734,
+  "point_count_after_normalization": 2376,
+  "is_empty": false,
+  "transform_file": "transforms/fragment_caesar_fragment_2.txt",
+  "alignment_method": "imported",
+  "voxel_size_mm": 1.5,
+  "alignment_error": {
+    "inlier_rmse_mm": 0.8154277073379292,
+    "fitness": 0.7425028835063437,
+    "mean_surface_distance_mm": 2.753566753926382
+  },
+  "flagged_for_review": false,
+  "skipped": false,
+  "failure_reason": null,
+  "degenerate_normal_count": 0,
+  "centering_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "scale_factor": 1.0,
+  "artifact_paths": {
+    "aligned": "fragments/fragment_caesar_fragment_2.ply",
+    "normals": "normals/fragment_caesar_fragment_2.ply",
+    "normalized": "normalized/fragment_caesar_fragment_2.ply"
+  }
+}

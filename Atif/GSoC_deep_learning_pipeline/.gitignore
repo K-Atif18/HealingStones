@@ -1,0 +1,41 @@
+# ─── Python ──────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+
+# ─── Test / tooling caches ───────────────────────────────────────────────────
+.pytest_cache/
+.hypothesis/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# ─── Editor / OS ─────────────────────────────────────────────────────────────
+.kiro/
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# ─── Large / redundant data artifacts (exceed GitHub's 100 MB limit) ─────────
+# The giant Phase 3 JSON pair dumps are redundant: the canonical, compact
+# labelled-pair table is phase3_final_review/pairs.npz (7.6 MB), which IS
+# tracked. Regenerate the JSON with scripts/phase3_pipeline.py if ever needed.
+pairs/positive_pairs.json
+pairs/random_negative_pairs.json
+pairs/hard_negative_pairs.json
+
+# Config backups
+config/*.bak.*
+
+# ─── Source meshes excluded (kept out of the repo by request) ────────────────
+# The raw scans in data/ total ~99 MB. They are inputs, not outputs, and are
+# distributed separately. Place them in data/ locally to run the pipeline.
+data/*.ply

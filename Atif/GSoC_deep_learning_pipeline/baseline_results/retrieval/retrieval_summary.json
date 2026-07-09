@@ -1,0 +1,18 @@
+{
+  "fpfh": {
+    "roc_auc": 0.7082786978043327,
+    "average_precision": 0.7112167660185639,
+    "mAP": 0.10939850865058914,
+    "precision_at_1": 0.13,
+    "high_overlap_auc": 0.735767433555692,
+    "low_overlap_auc": 0.707222614027199
+  },
+  "shot": {
+    "roc_auc": 0.5361724232982328,
+    "average_precision": 0.5682776870904058,
+    "mAP": 0.08582262412626047,
+    "precision_at_1": 0.1125,
+    "high_overlap_auc": 0.5844602104516022,
+    "low_overlap_auc": 0.557560478353404
+  }
+}

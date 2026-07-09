@@ -1,0 +1,9 @@
+{
+  "adjacency_threshold_mm": {
+    "conservative": 2.447970144461876,
+    "moderate": 3.671955216692814,
+    "inclusive": 6.11992536115469,
+    "reasoning": "Based on 2\u00d7, 3\u00d7, 5\u00d7 mean point spacing",
+    "suggested_with_alignment_error": 13.80322960760328
+  }
+}

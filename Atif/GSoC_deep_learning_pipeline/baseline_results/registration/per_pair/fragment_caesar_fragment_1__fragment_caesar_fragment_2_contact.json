@@ -1,0 +1,11 @@
+{
+  "fragment_A": "fragment_caesar_fragment_1",
+  "fragment_B": "fragment_caesar_fragment_2",
+  "is_adjacent": true,
+  "rotation_error_deg": 0.4372844807599624,
+  "translation_error_mm": 0.5558571825137013,
+  "fitness": 1.0,
+  "inlier_rmse": 0.9664564538454976,
+  "n_correspondences": 552,
+  "success": true
+}

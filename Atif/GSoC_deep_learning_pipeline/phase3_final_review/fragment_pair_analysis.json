@@ -1,0 +1,169 @@
+{
+  "adjacent_pairs_count": 11,
+  "total_positive_pairs": 719279,
+  "pairs_ranked_by_info": [
+    {
+      "fragment_A": "fragment_5",
+      "fragment_B": "fragment_6",
+      "contact_points_A": 233,
+      "contact_points_B": 229,
+      "contact_patches_A": 115,
+      "contact_patches_B": 356,
+      "positive_pairs": 40940,
+      "mean_distinctiveness": 0.7475,
+      "ambiguity_ratio": 0.0085,
+      "information_content": 4.5946
+    },
+    {
+      "fragment_A": "fragment_6",
+      "fragment_B": "fragment_7",
+      "contact_points_A": 397,
+      "contact_points_B": 411,
+      "contact_patches_A": 618,
+      "contact_patches_B": 347,
+      "positive_pairs": 214446,
+      "mean_distinctiveness": 0.7116,
+      "ambiguity_ratio": 0.1026,
+      "information_content": 4.3233
+    },
+    {
+      "fragment_A": "fragment_1",
+      "fragment_B": "fragment_5",
+      "contact_points_A": 381,
+      "contact_points_B": 407,
+      "contact_patches_A": 187,
+      "contact_patches_B": 208,
+      "positive_pairs": 38896,
+      "mean_distinctiveness": 0.6609,
+      "ambiguity_ratio": 0.1241,
+      "information_content": 3.9061
+    },
+    {
+      "fragment_A": "fragment_1",
+      "fragment_B": "fragment_3",
+      "contact_points_A": 83,
+      "contact_points_B": 82,
+      "contact_patches_A": 36,
+      "contact_patches_B": 66,
+      "positive_pairs": 2376,
+      "mean_distinctiveness": 0.7307,
+      "ambiguity_ratio": 0.0196,
+      "information_content": 3.6995
+    },
+    {
+      "fragment_A": "fragment_3",
+      "fragment_B": "fragment_4",
+      "contact_points_A": 411,
+      "contact_points_B": 390,
+      "contact_patches_A": 304,
+      "contact_patches_B": 127,
+      "positive_pairs": 38608,
+      "mean_distinctiveness": 0.6021,
+      "ambiguity_ratio": 0.1299,
+      "information_content": 3.5436
+    },
+    {
+      "fragment_A": "fragment_2",
+      "fragment_B": "fragment_3",
+      "contact_points_A": 495,
+      "contact_points_B": 507,
+      "contact_patches_A": 279,
+      "contact_patches_B": 373,
+      "positive_pairs": 104067,
+      "mean_distinctiveness": 0.5887,
+      "ambiguity_ratio": 0.1641,
+      "information_content": 3.4415
+    },
+    {
+      "fragment_A": "fragment_2",
+      "fragment_B": "fragment_4",
+      "contact_points_A": 81,
+      "contact_points_B": 77,
+      "contact_patches_A": 44,
+      "contact_patches_B": 28,
+      "positive_pairs": 1232,
+      "mean_distinctiveness": 0.6796,
+      "ambiguity_ratio": 0.0417,
+      "information_content": 3.3357
+    },
+    {
+      "fragment_A": "fragment_1",
+      "fragment_B": "fragment_2",
+      "contact_points_A": 540,
+      "contact_points_B": 552,
+      "contact_patches_A": 241,
+      "contact_patches_B": 304,
+      "positive_pairs": 73264,
+      "mean_distinctiveness": 0.5645,
+      "ambiguity_ratio": 0.2018,
+      "information_content": 3.1921
+    },
+    {
+      "fragment_A": "fragment_1",
+      "fragment_B": "fragment_4",
+      "contact_points_A": 906,
+      "contact_points_B": 938,
+      "contact_patches_A": 410,
+      "contact_patches_B": 266,
+      "positive_pairs": 109060,
+      "mean_distinctiveness": 0.5488,
+      "ambiguity_ratio": 0.2574,
+      "information_content": 3.1058
+    },
+    {
+      "fragment_A": "fragment_4",
+      "fragment_B": "fragment_5",
+      "contact_points_A": 830,
+      "contact_points_B": 836,
+      "contact_patches_A": 238,
+      "contact_patches_B": 405,
+      "positive_pairs": 96390,
+      "mean_distinctiveness": 0.544,
+      "ambiguity_ratio": 0.3048,
+      "information_content": 2.8459
+    },
+    {
+      "fragment_A": "fragment_5",
+      "fragment_B": "fragment_7",
+      "contact_points_A": 5,
+      "contact_points_B": 7,
+      "contact_patches_A": 0,
+      "contact_patches_B": 0,
+      "positive_pairs": 0,
+      "mean_distinctiveness": 0.0,
+      "ambiguity_ratio": 0.0,
+      "information_content": 0.0
+    }
+  ],
+  "most_informative": {
+    "fragment_A": "fragment_5",
+    "fragment_B": "fragment_6",
+    "contact_points_A": 233,
+    "contact_points_B": 229,
+    "contact_patches_A": 115,
+    "contact_patches_B": 356,
+    "positive_pairs": 40940,
+    "mean_distinctiveness": 0.7475,
+    "ambiguity_ratio": 0.0085,
+    "information_content": 4.5946
+  },
+  "least_informative": {
+    "fragment_A": "fragment_5",
+    "fragment_B": "fragment_7",
+    "contact_points_A": 5,
+    "contact_points_B": 7,
+    "contact_patches_A": 0,
+    "contact_patches_B": 0,
+    "positive_pairs": 0,
+    "mean_distinctiveness": 0.0,
+    "ambiguity_ratio": 0.0,
+    "information_content": 0.0
+  },
+  "imbalance_analysis": {
+    "max_pairs": 214446,
+    "min_pairs": 0,
+    "ratio_max_to_min": 214446.0,
+    "recommended_cap_per_pair": 50000,
+    "note": "Without a cap, training will overfit to pairs with large contact regions"
+  }
+}

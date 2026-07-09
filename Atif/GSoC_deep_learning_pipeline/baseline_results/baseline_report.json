@@ -1,0 +1,57 @@
+{
+  "phase": "Phase 4: Baseline Geometry",
+  "run_timestamp": "2026-07-09T18:41:11.712722+00:00",
+  "config_used": "dataset_dir: dataset/\ndescriptors:\n- fpfh\n- shot\nfpfh_max_nn: 100\nfpfh_radius_mm: 8.0\nicp_max_corr_dist_mm: 3.0\nicp_max_iterations: 50\nmin_pair_auc: 0.5\nnormal_max_nn: 30\nnormal_radius_mm: 4.0\noutput_dir: baseline_results/\npair_auc_sample: 200000\npairs_dataset_json: pairs/dataset.json\npairs_npz: phase3_final_review/pairs.npz\npatch_pooling: mean\npatches_dir: patches/\nperturb_max_rotation_deg: 30.0\nperturb_max_translation_mm: 20.0\nperturb_seed: 42\nransac_confidence: 0.999\nransac_max_corr_dist_mm: 3.0\nransac_max_iterations: 100000\nransac_n: 4\nregistration_descriptor: fpfh\nregistration_voxel_mm: 1.5\nretrieval_k_values:\n- 1\n- 5\n- 10\n- 20\nretrieval_query_sample: 800\nshot_cos_bins: 11\nshot_radius_mm: 8.0\nsuccess_rotation_deg: 15.0\nsuccess_translation_mm: 10.0\n",
+  "fragment_ids": [
+    "fragment_caesar_fragment_1",
+    "fragment_caesar_fragment_2",
+    "fragment_caesar_fragment_3",
+    "fragment_caesar_fragment_4",
+    "fragment_caesar_fragment_5",
+    "fragment_caesar_fragment_6",
+    "fragment_caesar_fragment_7"
+  ],
+  "stages_run": [
+    "registration"
+  ],
+  "registration": {
+    "adjacent_global_summary": {
+      "n": 11,
+      "success_rate": 0.0,
+      "median_rotation_error_deg": 118.53450141484005,
+      "median_translation_error_mm": 35.08633928088103,
+      "mean_fitness": 0.5612008769845627,
+      "mean_inlier_rmse": 1.381968239344176
+    },
+    "adjacent_contact_summary": {
+      "n": 11,
+      "success_rate": 0.9090909090909091,
+      "median_rotation_error_deg": 1.5262713085706634,
+      "median_translation_error_mm": 1.6210536052100937,
+      "mean_fitness": 0.9987003082790885,
+      "mean_inlier_rmse": 0.9863809354895998
+    },
+    "control_summary": {
+      "n": 6,
+      "success_rate": 0.0,
+      "median_rotation_error_deg": 146.28855058222567,
+      "median_translation_error_mm": 78.22412024687057,
+      "mean_fitness": 0.6274201152013631,
+      "mean_inlier_rmse": 1.2533795055314905
+    }
+  },
+  "validation": {
+    "passed": true,
+    "checks": [
+      {
+        "check": "registration_adjacent_contact>control",
+        "value": {
+          "adjacent_contact": 0.9090909090909091,
+          "control": 0.0
+        },
+        "passed": true
+      }
+    ],
+    "note": "The gate confirms the baseline is a trustworthy reference point (beats chance; adjacent registration separable from control). It does NOT mean the baseline is sufficient for assembly -- the similarity-vs-complementarity gap in the stratified retrieval metrics is the expected limitation motivating later phases."
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "fragment_A": "fragment_caesar_fragment_5",
+  "fragment_B": "fragment_caesar_fragment_7",
+  "contact_counts_by_threshold": {
+    "1.0": {
+      "A": 0,
+      "B": 0
+    },
+    "2.0": {
+      "A": 0,
+      "B": 0
+    },
+    "3.0": {
+      "A": 5,
+      "B": 7
+    },
+    "4.0": {
+      "A": 22,
+      "B": 27
+    },
+    "5.0": {
+      "A": 43,
+      "B": 52
+    },
+    "7.0": {
+      "A": 106,
+      "B": 116
+    },
+    "10.0": {
+      "A": 218,
+      "B": 244
+    },
+    "15.0": {
+      "A": 402,
+      "B": 499
+    }
+  },
+  "contact_region_3mm": {
+    "contact_pts_A": 5,
+    "contact_pts_B": 7,
+    "spatial_spread_mm": [
+      3.23,
+      6.11,
+      5.9
+    ],
+    "max_extent_mm": 6.11
+  },
+  "contact_type": "edge_contact",
+  "contact_description": "Edge contact \u2014 smaller than one patch radius",
+  "zero_pairs_is_correct": true,
+  "reason": "Contact region contains only 5-7 points (< 1 patch size of ~100 pts). No patch can have 30% of its points in this region. This is mathematically correct behaviour, not a bug.",
+  "patches_with_contact_overlap_30pct": {
+    "fragment_5": 0,
+    "fragment_7": 0
+  },
+  "recommendation": "Do NOT lower the overlap threshold to generate pairs for this pair. The contact is a corner/edge touch that is not matchable by local patch geometry. Including this pair with a lower threshold would introduce noise."
+}

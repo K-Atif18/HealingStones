@@ -1,0 +1,86 @@
+# Phase 4: Baseline Geometry Configuration
+#
+# Establishes non-learning descriptor + registration + retrieval baselines on the
+# Phase 1 fragments, Phase 2 patches, and Phase 3 ground-truth pairs. All distances
+# are in millimetres, in the Phase 1 ground-truth assembled coordinate frame.
+
+# ---------------------------------------------------------------------------
+# Inputs (produced by Phases 1-3)
+# ---------------------------------------------------------------------------
+dataset_dir: dataset/                       # Phase 1 normalized clouds + metadata
+patches_dir: patches/                       # Phase 2 patch archives
+pairs_npz: phase3_final_review/pairs.npz     # Phase 3 compact labelled pairs
+pairs_dataset_json: pairs/dataset.json       # Phase 3 adjacency summary (registration GT)
+
+# Output root
+output_dir: baseline_results/
+
+# ---------------------------------------------------------------------------
+# Descriptors
+# ---------------------------------------------------------------------------
+# Which descriptors to compute/evaluate. Any subset of ["fpfh", "shot"].
+descriptors: [fpfh, shot]
+
+# FPFH support radius (mm). Tied to the Phase 2 patch radius (8 mm) so the
+# descriptor's support matches the patch scale. max_nn caps the neighbourhood.
+fpfh_radius_mm: 8.0
+fpfh_max_nn: 100
+
+# Normal-estimation radius used only if a cloud lacks usable normals (mm).
+# The Phase 1 normalized clouds already carry normals, so this is a fallback.
+normal_radius_mm: 4.0
+normal_max_nn: 30
+
+# SHOT support radius (mm) and histogram resolution. The canonical SHOT uses
+# 32 spatial volumes (8 azimuth x 2 elevation x 2 radial) each with an 11-bin
+# cosine histogram -> 352 dims.
+shot_radius_mm: 8.0
+shot_cos_bins: 11
+
+# Patch-level pooling of the point-wise descriptors: "mean" (whole-patch
+# signature) or "center" (descriptor at the patch centre point only).
+patch_pooling: mean
+
+# ---------------------------------------------------------------------------
+# Retrieval experiment
+# ---------------------------------------------------------------------------
+# Cross-fragment retrieval only (a patch never retrieves patches from its own
+# fragment). K values for Precision@K / Recall@K.
+retrieval_k_values: [1, 5, 10, 20]
+# Number of query patches sampled for the ranking metrics (0 = use all patches
+# that participate in >=1 positive pair). Sampling keeps runtime bounded.
+retrieval_query_sample: 800
+# Number of positive / negative pairs sampled from pairs.npz for the pair-level
+# ROC-AUC / average-precision metric (0 = use all).
+pair_auc_sample: 200000
+
+# ---------------------------------------------------------------------------
+# Registration experiment
+# ---------------------------------------------------------------------------
+# For each adjacent pair we perturb fragment B by a known random rigid transform
+# and try to recover it with FPFH+RANSAC+ICP. Ground-truth recovery = inverse of
+# the perturbation (fragments are already in the assembled frame). Non-adjacent
+# pairs are run as a control (registration is expected to fail on them).
+registration_descriptor: fpfh              # descriptor used for correspondences
+perturb_max_rotation_deg: 30.0
+perturb_max_translation_mm: 20.0
+perturb_seed: 42
+
+# Voxel size (mm) for downsampling clouds before RANSAC (keeps it fast/stable).
+registration_voxel_mm: 1.5
+# RANSAC correspondence distance (mm) and iteration budget.
+ransac_max_corr_dist_mm: 3.0
+ransac_n: 4
+ransac_max_iterations: 100000
+ransac_confidence: 0.999
+# ICP refinement correspondence distance (mm).
+icp_max_corr_dist_mm: 3.0
+icp_max_iterations: 50
+# A registration counts as "successful recovery" when both thresholds are met.
+success_rotation_deg: 15.0
+success_translation_mm: 10.0
+
+# ---------------------------------------------------------------------------
+# Validation gate
+# ---------------------------------------------------------------------------
+min_pair_auc: 0.5          # baseline must beat chance

@@ -1,0 +1,30 @@
+{
+  "fragment_A_id": "fragment_caesar_fragment_1",
+  "fragment_B_id": "fragment_caesar_fragment_5",
+  "min_distance_mm": 0.11747844602991124,
+  "mean_distance_mm": 22.63623573755509,
+  "median_distance_mm": 23.31096088711172,
+  "contact_counts_at_thresholds": {
+    "1.0": [
+      248,
+      260
+    ],
+    "2.0": [
+      330,
+      347
+    ],
+    "3.0": [
+      381,
+      407
+    ],
+    "5.0": [
+      493,
+      546
+    ],
+    "10.0": [
+      768,
+      906
+    ]
+  },
+  "adjacency_category": "adjacent"
+}

@@ -1,0 +1,83 @@
+{
+  "config": {
+    "dataset_dir": "dataset/",
+    "patches_dir": "patches/",
+    "output_dir": "pairs/",
+    "adjacency_threshold_mm": 3.67,
+    "contact_threshold_mm": 3.0,
+    "min_contact_overlap": 0.3,
+    "positive_negative_ratio": [
+      1,
+      1
+    ]
+  },
+  "fragment_count": 7,
+  "fragment_ids": [
+    "fragment_caesar_fragment_1",
+    "fragment_caesar_fragment_2",
+    "fragment_caesar_fragment_3",
+    "fragment_caesar_fragment_4",
+    "fragment_caesar_fragment_5",
+    "fragment_caesar_fragment_6",
+    "fragment_caesar_fragment_7"
+  ],
+  "fragment_pairs_analyzed": 21,
+  "adjacent_pairs": 11,
+  "adjacent_pair_ids": [
+    [
+      "fragment_caesar_fragment_1",
+      "fragment_caesar_fragment_2"
+    ],
+    [
+      "fragment_caesar_fragment_1",
+      "fragment_caesar_fragment_3"
+    ],
+    [
+      "fragment_caesar_fragment_1",
+      "fragment_caesar_fragment_4"
+    ],
+    [
+      "fragment_caesar_fragment_1",
+      "fragment_caesar_fragment_5"
+    ],
+    [
+      "fragment_caesar_fragment_2",
+      "fragment_caesar_fragment_3"
+    ],
+    [
+      "fragment_caesar_fragment_2",
+      "fragment_caesar_fragment_4"
+    ],
+    [
+      "fragment_caesar_fragment_3",
+      "fragment_caesar_fragment_4"
+    ],
+    [
+      "fragment_caesar_fragment_4",
+      "fragment_caesar_fragment_5"
+    ],
+    [
+      "fragment_caesar_fragment_5",
+      "fragment_caesar_fragment_6"
+    ],
+    [
+      "fragment_caesar_fragment_5",
+      "fragment_caesar_fragment_7"
+    ],
+    [
+      "fragment_caesar_fragment_6",
+      "fragment_caesar_fragment_7"
+    ]
+  ],
+  "pair_counts": {
+    "positive": 719279,
+    "hard_negative": 0,
+    "random_negative": 719270,
+    "total": 1438549
+  },
+  "ratios": {
+    "positive": 0.5000031281520476,
+    "hard_negative": 0.0,
+    "random_negative": 0.49999687184795233
+  }
+}

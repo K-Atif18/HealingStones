@@ -1,0 +1,109 @@
+full_model_path: data/caesar_full_model.ply
+fragment_paths:
+- data/caesar_fragment_1.ply
+- data/caesar_fragment_2.ply
+- data/caesar_fragment_3.ply
+- data/caesar_fragment_4.ply
+- data/caesar_fragment_5.ply
+- data/caesar_fragment_6.ply
+- data/caesar_fragment_7.ply
+dataset_dir: dataset/
+voxel_size_mm: 1.5
+target_density_pts_per_mm3: 1.0
+normal_params:
+  search_radius_mm: 3.0
+  max_neighbors: 30
+  orientation_neighbors: 15
+registration_params:
+  feature_voxel_size_mm: 2.5
+  fpfh_radius_mm: 12.5
+  fpfh_max_neighbors: 100
+  normal_radius_mm: 5.0
+  ransac_distance_mm: 3.75
+  ransac_max_iterations: 400000
+  ransac_confidence: 0.999
+  icp_max_distance_mm: 2.0
+  icp_max_iterations: 60
+  seed: 42
+alignment_error_threshold_mm: 5.0
+correspondence_distance_mm: 3.0
+reconstruction_error_threshold_mm: 5.0
+centering_enabled: false
+centering_offset:
+- 0.0
+- 0.0
+- 0.0
+scaling_enabled: false
+scale_factor: 1.0
+precomputed_transforms:
+  fragment_caesar_fragment_2:
+  - - 0.1239448127363449
+    - -0.7604304570803965
+    - 0.6374819239321606
+    - -1.3055570896100297
+  - - 0.5039807640807349
+    - 0.6016474967408596
+    - 0.6196964410919725
+    - 1.9749411729594664
+  - - -0.8547754517020004
+    - 0.24447046776646136
+    - 0.457813409106477
+    - -19.16056880227748
+  - - 0.0
+    - 0.0
+    - 0.0
+    - 1.0
+  fragment_caesar_fragment_3:
+  - - 0.19659212937002019
+    - -0.6542184211473094
+    - 0.7303080118013748
+    - 23.58332456146354
+  - - 0.47181642957833075
+    - 0.7160567497339042
+    - 0.5144433768068886
+    - 4.133460205926561
+  - - -0.8595003149794148
+    - 0.2434357997338046
+    - 0.44944212081006124
+    - -17.68905664864969
+  - - 0.0
+    - 0.0
+    - 0.0
+    - 1.0
+  fragment_caesar_fragment_6:
+  - - 0.29817171016508426
+    - -0.9463493338671679
+    - -0.12456552310488722
+    - -4.709792417211246
+  - - -0.839823042804737
+    - -0.19807909476987284
+    - -0.5054324178259084
+    - 73.93823413323267
+  - - 0.4536418058682692
+    - 0.2553186450385336
+    - -0.8538275595600424
+    - 19.434439315285967
+  - - 0.0
+    - 0.0
+    - 0.0
+    - 1.0
+  fragment_caesar_fragment_1:
+  - - -0.37634618419458843
+    - -0.7043100282071538
+    - 0.6019226975359987
+    - -13.92753116115375
+  - - 0.8112211070621951
+    - -0.5643352494992493
+    - -0.15312100322754396
+    - 20.808634454309864
+  - - 0.44753085379553714
+    - 0.43066589177628034
+    - 0.7837365785527532
+    - 0.6001513264348228
+  - - 0.0
+    - 0.0
+    - 0.0
+    - 1.0
+image_output_path: dataset/visualization.png
+image_width: 1920
+image_height: 1080

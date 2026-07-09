@@ -1,0 +1,352 @@
+[
+  {
+    "fpfh_distance": 0.03549347630964067,
+    "fragment_A": "fragment_caesar_fragment_2",
+    "patch_A": 653,
+    "fragment_B": "fragment_caesar_fragment_5",
+    "patch_B": 481
+  },
+  {
+    "fpfh_distance": 0.038416457892019105,
+    "fragment_A": "fragment_caesar_fragment_3",
+    "patch_A": 382,
+    "fragment_B": "fragment_caesar_fragment_7",
+    "patch_B": 131
+  },
+  {
+    "fpfh_distance": 0.03920690743417036,
+    "fragment_A": "fragment_caesar_fragment_2",
+    "patch_A": 558,
+    "fragment_B": "fragment_caesar_fragment_5",
+    "patch_B": 248
+  },
+  {
+    "fpfh_distance": 0.040673666675077935,
+    "fragment_A": "fragment_caesar_fragment_2",
+    "patch_A": 486,
+    "fragment_B": "fragment_caesar_fragment_5",
+    "patch_B": 117
+  },
+  {
+    "fpfh_distance": 0.040696476795231445,
+    "fragment_A": "fragment_caesar_fragment_4",
+    "patch_A": 19,
+    "fragment_B": "fragment_caesar_fragment_7",
+    "patch_B": 58
+  },
+  {
+    "fpfh_distance": 0.04091227581248743,
+    "fragment_A": "fragment_caesar_fragment_4",
+    "patch_A": 358,
+    "fragment_B": "fragment_caesar_fragment_7",
+    "patch_B": 932
+  },
+  {
+    "fpfh_distance": 0.04312457203999203,
+    "fragment_A": "fragment_caesar_fragment_2",
+    "patch_A": 351,
+    "fragment_B": "fragment_caesar_fragment_5",
+    "patch_B": 214
+  },
+  {
+    "fpfh_distance": 0.04439889909337565,
+    "fragment_A": "fragment_caesar_fragment_4",
+    "patch_A": 535,
+    "fragment_B": "fragment_caesar_fragment_7",
+    "patch_B": 967
+  },
+  {
+    "fpfh_distance": 0.045451973516278756,
+    "fragment_A": "fragment_caesar_fragment_2",
+    "patch_A": 486,
+    "fragment_B": "fragment_caesar_fragment_5",
+    "patch_B": 248
+  },
+  {
+    "fpfh_distance": 0.04641660151987252,
+    "fragment_A": "fragment_caesar_fragment_1",
+    "patch_A": 933,
+    "fragment_B": "fragment_caesar_fragment_7",
+    "patch_B": 753
+  },
+  {
+    "fpfh_distance": 0.04694777015484427,
+    "fragment_A": "fragment_caesar_fragment_3",
+    "patch_A": 289,
+    "fragment_B": "fragment_caesar_fragment_5",
+    "patch_B": 462
+  },
+  {
+    "fpfh_distance": 0.0480330515732107,
+    "fragment_A": "fragment_caesar_fragment_3",
+    "patch_A": 523,
+    "fragment_B": "fragment_caesar_fragment_5",
+    "patch_B": 462
+  },
+  {
+    "fpfh_distance": 0.04803665130639838,
+    "fragment_A": "fragment_caesar_fragment_3",
+    "patch_A": 427,
+    "fragment_B": "fragment_caesar_fragment_5",
+    "patch_B": 462
+  },
+  {
+    "fpfh_distance": 0.049135920716340736,
+    "fragment_A": "fragment_caesar_fragment_3",
+    "patch_A": 748,
+    "fragment_B": "fragment_caesar_fragment_5",
+    "patch_B": 462
+  },
+  {
+    "fpfh_distance": 0.0492724984445027,
+    "fragment_A": "fragment_caesar_fragment_3",
+    "patch_A": 39,
+    "fragment_B": "fragment_caesar_fragment_5",
+    "patch_B": 462
+  },
+  {
+    "fpfh_distance": 0.05275738750122094,
+    "fragment_A": "fragment_caesar_fragment_4",
+    "patch_A": 19,
+    "fragment_B": "fragment_caesar_fragment_7",
+    "patch_B": 183
+  },
+  {
+    "fpfh_distance": 0.053613216597004174,
+    "fragment_A": "fragment_caesar_fragment_4",
+    "patch_A": 518,
+    "fragment_B": "fragment_caesar_fragment_7",
+    "patch_B": 581
+  },
+  {
+    "fpfh_distance": 0.05447167231006363,
+    "fragment_A": "fragment_caesar_fragment_3",
+    "patch_A": 754,
+    "fragment_B": "fragment_caesar_fragment_7",
+    "patch_B": 648
+  },
+  {
+    "fpfh_distance": 0.05486536934687145,
+    "fragment_A": "fragment_caesar_fragment_1",
+    "patch_A": 887,
+    "fragment_B": "fragment_caesar_fragment_7",
+    "patch_B": 339
+  },
+  {
+    "fpfh_distance": 0.057444413854188636,
+    "fragment_A": "fragment_caesar_fragment_3",
+    "patch_A": 26,
+    "fragment_B": "fragment_caesar_fragment_7",
+    "patch_B": 648
+  },
+  {
+    "fpfh_distance": 0.0592806668024738,
+    "fragment_A": "fragment_caesar_fragment_2",
+    "patch_A": 12,
+    "fragment_B": "fragment_caesar_fragment_7",
+    "patch_B": 19
+  },
+  {
+    "fpfh_distance": 0.06078019973375667,
+    "fragment_A": "fragment_caesar_fragment_1",
+    "patch_A": 528,
+    "fragment_B": "fragment_caesar_fragment_7",
+    "patch_B": 753
+  },
+  {
+    "fpfh_distance": 0.06304584157398746,
+    "fragment_A": "fragment_caesar_fragment_2",
+    "patch_A": 698,
+    "fragment_B": "fragment_caesar_fragment_7",
+    "patch_B": 166
+  },
+  {
+    "fpfh_distance": 0.06437628894199939,
+    "fragment_A": "fragment_caesar_fragment_1",
+    "patch_A": 887,
+    "fragment_B": "fragment_caesar_fragment_7",
+    "patch_B": 221
+  },
+  {
+    "fpfh_distance": 0.06447395021166746,
+    "fragment_A": "fragment_caesar_fragment_1",
+    "patch_A": 933,
+    "fragment_B": "fragment_caesar_fragment_7",
+    "patch_B": 79
+  },
+  {
+    "fpfh_distance": 0.06792684866452205,
+    "fragment_A": "fragment_caesar_fragment_2",
+    "patch_A": 757,
+    "fragment_B": "fragment_caesar_fragment_7",
+    "patch_B": 246
+  },
+  {
+    "fpfh_distance": 0.06948807670484489,
+    "fragment_A": "fragment_caesar_fragment_3",
+    "patch_A": 382,
+    "fragment_B": "fragment_caesar_fragment_7",
+    "patch_B": 144
+  },
+  {
+    "fpfh_distance": 0.07063465429500868,
+    "fragment_A": "fragment_caesar_fragment_3",
+    "patch_A": 698,
+    "fragment_B": "fragment_caesar_fragment_7",
+    "patch_B": 400
+  },
+  {
+    "fpfh_distance": 0.0735139670400028,
+    "fragment_A": "fragment_caesar_fragment_2",
+    "patch_A": 667,
+    "fragment_B": "fragment_caesar_fragment_7",
+    "patch_B": 669
+  },
+  {
+    "fpfh_distance": 0.07360770920591886,
+    "fragment_A": "fragment_caesar_fragment_2",
+    "patch_A": 158,
+    "fragment_B": "fragment_caesar_fragment_7",
+    "patch_B": 246
+  },
+  {
+    "fpfh_distance": 0.08712454547046884,
+    "fragment_A": "fragment_caesar_fragment_4",
+    "patch_A": 852,
+    "fragment_B": "fragment_caesar_fragment_6",
+    "patch_B": 276
+  },
+  {
+    "fpfh_distance": 0.08804141837871218,
+    "fragment_A": "fragment_caesar_fragment_4",
+    "patch_A": 852,
+    "fragment_B": "fragment_caesar_fragment_6",
+    "patch_B": 171
+  },
+  {
+    "fpfh_distance": 0.08913879211171016,
+    "fragment_A": "fragment_caesar_fragment_4",
+    "patch_A": 852,
+    "fragment_B": "fragment_caesar_fragment_6",
+    "patch_B": 662
+  },
+  {
+    "fpfh_distance": 0.09749374250019743,
+    "fragment_A": "fragment_caesar_fragment_4",
+    "patch_A": 852,
+    "fragment_B": "fragment_caesar_fragment_6",
+    "patch_B": 304
+  },
+  {
+    "fpfh_distance": 0.1017313339126666,
+    "fragment_A": "fragment_caesar_fragment_4",
+    "patch_A": 852,
+    "fragment_B": "fragment_caesar_fragment_6",
+    "patch_B": 473
+  },
+  {
+    "fpfh_distance": 0.11594960584776255,
+    "fragment_A": "fragment_caesar_fragment_2",
+    "patch_A": 452,
+    "fragment_B": "fragment_caesar_fragment_6",
+    "patch_B": 430
+  },
+  {
+    "fpfh_distance": 0.11604330053437283,
+    "fragment_A": "fragment_caesar_fragment_2",
+    "patch_A": 114,
+    "fragment_B": "fragment_caesar_fragment_6",
+    "patch_B": 430
+  },
+  {
+    "fpfh_distance": 0.11821418596771364,
+    "fragment_A": "fragment_caesar_fragment_2",
+    "patch_A": 421,
+    "fragment_B": "fragment_caesar_fragment_6",
+    "patch_B": 777
+  },
+  {
+    "fpfh_distance": 0.11934644899397066,
+    "fragment_A": "fragment_caesar_fragment_2",
+    "patch_A": 421,
+    "fragment_B": "fragment_caesar_fragment_6",
+    "patch_B": 490
+  },
+  {
+    "fpfh_distance": 0.11946393392970245,
+    "fragment_A": "fragment_caesar_fragment_2",
+    "patch_A": 421,
+    "fragment_B": "fragment_caesar_fragment_6",
+    "patch_B": 70
+  },
+  {
+    "fpfh_distance": 0.13113555178284111,
+    "fragment_A": "fragment_caesar_fragment_1",
+    "patch_A": 112,
+    "fragment_B": "fragment_caesar_fragment_6",
+    "patch_B": 377
+  },
+  {
+    "fpfh_distance": 0.1327249386707686,
+    "fragment_A": "fragment_caesar_fragment_1",
+    "patch_A": 492,
+    "fragment_B": "fragment_caesar_fragment_6",
+    "patch_B": 377
+  },
+  {
+    "fpfh_distance": 0.1342654958399879,
+    "fragment_A": "fragment_caesar_fragment_1",
+    "patch_A": 811,
+    "fragment_B": "fragment_caesar_fragment_6",
+    "patch_B": 380
+  },
+  {
+    "fpfh_distance": 0.13523578015416796,
+    "fragment_A": "fragment_caesar_fragment_1",
+    "patch_A": 112,
+    "fragment_B": "fragment_caesar_fragment_6",
+    "patch_B": 320
+  },
+  {
+    "fpfh_distance": 0.13683915982958283,
+    "fragment_A": "fragment_caesar_fragment_1",
+    "patch_A": 492,
+    "fragment_B": "fragment_caesar_fragment_6",
+    "patch_B": 320
+  },
+  {
+    "fpfh_distance": 0.13882576331405774,
+    "fragment_A": "fragment_caesar_fragment_3",
+    "patch_A": 414,
+    "fragment_B": "fragment_caesar_fragment_6",
+    "patch_B": 132
+  },
+  {
+    "fpfh_distance": 0.14495599390783437,
+    "fragment_A": "fragment_caesar_fragment_3",
+    "patch_A": 450,
+    "fragment_B": "fragment_caesar_fragment_6",
+    "patch_B": 692
+  },
+  {
+    "fpfh_distance": 0.14725175413964892,
+    "fragment_A": "fragment_caesar_fragment_3",
+    "patch_A": 272,
+    "fragment_B": "fragment_caesar_fragment_6",
+    "patch_B": 254
+  },
+  {
+    "fpfh_distance": 0.15162228742010142,
+    "fragment_A": "fragment_caesar_fragment_3",
+    "patch_A": 127,
+    "fragment_B": "fragment_caesar_fragment_6",
+    "patch_B": 254
+  },
+  {
+    "fpfh_distance": 0.15206800819134303,
+    "fragment_A": "fragment_caesar_fragment_3",
+    "patch_A": 437,
+    "fragment_B": "fragment_caesar_fragment_6",
+    "patch_B": 132
+  }
+]

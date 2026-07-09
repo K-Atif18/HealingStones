@@ -1,0 +1,142 @@
+{
+  "run_timestamp": "2026-07-02T13:12:10.561508+00:00",
+  "config_used": "dataset_dir: dataset/\npatch_dir: patches/\npatch_radius_mm: 8.0\nmax_patch_points: 128\ntarget_center_count: 1000\ntarget_center_density_per_mm2: null\nfps_seed: 42\ncoverage_threshold: 1.0\nmin_patch_size: 1\nimage_output_path: patches/visualization.png\nimage_width: 1024\nimage_height: 1024\n",
+  "fragment_ids": [
+    "fragment_caesar_fragment_1",
+    "fragment_caesar_fragment_2",
+    "fragment_caesar_fragment_3",
+    "fragment_caesar_fragment_4",
+    "fragment_caesar_fragment_5",
+    "fragment_caesar_fragment_6",
+    "fragment_caesar_fragment_7"
+  ],
+  "overall_validation_pass": true,
+  "fragments": {
+    "fragment_caesar_fragment_1": {
+      "patch_count": 1000,
+      "coverage_fraction": 1.0,
+      "overlap": {
+        "mean_overlap": 0.2668971346424227,
+        "max_overlap": 1.0
+      },
+      "size_summary": {
+        "min_size": 65,
+        "max_size": 128,
+        "mean_size": 99.22,
+        "median_size": 98.0
+      },
+      "coverage_pass": true,
+      "size_pass": true,
+      "artifact_path": "patches/fragment_caesar_fragment_1/patches.npz",
+      "metadata_path": "patches/fragment_caesar_fragment_1/metadata.json"
+    },
+    "fragment_caesar_fragment_2": {
+      "patch_count": 1000,
+      "coverage_fraction": 1.0,
+      "overlap": {
+        "mean_overlap": 0.2703103819292869,
+        "max_overlap": 1.0
+      },
+      "size_summary": {
+        "min_size": 59,
+        "max_size": 128,
+        "mean_size": 96.877,
+        "median_size": 95.0
+      },
+      "coverage_pass": true,
+      "size_pass": true,
+      "artifact_path": "patches/fragment_caesar_fragment_2/patches.npz",
+      "metadata_path": "patches/fragment_caesar_fragment_2/metadata.json"
+    },
+    "fragment_caesar_fragment_3": {
+      "patch_count": 1000,
+      "coverage_fraction": 1.0,
+      "overlap": {
+        "mean_overlap": 0.2711394593017042,
+        "max_overlap": 1.0
+      },
+      "size_summary": {
+        "min_size": 66,
+        "max_size": 128,
+        "mean_size": 101.321,
+        "median_size": 100.0
+      },
+      "coverage_pass": true,
+      "size_pass": true,
+      "artifact_path": "patches/fragment_caesar_fragment_3/patches.npz",
+      "metadata_path": "patches/fragment_caesar_fragment_3/metadata.json"
+    },
+    "fragment_caesar_fragment_4": {
+      "patch_count": 1000,
+      "coverage_fraction": 1.0,
+      "overlap": {
+        "mean_overlap": 0.2630624176358527,
+        "max_overlap": 1.0
+      },
+      "size_summary": {
+        "min_size": 69,
+        "max_size": 128,
+        "mean_size": 96.872,
+        "median_size": 95.0
+      },
+      "coverage_pass": true,
+      "size_pass": true,
+      "artifact_path": "patches/fragment_caesar_fragment_4/patches.npz",
+      "metadata_path": "patches/fragment_caesar_fragment_4/metadata.json"
+    },
+    "fragment_caesar_fragment_5": {
+      "patch_count": 1000,
+      "coverage_fraction": 1.0,
+      "overlap": {
+        "mean_overlap": 0.26509692219825526,
+        "max_overlap": 1.0
+      },
+      "size_summary": {
+        "min_size": 66,
+        "max_size": 128,
+        "mean_size": 104.681,
+        "median_size": 100.0
+      },
+      "coverage_pass": true,
+      "size_pass": true,
+      "artifact_path": "patches/fragment_caesar_fragment_5/patches.npz",
+      "metadata_path": "patches/fragment_caesar_fragment_5/metadata.json"
+    },
+    "fragment_caesar_fragment_6": {
+      "patch_count": 822,
+      "coverage_fraction": 1.0,
+      "overlap": {
+        "mean_overlap": 0.28963812379357334,
+        "max_overlap": 1.0
+      },
+      "size_summary": {
+        "min_size": 66,
+        "max_size": 128,
+        "mean_size": 106.42092457420925,
+        "median_size": 106.0
+      },
+      "coverage_pass": true,
+      "size_pass": true,
+      "artifact_path": "patches/fragment_caesar_fragment_6/patches.npz",
+      "metadata_path": "patches/fragment_caesar_fragment_6/metadata.json"
+    },
+    "fragment_caesar_fragment_7": {
+      "patch_count": 1000,
+      "coverage_fraction": 1.0,
+      "overlap": {
+        "mean_overlap": 0.27873787444221565,
+        "max_overlap": 1.0
+      },
+      "size_summary": {
+        "min_size": 80,
+        "max_size": 128,
+        "mean_size": 93.592,
+        "median_size": 92.0
+      },
+      "coverage_pass": true,
+      "size_pass": true,
+      "artifact_path": "patches/fragment_caesar_fragment_7/patches.npz",
+      "metadata_path": "patches/fragment_caesar_fragment_7/metadata.json"
+    }
+  }
+}

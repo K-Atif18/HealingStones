@@ -1,0 +1,26 @@
+{
+  "fragment_id": "fragment_caesar_fragment_1",
+  "point_count": 2973,
+  "skipped": false,
+  "error": null,
+  "patch_count": 1000,
+  "coverage_fraction": 1.0,
+  "covered_count": 2973,
+  "uncovered_count": 0,
+  "uncovered_indices": [],
+  "overlap": {
+    "analyzed_pair_count": 122728,
+    "mean_overlap": 0.2668971346424227,
+    "max_overlap": 1.0
+  },
+  "size_summary": {
+    "min_size": 65,
+    "max_size": 128,
+    "mean_size": 99.22,
+    "median_size": 98.0
+  },
+  "coverage_pass": true,
+  "size_pass": true,
+  "offending_bound": null,
+  "artifact_path": "patches/fragment_caesar_fragment_1/patches.npz"
+}

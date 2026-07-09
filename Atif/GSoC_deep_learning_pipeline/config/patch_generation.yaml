@@ -1,0 +1,41 @@
+# Phase 2 (Patch Generation) default configuration.
+# All spatial values are in millimeters in the Full_Model coordinate frame.
+# Exactly one of target_center_count / target_center_density_per_mm2 must be set.
+
+# Phase 1 output directory (must exist on disk).
+dataset_dir: dataset/
+
+# Phase 2 output directory for patch records, metadata, and visualizations.
+patch_dir: patches/
+
+# Patch neighborhood radius in millimeters. Fragments span ~135 mm at ~1.5 mm
+# spacing, so 8.0 mm yields patches of a few dozen points.
+patch_radius_mm: 8.0
+
+# Upper bound on points kept per patch; excess in-radius points are pruned to
+# the nearest max_patch_points.
+max_patch_points: 128
+
+# Number of FPS patch centers to select. FPS caps at the fragment point count,
+# so a value exceeding a fragment's point count simply selects every point.
+target_center_count: 1000
+
+# Alternative center specification (density-based). Must be null when
+# target_center_count is set (exactly one may be non-null).
+target_center_density_per_mm2: null
+
+# Seed for deterministic farthest-point sampling.
+fps_seed: 42
+
+# Coverage validation threshold in [0, 1]; 1.0 requires full surface coverage.
+coverage_threshold: 1.0
+
+# Minimum acceptable patch size (points).
+min_patch_size: 1
+
+# Off-screen visualization output path (used in headless environments).
+image_output_path: patches/visualization.png
+
+# Rendered image dimensions in pixels; each must be >= 1024.
+image_width: 1024
+image_height: 1024
