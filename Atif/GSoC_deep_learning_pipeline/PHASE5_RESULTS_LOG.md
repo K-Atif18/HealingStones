@@ -5,9 +5,9 @@
 `scripts/generate_results_log.py` -- do not hand-edit numbers here; regenerate.
 Prose (deviations, decisions) is maintained in the generator template.
 
-- Generated: `2026-07-25T15:38:11.083146+00:00`
+- Generated: `2026-07-25T15:49:31.170129+00:00`
 - Source JSON `run_timestamp`: `2026-07-23T16:53:22.637596+00:00`
-- Git commit at generation: `8852e18`
+- Git commit at generation: `d166346`
 - Fragments: F1, F2, F3, F4, F5, F6, F7
 - Total patches: 6822 | Adjacent pairs: 11
 
@@ -365,10 +365,11 @@ separately, and they overlap. Real work: 18,887 patch-encodes (15,466 pool
 
 ### Recurring failure class (named explicitly)
 
-This is the FIFTH unit/scope mismatch in the project (a SIXTH was found
-later -- see section (h)). The citation rule catches a wrong *location*; it
-does not catch a number correctly copied from a real measurement of the
-WRONG QUANTITY:
+This is the FIFTH unit/scope mismatch in the project (a SIXTH and SEVENTH
+were found later -- see sections (h)/(i)). The citation rule catches a wrong
+*location*; it does not catch a number correctly copied from a real
+measurement of the WRONG QUANTITY, nor a parameter that looks active but is
+frozen (#7):
 
 | # | Symptom | wrong unit/scope |
 |---|---|---|
@@ -378,6 +379,7 @@ WRONG QUANTITY:
 | 4 | mined-distance asymmetry | §2b pool sizes are *full-dataset*, no *fold* sees them |
 | 5 | ~17.7 s/epoch | measured *one* pool, code does *six* overlapping |
 | 6 | `steps_per_epoch=12` "epoch" | 12 steps is ~1.4% of pairs / ~90 anchor-passes-worth is 600 steps; "epoch" was never one pass, so patience=5 spanned noise not a real epoch (see section (h)) |
+| 7 | jitter augmentation | `seed=cfg.seed` constant -> every patch got the SAME noise every epoch; jitter looked active but was inert (a parameter that looked on and wasn't -- a subtler cousin of the class: not a wrong unit, a frozen stochastic op) |
 
 **Added rule:** every measurement states its UNIT and SCOPE (per patch / per
 step / per epoch; per fold / full dataset; one pool / all pools), not just
@@ -462,21 +464,73 @@ the two runs actually differ only by the cap, both 50-epoch/patience-off, so
 the confound is the unit bug + noisy checkpoint, not duration). Not yet durable
 evidence. **Do not tune the cap to chase P@1 until the training loop is sound.**
 
-### Next step (agreed, single-variable): clean re-run at a coherent epoch unit
-- Fix ONLY the unit: `steps_per_epoch=7` (one anchor-pass over 3,421 anchors at
-  batch 512 = ~6.7 steps), `epoch_cap=85`, `patience=8`. **Uncapped** -- so the
-  re-run differs from the BASELINE (Run 1) in EXACTLY ONE thing (the epoch unit).
-- `epoch_cap=85` is a **deliberate control, not tuning**: 85*7=595 steps ~= the
-  ~600/~90-passes budget of both prior runs, so the budget is HELD CONSTANT to
-  isolate the unit fix from a training-duration change. Nobody should read
-  cap-50 -> cap-85 as "trained longer because results improved."
-- **Pre-framed likely outcome (a legitimate result, not a problem to knob-turn):**
-  a coherent epoch may make patience fire early with the val curve still flat,
-  because the diagnosed pathology is overfitting a small anchor set and the unit
-  fix does not touch that. If so, the honest finding is "the encoder overfits the
-  ~3,400 fold-1 anchors and does not generalize to held-out pairs at this
-  capacity/regularization" -- and the next lever is regularization / the existing
-  jitter augmentation, NOT more steps and NOT the cap.
+### Run 3 -- UNIT-FIXED: 7 steps/epoch, cap 85, patience 8, uncapped (CLEAN)
+`phase5a_runs_unit7/`. The single-variable re-run vs Run 1 baseline: only the
+epoch UNIT changed (steps_per_epoch 12->7 = one anchor-pass over 3,421 anchors;
+epoch_cap 50->85 to HOLD the budget at ~595 steps; patience re-enabled now that
+it spans coherent passes). Budget held constant -- NOT trained longer.
+
+Result: **patience FIRED at epoch 10** (77 gradient steps; did NOT reach the
+85-cap). Best val loss 5.5288 @ **epoch 2**, then no improvement for 8 epochs.
+- val trajectory: 5.573 -> 5.529(ep2) -> 5.588 -> ... -> 5.594; **no downward trend**.
+- train trajectory: 6.498 -> 5.522, falling monotonically, still descending at stop.
+
+**Interpretation (held loosely):** the epoch-unit fix worked -- patience is now
+a meaningful signal and it fired early. But validation does NOT trend: best val
+(5.529) is 0.8% below val[0] (5.573), reached at epoch 2, flat/noisy thereafter,
+while train falls cleanly. This is the small-anchor overfitting signature
+pre-framed last turn -- the unit fix does not touch it, as predicted.
+
+**BUT two caveats keep this from being a conclusion:**
+1. The validation SIGNAL may be incapable of trending: with median 347 positives
+   per contact patch (§7), a held-out val pair's endpoints appear in hundreds of
+   training pairs, so "held-out" val loss is nearly the same quantity as train
+   loss. A flat val curve may mean "doesn't generalize" OR "the val metric can't
+   distinguish generalization from memorization." Val loss is NOT a pass
+   criterion anyway -- the verdict is LOFO retrieval through the battery.
+2. **The one regularizer in the pipeline (jitter) was INERT** during all three
+   runs -- see section (i). We cannot claim a capacity/data-ratio wall until the
+   one regularizer that exists has actually functioned once.
+
+---
+
+## (i) Deviation 4 -- jitter augmentation was inert (constant seed)
+
+**Defect (failure-class #7):** `_encode_patch_ids` passed `seed=cfg.seed`
+(constant 0) to `prepare_patch` for every patch every epoch. `jitter()` seeds
+its RNG from that, so **every patch received the identical noise realization on
+every pass** -- a fixed perturbation baked in once, not fresh stochastic
+augmentation. As regularization this is inert: the network sees the same
+"augmented" patch each epoch, so there is nothing to average over and no
+diversity to resist memorization. The one regularizer in the pipeline had never
+actually functioned across Runs 1-3.
+
+This is a subtler cousin of the recurring unit/scope class: not a wrong unit,
+but **a parameter that looked active and wasn't** -- jitter was nominally
+`training=True` and running, yet frozen by a constant seed.
+
+**Fix:** `prepare_patch` gains a separate `jitter_seed` (default None ->
+falls back to `seed`, so eval/mining/pose-gate paths stay byte-identical). The
+FPS resample seed stays deterministic (its main path is argmax-from-centroid,
+RNG-free; the seed only drives the pad branch on under-full patches -- so FPS
+has ~no diversity to gain and must stay deterministic for the pose gate).
+`_encode_patch_ids` derives the jitter seed per (cfg.seed, epoch, frag_index,
+pid) via `np.random.default_rng([...])` (reproducible integer composition, NOT
+Python `hash()` which is per-process salted), so noise is fresh per epoch AND
+per patch -- not per-epoch-only (which would give all patches in an epoch
+correlated noise).
+
+**Honesty note:** working jitter is a genuine regularization change. If val
+trends after this fix, that is a real improvement -- and the re-run (Run 4)
+differs from Run 3 by this ONE variable (jitter-on vs jitter-inert), nothing
+else; budget and all other settings held constant. If val STILL does not trend
+with working augmentation, THEN the capacity/data-ratio wall is the honest
+finding and we stop chasing it.
+
+**Deferred (deliberately, not overlooked):** making FPS resample stochastic
+per epoch. Its main path is deterministic by construction (pose gate); only the
+pad branch on under-full patches uses the seed, so there is little diversity to
+gain. Revisit only if working jitter still doesn't make val trend.
 
 ---
 

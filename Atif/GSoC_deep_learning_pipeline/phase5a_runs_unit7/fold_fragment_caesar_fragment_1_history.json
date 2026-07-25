@@ -1,0 +1,570 @@
+{
+  "held_out": "fragment_caesar_fragment_1",
+  "epochs": [
+    {
+      "epoch": 0,
+      "train_loss_mean": 6.4983647891453336,
+      "train_loss_per_step": [
+        6.5243072509765625,
+        6.490647315979004,
+        6.4989752769470215,
+        6.498435974121094,
+        6.510614395141602,
+        6.486385345458984,
+        6.479187965393066
+      ],
+      "train_loss_first_step": 6.5243072509765625,
+      "train_loss_last_step": 6.479187965393066,
+      "val_loss": 5.573044217898993,
+      "improved": true,
+      "epochs_without_improvement": 0,
+      "mining_seconds": 6.1693854331970215,
+      "training_seconds": 12.108304023742676,
+      "validation_seconds": 0.9170839786529541,
+      "epoch_seconds_total": 19.19477343559265,
+      "peak_gpu_mb": 945.452544,
+      "interface_draw_counts": {
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 374,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 873,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 361,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 907,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 886,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 183
+      },
+      "interface_draw_fractions": {
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.10435267857142858,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.24358258928571427,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.10072544642857142,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.25306919642857145,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.24720982142857142,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.051060267857142856
+      },
+      "deduped_hard_negatives_per_step_mean": 264.14285714285717,
+      "deduped_hard_negatives_per_step_min": 258,
+      "deduped_hard_negatives_per_step_max": 272,
+      "per_fragment_mined_distance_mean": {
+        "fragment_caesar_fragment_2": 0.026363689113090668,
+        "fragment_caesar_fragment_3": 0.025676512188663344,
+        "fragment_caesar_fragment_4": 0.025928799841922763,
+        "fragment_caesar_fragment_5": 0.045797591435803316,
+        "fragment_caesar_fragment_6": 0.04852638564860592,
+        "fragment_caesar_fragment_7": 0.024583107131595054
+      }
+    },
+    {
+      "epoch": 1,
+      "train_loss_mean": 6.426609856741769,
+      "train_loss_per_step": [
+        6.4742431640625,
+        6.459191799163818,
+        6.423678874969482,
+        6.446287631988525,
+        6.4328789710998535,
+        6.380589008331299,
+        6.369399547576904
+      ],
+      "train_loss_first_step": 6.4742431640625,
+      "train_loss_last_step": 6.369399547576904,
+      "val_loss": 5.870816652187126,
+      "improved": false,
+      "epochs_without_improvement": 1,
+      "mining_seconds": 6.1365509033203125,
+      "training_seconds": 11.877175092697144,
+      "validation_seconds": 0.8842968940734863,
+      "epoch_seconds_total": 18.898022890090942,
+      "peak_gpu_mb": 949.011456,
+      "interface_draw_counts": {
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 811,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 889,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 390,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 903,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 181,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 410
+      },
+      "interface_draw_fractions": {
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.22628348214285715,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.248046875,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.10881696428571429,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.251953125,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.050502232142857144,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.11439732142857142
+      },
+      "deduped_hard_negatives_per_step_mean": 258.14285714285717,
+      "deduped_hard_negatives_per_step_min": 248,
+      "deduped_hard_negatives_per_step_max": 271,
+      "per_fragment_mined_distance_mean": {
+        "fragment_caesar_fragment_2": 0.04154797288401471,
+        "fragment_caesar_fragment_3": 0.03992658976569486,
+        "fragment_caesar_fragment_4": 0.041242656244910046,
+        "fragment_caesar_fragment_5": 0.06815979617356172,
+        "fragment_caesar_fragment_6": 0.07270353651629427,
+        "fragment_caesar_fragment_7": 0.03866332911642038
+      }
+    },
+    {
+      "epoch": 2,
+      "train_loss_mean": 6.294661045074463,
+      "train_loss_per_step": [
+        6.276045799255371,
+        6.309986591339111,
+        6.341222763061523,
+        6.336846351623535,
+        6.332531929016113,
+        6.2571492195129395,
+        6.2088446617126465
+      ],
+      "train_loss_first_step": 6.276045799255371,
+      "train_loss_last_step": 6.2088446617126465,
+      "val_loss": 5.528790384112953,
+      "improved": true,
+      "epochs_without_improvement": 0,
+      "mining_seconds": 6.091973066329956,
+      "training_seconds": 11.471861839294434,
+      "validation_seconds": 0.8775365352630615,
+      "epoch_seconds_total": 18.44137144088745,
+      "peak_gpu_mb": 910.230016,
+      "interface_draw_counts": {
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 942,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 828,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 908,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 364,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 372,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 170
+      },
+      "interface_draw_fractions": {
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.26283482142857145,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.23102678571428573,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.2533482142857143,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.1015625,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.10379464285714286,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.04743303571428571
+      },
+      "deduped_hard_negatives_per_step_mean": 218.42857142857142,
+      "deduped_hard_negatives_per_step_min": 210,
+      "deduped_hard_negatives_per_step_max": 230,
+      "per_fragment_mined_distance_mean": {
+        "fragment_caesar_fragment_2": 0.09263533006905932,
+        "fragment_caesar_fragment_3": 0.09117560840518998,
+        "fragment_caesar_fragment_4": 0.08944742046707474,
+        "fragment_caesar_fragment_5": 0.14260410882093,
+        "fragment_caesar_fragment_6": 0.15090734866471628,
+        "fragment_caesar_fragment_7": 0.0871105467744966
+      }
+    },
+    {
+      "epoch": 3,
+      "train_loss_mean": 6.235243933541434,
+      "train_loss_per_step": [
+        6.234943389892578,
+        6.231709003448486,
+        6.277279376983643,
+        6.268967628479004,
+        6.268846035003662,
+        6.212580680847168,
+        6.152381420135498
+      ],
+      "train_loss_first_step": 6.234943389892578,
+      "train_loss_last_step": 6.152381420135498,
+      "val_loss": 5.5883182065042565,
+      "improved": false,
+      "epochs_without_improvement": 1,
+      "mining_seconds": 6.072569131851196,
+      "training_seconds": 11.378977060317993,
+      "validation_seconds": 0.9109663963317871,
+      "epoch_seconds_total": 18.362512588500977,
+      "peak_gpu_mb": 906.171904,
+      "interface_draw_counts": {
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 370,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 854,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 921,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 873,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 375,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 191
+      },
+      "interface_draw_fractions": {
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.10323660714285714,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.23828125,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.25697544642857145,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.24358258928571427,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.10463169642857142,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.05329241071428571
+      },
+      "deduped_hard_negatives_per_step_mean": 220.71428571428572,
+      "deduped_hard_negatives_per_step_min": 213,
+      "deduped_hard_negatives_per_step_max": 227,
+      "per_fragment_mined_distance_mean": {
+        "fragment_caesar_fragment_2": 0.06970645806412826,
+        "fragment_caesar_fragment_3": 0.06920802194696654,
+        "fragment_caesar_fragment_4": 0.06582973805352059,
+        "fragment_caesar_fragment_5": 0.09324547942620723,
+        "fragment_caesar_fragment_6": 0.09343935526334322,
+        "fragment_caesar_fragment_7": 0.059094053228796385
+      }
+    },
+    {
+      "epoch": 4,
+      "train_loss_mean": 6.109094347272601,
+      "train_loss_per_step": [
+        6.193737030029297,
+        6.194382667541504,
+        6.0956315994262695,
+        6.040189266204834,
+        6.135041236877441,
+        6.065767765045166,
+        6.038910865783691
+      ],
+      "train_loss_first_step": 6.193737030029297,
+      "train_loss_last_step": 6.038910865783691,
+      "val_loss": 5.686683567826877,
+      "improved": false,
+      "epochs_without_improvement": 2,
+      "mining_seconds": 6.109886646270752,
+      "training_seconds": 11.297500133514404,
+      "validation_seconds": 0.8477847576141357,
+      "epoch_seconds_total": 18.255171537399292,
+      "peak_gpu_mb": 925.278208,
+      "interface_draw_counts": {
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 886,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 861,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 372,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 200,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 850,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 415
+      },
+      "interface_draw_fractions": {
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.24720982142857142,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.240234375,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.10379464285714286,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.05580357142857143,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.23716517857142858,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.11579241071428571
+      },
+      "deduped_hard_negatives_per_step_mean": 213.85714285714286,
+      "deduped_hard_negatives_per_step_min": 197,
+      "deduped_hard_negatives_per_step_max": 234,
+      "per_fragment_mined_distance_mean": {
+        "fragment_caesar_fragment_2": 0.06124096785404885,
+        "fragment_caesar_fragment_3": 0.05900800240471517,
+        "fragment_caesar_fragment_4": 0.060543412784361005,
+        "fragment_caesar_fragment_5": 0.10279603685715916,
+        "fragment_caesar_fragment_6": 0.10416060780676512,
+        "fragment_caesar_fragment_7": 0.06015262152108576
+      }
+    },
+    {
+      "epoch": 5,
+      "train_loss_mean": 5.9549031257629395,
+      "train_loss_per_step": [
+        5.955487251281738,
+        5.9861345291137695,
+        5.955020904541016,
+        6.016740798950195,
+        5.961063861846924,
+        5.908352851867676,
+        5.901521682739258
+      ],
+      "train_loss_first_step": 5.955487251281738,
+      "train_loss_last_step": 5.901521682739258,
+      "val_loss": 5.606531690738961,
+      "improved": false,
+      "epochs_without_improvement": 3,
+      "mining_seconds": 6.115044116973877,
+      "training_seconds": 11.281649351119995,
+      "validation_seconds": 0.8886480331420898,
+      "epoch_seconds_total": 18.285341501235962,
+      "peak_gpu_mb": 901.584896,
+      "interface_draw_counts": {
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 914,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 854,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 373,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 884,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 384,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 175
+      },
+      "interface_draw_fractions": {
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.25502232142857145,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.23828125,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.10407366071428571,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.24665178571428573,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.10714285714285714,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.048828125
+      },
+      "deduped_hard_negatives_per_step_mean": 201.57142857142858,
+      "deduped_hard_negatives_per_step_min": 192,
+      "deduped_hard_negatives_per_step_max": 210,
+      "per_fragment_mined_distance_mean": {
+        "fragment_caesar_fragment_2": 0.10755158174609722,
+        "fragment_caesar_fragment_3": 0.10783211482496993,
+        "fragment_caesar_fragment_4": 0.10146210814127699,
+        "fragment_caesar_fragment_5": 0.1290695757553004,
+        "fragment_caesar_fragment_6": 0.1288694693109928,
+        "fragment_caesar_fragment_7": 0.08612817871016624
+      }
+    },
+    {
+      "epoch": 6,
+      "train_loss_mean": 5.895540986742292,
+      "train_loss_per_step": [
+        5.969416618347168,
+        5.9300055503845215,
+        5.844408988952637,
+        5.897011756896973,
+        5.903101921081543,
+        5.855648040771484,
+        5.869194030761719
+      ],
+      "train_loss_first_step": 5.969416618347168,
+      "train_loss_last_step": 5.869194030761719,
+      "val_loss": 5.752912181173871,
+      "improved": false,
+      "epochs_without_improvement": 4,
+      "mining_seconds": 6.201010227203369,
+      "training_seconds": 11.429028034210205,
+      "validation_seconds": 0.9052741527557373,
+      "epoch_seconds_total": 18.53531241416931,
+      "peak_gpu_mb": 897.135616,
+      "interface_draw_counts": {
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 925,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 864,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 846,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 189,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 375,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 385
+      },
+      "interface_draw_fractions": {
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.25809151785714285,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.24107142857142858,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.23604910714285715,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.052734375,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.10463169642857142,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.107421875
+      },
+      "deduped_hard_negatives_per_step_mean": 194.42857142857142,
+      "deduped_hard_negatives_per_step_min": 182,
+      "deduped_hard_negatives_per_step_max": 207,
+      "per_fragment_mined_distance_mean": {
+        "fragment_caesar_fragment_2": 0.12446436758131482,
+        "fragment_caesar_fragment_3": 0.12871657280059592,
+        "fragment_caesar_fragment_4": 0.11862162417759571,
+        "fragment_caesar_fragment_5": 0.12041690591694548,
+        "fragment_caesar_fragment_6": 0.12485092516319873,
+        "fragment_caesar_fragment_7": 0.09055270453222547
+      }
+    },
+    {
+      "epoch": 7,
+      "train_loss_mean": 5.842065879276821,
+      "train_loss_per_step": [
+        5.8606858253479,
+        5.86570405960083,
+        5.809322834014893,
+        5.892991542816162,
+        5.739964008331299,
+        5.839661121368408,
+        5.886131763458252
+      ],
+      "train_loss_first_step": 5.8606858253479,
+      "train_loss_last_step": 5.886131763458252,
+      "val_loss": 5.727697634266947,
+      "improved": false,
+      "epochs_without_improvement": 5,
+      "mining_seconds": 6.066962003707886,
+      "training_seconds": 11.610705137252808,
+      "validation_seconds": 0.8565311431884766,
+      "epoch_seconds_total": 18.53419828414917,
+      "peak_gpu_mb": 902.818304,
+      "interface_draw_counts": {
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 820,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 954,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 887,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 376,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 163,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 384
+      },
+      "interface_draw_fractions": {
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.22879464285714285,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.2661830357142857,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.24748883928571427,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.10491071428571429,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.04547991071428571,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.10714285714285714
+      },
+      "deduped_hard_negatives_per_step_mean": 191.28571428571428,
+      "deduped_hard_negatives_per_step_min": 185,
+      "deduped_hard_negatives_per_step_max": 205,
+      "per_fragment_mined_distance_mean": {
+        "fragment_caesar_fragment_2": 0.1469475036169323,
+        "fragment_caesar_fragment_3": 0.1489276572944918,
+        "fragment_caesar_fragment_4": 0.13888611074071378,
+        "fragment_caesar_fragment_5": 0.16080895191376943,
+        "fragment_caesar_fragment_6": 0.17305882496711536,
+        "fragment_caesar_fragment_7": 0.12765407245552504
+      }
+    },
+    {
+      "epoch": 8,
+      "train_loss_mean": 5.7460810116359164,
+      "train_loss_per_step": [
+        5.851846218109131,
+        5.777782917022705,
+        5.8868021965026855,
+        5.696069717407227,
+        5.648498058319092,
+        5.664993762969971,
+        5.6965742111206055
+      ],
+      "train_loss_first_step": 5.851846218109131,
+      "train_loss_last_step": 5.6965742111206055,
+      "val_loss": 5.737183751467474,
+      "improved": false,
+      "epochs_without_improvement": 6,
+      "mining_seconds": 6.09141731262207,
+      "training_seconds": 11.32417893409729,
+      "validation_seconds": 0.852684497833252,
+      "epoch_seconds_total": 18.268280744552612,
+      "peak_gpu_mb": 898.434048,
+      "interface_draw_counts": {
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 879,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 841,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 397,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 929,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 176,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 362
+      },
+      "interface_draw_fractions": {
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.24525669642857142,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.23465401785714285,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.11077008928571429,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.2592075892857143,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.049107142857142856,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.10100446428571429
+      },
+      "deduped_hard_negatives_per_step_mean": 189.0,
+      "deduped_hard_negatives_per_step_min": 177,
+      "deduped_hard_negatives_per_step_max": 210,
+      "per_fragment_mined_distance_mean": {
+        "fragment_caesar_fragment_2": 0.12000326011979649,
+        "fragment_caesar_fragment_3": 0.11832964916373839,
+        "fragment_caesar_fragment_4": 0.11887718698092024,
+        "fragment_caesar_fragment_5": 0.1463570994791348,
+        "fragment_caesar_fragment_6": 0.1539378355519894,
+        "fragment_caesar_fragment_7": 0.10899909086503969
+      }
+    },
+    {
+      "epoch": 9,
+      "train_loss_mean": 5.672717162540981,
+      "train_loss_per_step": [
+        5.754413604736328,
+        5.676614284515381,
+        5.7539963722229,
+        5.647468090057373,
+        5.646887302398682,
+        5.611311912536621,
+        5.61832857131958
+      ],
+      "train_loss_first_step": 5.754413604736328,
+      "train_loss_last_step": 5.61832857131958,
+      "val_loss": 5.584637296940377,
+      "improved": false,
+      "epochs_without_improvement": 7,
+      "mining_seconds": 6.138047218322754,
+      "training_seconds": 11.443778038024902,
+      "validation_seconds": 0.8679516315460205,
+      "epoch_seconds_total": 18.449776887893677,
+      "peak_gpu_mb": 895.428608,
+      "interface_draw_counts": {
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 885,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 180,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 864,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 390,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 906,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 359
+      },
+      "interface_draw_fractions": {
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.24693080357142858,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.05022321428571429,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.24107142857142858,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.10881696428571429,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.25279017857142855,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.10016741071428571
+      },
+      "deduped_hard_negatives_per_step_mean": 185.14285714285714,
+      "deduped_hard_negatives_per_step_min": 177,
+      "deduped_hard_negatives_per_step_max": 194,
+      "per_fragment_mined_distance_mean": {
+        "fragment_caesar_fragment_2": 0.1275178336921011,
+        "fragment_caesar_fragment_3": 0.12350700100002905,
+        "fragment_caesar_fragment_4": 0.1322422688416041,
+        "fragment_caesar_fragment_5": 0.1769319993025326,
+        "fragment_caesar_fragment_6": 0.19365897363959214,
+        "fragment_caesar_fragment_7": 0.13293950303701915
+      }
+    },
+    {
+      "epoch": 10,
+      "train_loss_mean": 5.522066593170166,
+      "train_loss_per_step": [
+        5.520266532897949,
+        5.529407501220703,
+        5.4993510246276855,
+        5.51968240737915,
+        5.5540361404418945,
+        5.501157760620117,
+        5.530564785003662
+      ],
+      "train_loss_first_step": 5.520266532897949,
+      "train_loss_last_step": 5.530564785003662,
+      "val_loss": 5.5943121594752006,
+      "improved": false,
+      "epochs_without_improvement": 8,
+      "mining_seconds": 6.070698499679565,
+      "training_seconds": 11.02835202217102,
+      "validation_seconds": 0.8648543357849121,
+      "epoch_seconds_total": 17.963904857635498,
+      "peak_gpu_mb": 880.49152,
+      "interface_draw_counts": {
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 399,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 842,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 358,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 928,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 165,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 892
+      },
+      "interface_draw_fractions": {
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.111328125,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.23493303571428573,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.09988839285714286,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.25892857142857145,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.04603794642857143,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.24888392857142858
+      },
+      "deduped_hard_negatives_per_step_mean": 171.0,
+      "deduped_hard_negatives_per_step_min": 161,
+      "deduped_hard_negatives_per_step_max": 180,
+      "per_fragment_mined_distance_mean": {
+        "fragment_caesar_fragment_2": 0.16875354335607254,
+        "fragment_caesar_fragment_3": 0.17056157249456716,
+        "fragment_caesar_fragment_4": 0.15863946339745513,
+        "fragment_caesar_fragment_5": 0.18428696994070928,
+        "fragment_caesar_fragment_6": 0.18258877252347958,
+        "fragment_caesar_fragment_7": 0.1386939105752222
+      }
+    }
+  ],
+  "stopped_by": "patience",
+  "stopped_at_epoch": 10,
+  "interface_weights": {
+    "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.10158305934398554,
+    "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.24648238449950224,
+    "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.24648238449950224,
+    "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.10967331025760725,
+    "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.24648238449950224,
+    "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.049296476899900445
+  },
+  "n_train_interfaces": 6,
+  "n_val_pairs": 499,
+  "device": "cuda",
+  "batch_size": 512,
+  "steps_per_epoch": 7
+}
