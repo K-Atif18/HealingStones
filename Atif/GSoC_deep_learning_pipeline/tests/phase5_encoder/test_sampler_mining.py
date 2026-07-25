@@ -446,3 +446,29 @@ def test_positive_distance_cap_filters_and_default_is_uncapped():
     # The (B,C) interface (large distances) should be gone under a 10mm cap.
     assert ("B", "C") not in capped.train_interface_pair_rows or \
         len(capped.train_interface_pair_rows.get(("B", "C"), [])) == 0
+
+
+# ----------------------------------------------------------------------
+# Deviation 4: jitter must be REAL stochastic augmentation (varying jitter_seed),
+# not the frozen constant-seed version. None must preserve the old behaviour
+# byte-for-byte, and the eval path (training=False) must ignore jitter_seed.
+# ----------------------------------------------------------------------
+def test_jitter_seed_makes_augmentation_stochastic():
+    from phase5_encoder.preprocess import prepare_patch
+    rng = np.random.default_rng(0)
+    pts = rng.standard_normal((80, 3)) * 4.0
+    nrm = rng.standard_normal((80, 3)); nrm /= np.linalg.norm(nrm, axis=1, keepdims=True)
+
+    a, _ = prepare_patch(pts, nrm, 64, training=True, seed=0, jitter_seed=100)
+    b, _ = prepare_patch(pts, nrm, 64, training=True, seed=0, jitter_seed=100)
+    c, _ = prepare_patch(pts, nrm, 64, training=True, seed=0, jitter_seed=200)
+    d, _ = prepare_patch(pts, nrm, 64, training=True, seed=0, jitter_seed=None)
+    e, _ = prepare_patch(pts, nrm, 64, training=True, seed=0)  # no jitter_seed arg
+
+    assert np.allclose(a, b), "same jitter_seed must be reproducible"
+    assert not np.allclose(a, c), "different jitter_seed must give different noise"
+    assert np.array_equal(d, e), "jitter_seed=None must equal old no-arg behaviour"
+    # Eval path ignores jitter_seed entirely (no jitter at training=False).
+    ev1, _ = prepare_patch(pts, nrm, 64, training=False, seed=0, jitter_seed=999)
+    ev2, _ = prepare_patch(pts, nrm, 64, training=False, seed=0)
+    assert np.array_equal(ev1, ev2), "eval path must be unaffected by jitter_seed"

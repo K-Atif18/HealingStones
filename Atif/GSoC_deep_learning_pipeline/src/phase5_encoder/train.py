@@ -69,13 +69,29 @@ class TrainConfig:
 
 
 def _encode_patch_ids(model, ctx: DiagnosticContext, fid: str, pids, cfg: TrainConfig,
-                       training: bool) -> torch.Tensor:
+                      training: bool, epoch: int = 0) -> torch.Tensor:
     pt = ctx.patch_tables[fid]
+    # Stable integer fragment index (position in the fixed fragment vocabulary),
+    # for a reproducible jitter seed composition -- NOT the string fid, and NOT
+    # Python hash() (per-process salted, would break run reproducibility).
+    frag_index = ctx.fragment_ids.index(fid)
     feats = []
     for pid in pids:
-        row = pt.row_for_patch_id(int(pid))
+        pid = int(pid)
+        row = pt.row_for_patch_id(pid)
+        # FPS seed stays deterministic per patch (pose gate); jitter seed varies
+        # per (cfg.seed, epoch, frag_index, pid) so noise is fresh per epoch AND
+        # per patch -- real stochastic augmentation (Deviation 4). Only engaged
+        # when training=True; eval/mining/pose-gate pass jitter_seed=None.
+        if training:
+            jseed = int(np.random.default_rng(
+                [cfg.seed, int(epoch), frag_index, pid]
+            ).integers(2**31))
+        else:
+            jseed = None
         p, n = prepare_patch(pt.patch_points(row), pt.patch_normals(row),
-                              cfg.n_points, training=training, seed=cfg.seed)
+                             cfg.n_points, training=training,
+                             seed=cfg.seed, jitter_seed=jseed)
         feats.append(knn_ppf_features(p, n, k=cfg.k))
     t = torch.from_numpy(np.stack(feats)).float().to(cfg.device)
     return model(t)
@@ -111,7 +127,7 @@ def _build_positive_partner_lookup(ctx: DiagnosticContext) -> dict[tuple, set]:
 
 def _info_nce_step(
     model, ctx, batch, mined, cfg: TrainConfig,
-    positive_lookup: dict[tuple, set],
+    positive_lookup: dict[tuple, set], epoch: int = 0,
 ) -> tuple[torch.Tensor, int]:
     """One training step's loss. Hard negatives are deduplicated within the
     batch (design §3: 'dedup is mandatory, not a fallback') -- each DISTINCT
@@ -139,7 +155,7 @@ def _info_nce_step(
             by_frag.setdefault(fid, []).append(pid)
             order.append((fid, len(by_frag[fid]) - 1))
         embs_by_frag = {
-            fid: _encode_patch_ids(model, ctx, fid, pids, cfg, training=True)
+            fid: _encode_patch_ids(model, ctx, fid, pids, cfg, training=True, epoch=epoch)
             for fid, pids in by_frag.items()
         }
         return torch.stack([embs_by_frag[fid][i] for fid, i in order])
@@ -325,7 +341,7 @@ def train_one_fold(
                 interface_draw_counts[key] = interface_draw_counts.get(key, 0) + 1
             optim.zero_grad()
             loss, n_deduped_hard = _info_nce_step(
-                model, ctx, batch, mined, cfg, positive_lookup
+                model, ctx, batch, mined, cfg, positive_lookup, epoch=epoch
             )
             loss.backward()
             optim.step()

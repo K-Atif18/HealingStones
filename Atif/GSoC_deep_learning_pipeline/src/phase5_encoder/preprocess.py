@@ -100,14 +100,25 @@ def prepare_patch(
     training: bool = False,
     jitter_sigma: float = 0.1,
     seed: int = 0,
+    jitter_seed: int | None = None,
 ) -> tuple[np.ndarray, np.ndarray]:
     """Full input preprocessing: FPS resample (+ optional jitter if training).
 
     Returns ``(points_out, normals_out)`` both ``(n_out, 3)``. Jitter is applied
     *after* resampling and only when ``training`` is True, so the eval/export and
     pose-gate paths are deterministic and frame independent.
+
+    ``seed`` drives the FPS resample (only its pad branch actually uses it -- the
+    main farthest-point path is argmax-from-centroid, RNG-free -- and it must
+    stay deterministic for the pose gate). ``jitter_seed`` drives ONLY the
+    training-time jitter noise; if ``None`` it falls back to ``seed`` (preserving
+    the original behaviour byte-for-byte for any caller that does not pass it,
+    e.g. eval / mining / pose-gate, which all use ``training=False`` anyway).
+    Passing a per-(epoch, patch) ``jitter_seed`` is what turns jitter from a
+    frozen fixed perturbation into real stochastic augmentation (Deviation 4).
     """
     p, nrm = fps_resample(points, normals, n_out, seed=seed)
     if training:
-        p = jitter(p, sigma=jitter_sigma, seed=seed)
+        js = jitter_seed if jitter_seed is not None else seed
+        p = jitter(p, sigma=jitter_sigma, seed=js)
     return p, nrm
