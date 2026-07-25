@@ -1,0 +1,1070 @@
+{
+  "held_out": "fragment_caesar_fragment_1",
+  "epochs": [
+    {
+      "epoch": 0,
+      "train_loss_mean": 6.497350624629429,
+      "train_loss_per_step": [
+        6.524169921875,
+        6.490493297576904,
+        6.498847484588623,
+        6.497219562530518,
+        6.506529808044434,
+        6.486493110656738,
+        6.477701187133789
+      ],
+      "train_loss_first_step": 6.524169921875,
+      "train_loss_last_step": 6.477701187133789,
+      "val_loss": 5.54000587788278,
+      "improved": true,
+      "epochs_without_improvement": 0,
+      "mining_seconds": 6.24274468421936,
+      "training_seconds": 12.481030702590942,
+      "validation_seconds": 0.904273509979248,
+      "epoch_seconds_total": 19.62804889678955,
+      "peak_gpu_mb": 945.452544,
+      "interface_draw_counts": {
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 374,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 873,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 361,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 907,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 886,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 183
+      },
+      "interface_draw_fractions": {
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.10435267857142858,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.24358258928571427,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.10072544642857142,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.25306919642857145,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.24720982142857142,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.051060267857142856
+      },
+      "deduped_hard_negatives_per_step_mean": 264.14285714285717,
+      "deduped_hard_negatives_per_step_min": 258,
+      "deduped_hard_negatives_per_step_max": 272,
+      "per_fragment_mined_distance_mean": {
+        "fragment_caesar_fragment_2": 0.026363689113090668,
+        "fragment_caesar_fragment_3": 0.025676512188663344,
+        "fragment_caesar_fragment_4": 0.025928799841922763,
+        "fragment_caesar_fragment_5": 0.045797591435803316,
+        "fragment_caesar_fragment_6": 0.04852638564860592,
+        "fragment_caesar_fragment_7": 0.024583107131595054
+      }
+    },
+    {
+      "epoch": 1,
+      "train_loss_mean": 6.454340662275042,
+      "train_loss_per_step": [
+        6.481656074523926,
+        6.468736171722412,
+        6.392959117889404,
+        6.484738349914551,
+        6.46028470993042,
+        6.4223551750183105,
+        6.4696550369262695
+      ],
+      "train_loss_first_step": 6.481656074523926,
+      "train_loss_last_step": 6.4696550369262695,
+      "val_loss": 5.512362761105708,
+      "improved": true,
+      "epochs_without_improvement": 0,
+      "mining_seconds": 6.164067029953003,
+      "training_seconds": 12.170942544937134,
+      "validation_seconds": 0.8580787181854248,
+      "epoch_seconds_total": 19.19308829307556,
+      "peak_gpu_mb": 939.688448,
+      "interface_draw_counts": {
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 811,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 889,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 390,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 903,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 181,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 410
+      },
+      "interface_draw_fractions": {
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.22628348214285715,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.248046875,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.10881696428571429,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.251953125,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.050502232142857144,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.11439732142857142
+      },
+      "deduped_hard_negatives_per_step_mean": 265.14285714285717,
+      "deduped_hard_negatives_per_step_min": 247,
+      "deduped_hard_negatives_per_step_max": 278,
+      "per_fragment_mined_distance_mean": {
+        "fragment_caesar_fragment_2": 0.03911868478857385,
+        "fragment_caesar_fragment_3": 0.03755872606919074,
+        "fragment_caesar_fragment_4": 0.038757636951392185,
+        "fragment_caesar_fragment_5": 0.06385325075447018,
+        "fragment_caesar_fragment_6": 0.06711961939118993,
+        "fragment_caesar_fragment_7": 0.03712617625785664
+      }
+    },
+    {
+      "epoch": 2,
+      "train_loss_mean": 6.293894699641636,
+      "train_loss_per_step": [
+        6.352685928344727,
+        6.298417091369629,
+        6.31301212310791,
+        6.285034656524658,
+        6.315004348754883,
+        6.2536091804504395,
+        6.239499568939209
+      ],
+      "train_loss_first_step": 6.352685928344727,
+      "train_loss_last_step": 6.239499568939209,
+      "val_loss": 5.522387993837406,
+      "improved": false,
+      "epochs_without_improvement": 1,
+      "mining_seconds": 6.223411321640015,
+      "training_seconds": 11.795031785964966,
+      "validation_seconds": 0.8565983772277832,
+      "epoch_seconds_total": 18.875041484832764,
+      "peak_gpu_mb": 906.830336,
+      "interface_draw_counts": {
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 942,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 828,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 908,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 364,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 372,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 170
+      },
+      "interface_draw_fractions": {
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.26283482142857145,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.23102678571428573,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.2533482142857143,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.1015625,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.10379464285714286,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.04743303571428571
+      },
+      "deduped_hard_negatives_per_step_mean": 215.71428571428572,
+      "deduped_hard_negatives_per_step_min": 208,
+      "deduped_hard_negatives_per_step_max": 227,
+      "per_fragment_mined_distance_mean": {
+        "fragment_caesar_fragment_2": 0.04295475210258087,
+        "fragment_caesar_fragment_3": 0.041264309221147245,
+        "fragment_caesar_fragment_4": 0.04131397015161758,
+        "fragment_caesar_fragment_5": 0.06833328124919115,
+        "fragment_caesar_fragment_6": 0.07328392154990862,
+        "fragment_caesar_fragment_7": 0.04002179975704604
+      }
+    },
+    {
+      "epoch": 3,
+      "train_loss_mean": 6.244992937360491,
+      "train_loss_per_step": [
+        6.250296592712402,
+        6.293503761291504,
+        6.228610515594482,
+        6.274807929992676,
+        6.260933876037598,
+        6.23819637298584,
+        6.1686015129089355
+      ],
+      "train_loss_first_step": 6.250296592712402,
+      "train_loss_last_step": 6.1686015129089355,
+      "val_loss": 5.70455875759851,
+      "improved": false,
+      "epochs_without_improvement": 2,
+      "mining_seconds": 6.184951066970825,
+      "training_seconds": 12.136164903640747,
+      "validation_seconds": 0.8938853740692139,
+      "epoch_seconds_total": 19.215001344680786,
+      "peak_gpu_mb": 913.53344,
+      "interface_draw_counts": {
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 370,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 854,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 921,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 873,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 375,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 191
+      },
+      "interface_draw_fractions": {
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.10323660714285714,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.23828125,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.25697544642857145,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.24358258928571427,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.10463169642857142,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.05329241071428571
+      },
+      "deduped_hard_negatives_per_step_mean": 218.71428571428572,
+      "deduped_hard_negatives_per_step_min": 210,
+      "deduped_hard_negatives_per_step_max": 233,
+      "per_fragment_mined_distance_mean": {
+        "fragment_caesar_fragment_2": 0.06337326578073954,
+        "fragment_caesar_fragment_3": 0.06369263504227106,
+        "fragment_caesar_fragment_4": 0.057890298906439805,
+        "fragment_caesar_fragment_5": 0.08739021180673825,
+        "fragment_caesar_fragment_6": 0.09071822482137344,
+        "fragment_caesar_fragment_7": 0.05183176102079129
+      }
+    },
+    {
+      "epoch": 4,
+      "train_loss_mean": 6.116744654519217,
+      "train_loss_per_step": [
+        6.207649230957031,
+        6.17099142074585,
+        6.102360725402832,
+        6.094676494598389,
+        6.1142354011535645,
+        6.080885410308838,
+        6.046413898468018
+      ],
+      "train_loss_first_step": 6.207649230957031,
+      "train_loss_last_step": 6.046413898468018,
+      "val_loss": 5.597479644423736,
+      "improved": false,
+      "epochs_without_improvement": 3,
+      "mining_seconds": 6.203527212142944,
+      "training_seconds": 11.816481351852417,
+      "validation_seconds": 0.8697366714477539,
+      "epoch_seconds_total": 18.889745235443115,
+      "peak_gpu_mb": 923.256832,
+      "interface_draw_counts": {
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 886,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 861,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 372,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 200,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 850,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 415
+      },
+      "interface_draw_fractions": {
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.24720982142857142,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.240234375,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.10379464285714286,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.05580357142857143,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.23716517857142858,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.11579241071428571
+      },
+      "deduped_hard_negatives_per_step_mean": 216.14285714285714,
+      "deduped_hard_negatives_per_step_min": 199,
+      "deduped_hard_negatives_per_step_max": 232,
+      "per_fragment_mined_distance_mean": {
+        "fragment_caesar_fragment_2": 0.07140225769100032,
+        "fragment_caesar_fragment_3": 0.06736865047736006,
+        "fragment_caesar_fragment_4": 0.06793280075961615,
+        "fragment_caesar_fragment_5": 0.11841005523394618,
+        "fragment_caesar_fragment_6": 0.12272825837135315,
+        "fragment_caesar_fragment_7": 0.06441011662012562
+      }
+    },
+    {
+      "epoch": 5,
+      "train_loss_mean": 6.006751673562186,
+      "train_loss_per_step": [
+        5.9710211753845215,
+        6.019510269165039,
+        5.95130729675293,
+        6.05320930480957,
+        5.957849025726318,
+        6.075448513031006,
+        6.018916130065918
+      ],
+      "train_loss_first_step": 5.9710211753845215,
+      "train_loss_last_step": 6.018916130065918,
+      "val_loss": 5.497964707070697,
+      "improved": true,
+      "epochs_without_improvement": 0,
+      "mining_seconds": 6.174505949020386,
+      "training_seconds": 11.49730896949768,
+      "validation_seconds": 0.8494687080383301,
+      "epoch_seconds_total": 18.521283626556396,
+      "peak_gpu_mb": 902.748672,
+      "interface_draw_counts": {
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 914,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 854,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 373,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 884,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 384,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 175
+      },
+      "interface_draw_fractions": {
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.25502232142857145,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.23828125,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.10407366071428571,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.24665178571428573,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.10714285714285714,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.048828125
+      },
+      "deduped_hard_negatives_per_step_mean": 198.42857142857142,
+      "deduped_hard_negatives_per_step_min": 187,
+      "deduped_hard_negatives_per_step_max": 213,
+      "per_fragment_mined_distance_mean": {
+        "fragment_caesar_fragment_2": 0.10712687817380526,
+        "fragment_caesar_fragment_3": 0.11112156677438535,
+        "fragment_caesar_fragment_4": 0.09695913063649855,
+        "fragment_caesar_fragment_5": 0.11767559473750812,
+        "fragment_caesar_fragment_6": 0.1226039671506255,
+        "fragment_caesar_fragment_7": 0.07563066509383212
+      }
+    },
+    {
+      "epoch": 6,
+      "train_loss_mean": 5.972232818603516,
+      "train_loss_per_step": [
+        6.050278186798096,
+        6.018877029418945,
+        5.898714065551758,
+        5.95815372467041,
+        5.9381890296936035,
+        5.940948486328125,
+        6.000469207763672
+      ],
+      "train_loss_first_step": 6.050278186798096,
+      "train_loss_last_step": 6.000469207763672,
+      "val_loss": 5.700809673699205,
+      "improved": false,
+      "epochs_without_improvement": 1,
+      "mining_seconds": 6.127329587936401,
+      "training_seconds": 11.469441652297974,
+      "validation_seconds": 0.8605692386627197,
+      "epoch_seconds_total": 18.457340478897095,
+      "peak_gpu_mb": 894.77888,
+      "interface_draw_counts": {
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 925,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 864,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 846,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 189,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 375,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 385
+      },
+      "interface_draw_fractions": {
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.25809151785714285,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.24107142857142858,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.23604910714285715,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.052734375,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.10463169642857142,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.107421875
+      },
+      "deduped_hard_negatives_per_step_mean": 188.28571428571428,
+      "deduped_hard_negatives_per_step_min": 180,
+      "deduped_hard_negatives_per_step_max": 204,
+      "per_fragment_mined_distance_mean": {
+        "fragment_caesar_fragment_2": 0.08886588235609522,
+        "fragment_caesar_fragment_3": 0.09267494859040616,
+        "fragment_caesar_fragment_4": 0.07940274175009965,
+        "fragment_caesar_fragment_5": 0.09214846220898827,
+        "fragment_caesar_fragment_6": 0.1000154471072631,
+        "fragment_caesar_fragment_7": 0.06178072048753758
+      }
+    },
+    {
+      "epoch": 7,
+      "train_loss_mean": 5.953535420554025,
+      "train_loss_per_step": [
+        6.0134077072143555,
+        5.924587249755859,
+        5.911459922790527,
+        5.958727836608887,
+        5.932477951049805,
+        5.877295970916748,
+        6.056791305541992
+      ],
+      "train_loss_first_step": 6.0134077072143555,
+      "train_loss_last_step": 6.056791305541992,
+      "val_loss": 5.641647856794521,
+      "improved": false,
+      "epochs_without_improvement": 2,
+      "mining_seconds": 6.204786062240601,
+      "training_seconds": 11.451270580291748,
+      "validation_seconds": 0.8575735092163086,
+      "epoch_seconds_total": 18.513630151748657,
+      "peak_gpu_mb": 897.746432,
+      "interface_draw_counts": {
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 820,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 954,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 887,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 376,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 163,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 384
+      },
+      "interface_draw_fractions": {
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.22879464285714285,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.2661830357142857,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.24748883928571427,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.10491071428571429,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.04547991071428571,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.10714285714285714
+      },
+      "deduped_hard_negatives_per_step_mean": 185.42857142857142,
+      "deduped_hard_negatives_per_step_min": 168,
+      "deduped_hard_negatives_per_step_max": 209,
+      "per_fragment_mined_distance_mean": {
+        "fragment_caesar_fragment_2": 0.12355239694403816,
+        "fragment_caesar_fragment_3": 0.12388060431777911,
+        "fragment_caesar_fragment_4": 0.1326281903722488,
+        "fragment_caesar_fragment_5": 0.14835107497837108,
+        "fragment_caesar_fragment_6": 0.14996942191933973,
+        "fragment_caesar_fragment_7": 0.10011816527211356
+      }
+    },
+    {
+      "epoch": 8,
+      "train_loss_mean": 5.8205278260367255,
+      "train_loss_per_step": [
+        5.8853759765625,
+        5.924869537353516,
+        5.878140926361084,
+        5.815862655639648,
+        5.719454765319824,
+        5.746878623962402,
+        5.7731122970581055
+      ],
+      "train_loss_first_step": 5.8853759765625,
+      "train_loss_last_step": 5.7731122970581055,
+      "val_loss": 5.531113873024981,
+      "improved": false,
+      "epochs_without_improvement": 3,
+      "mining_seconds": 6.22077751159668,
+      "training_seconds": 11.552187204360962,
+      "validation_seconds": 0.9047996997833252,
+      "epoch_seconds_total": 18.677764415740967,
+      "peak_gpu_mb": 884.66944,
+      "interface_draw_counts": {
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 879,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 841,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 397,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 929,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 176,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 362
+      },
+      "interface_draw_fractions": {
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.24525669642857142,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.23465401785714285,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.11077008928571429,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.2592075892857143,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.049107142857142856,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.10100446428571429
+      },
+      "deduped_hard_negatives_per_step_mean": 175.85714285714286,
+      "deduped_hard_negatives_per_step_min": 162,
+      "deduped_hard_negatives_per_step_max": 188,
+      "per_fragment_mined_distance_mean": {
+        "fragment_caesar_fragment_2": 0.1370280140563268,
+        "fragment_caesar_fragment_3": 0.13897042114931252,
+        "fragment_caesar_fragment_4": 0.14021409560433207,
+        "fragment_caesar_fragment_5": 0.12619535637379775,
+        "fragment_caesar_fragment_6": 0.12797282270323007,
+        "fragment_caesar_fragment_7": 0.09125802769011654
+      }
+    },
+    {
+      "epoch": 9,
+      "train_loss_mean": 5.7180312020438055,
+      "train_loss_per_step": [
+        5.749039173126221,
+        5.828437328338623,
+        5.764636993408203,
+        5.701900482177734,
+        5.696000099182129,
+        5.696472644805908,
+        5.589731693267822
+      ],
+      "train_loss_first_step": 5.749039173126221,
+      "train_loss_last_step": 5.589731693267822,
+      "val_loss": 5.656609392835048,
+      "improved": false,
+      "epochs_without_improvement": 4,
+      "mining_seconds": 6.153520345687866,
+      "training_seconds": 11.015250444412231,
+      "validation_seconds": 0.8836307525634766,
+      "epoch_seconds_total": 18.052401542663574,
+      "peak_gpu_mb": 873.168896,
+      "interface_draw_counts": {
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 885,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 180,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 864,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 390,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 906,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 359
+      },
+      "interface_draw_fractions": {
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.24693080357142858,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.05022321428571429,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.24107142857142858,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.10881696428571429,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.25279017857142855,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.10016741071428571
+      },
+      "deduped_hard_negatives_per_step_mean": 156.14285714285714,
+      "deduped_hard_negatives_per_step_min": 143,
+      "deduped_hard_negatives_per_step_max": 175,
+      "per_fragment_mined_distance_mean": {
+        "fragment_caesar_fragment_2": 0.1543766933803757,
+        "fragment_caesar_fragment_3": 0.15967256634335245,
+        "fragment_caesar_fragment_4": 0.15263328550602584,
+        "fragment_caesar_fragment_5": 0.14545219398347403,
+        "fragment_caesar_fragment_6": 0.14348605813410803,
+        "fragment_caesar_fragment_7": 0.0979267173588963
+      }
+    },
+    {
+      "epoch": 10,
+      "train_loss_mean": 5.668308121817453,
+      "train_loss_per_step": [
+        5.706149101257324,
+        5.634028434753418,
+        5.700616836547852,
+        5.7027177810668945,
+        5.677696704864502,
+        5.647551536560059,
+        5.609396457672119
+      ],
+      "train_loss_first_step": 5.706149101257324,
+      "train_loss_last_step": 5.609396457672119,
+      "val_loss": 5.649199249749193,
+      "improved": false,
+      "epochs_without_improvement": 5,
+      "mining_seconds": 6.16750955581665,
+      "training_seconds": 11.156909465789795,
+      "validation_seconds": 0.9367208480834961,
+      "epoch_seconds_total": 18.26113986968994,
+      "peak_gpu_mb": 872.544256,
+      "interface_draw_counts": {
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 399,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 842,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 358,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 928,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 165,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 892
+      },
+      "interface_draw_fractions": {
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.111328125,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.23493303571428573,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.09988839285714286,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.25892857142857145,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.04603794642857143,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.24888392857142858
+      },
+      "deduped_hard_negatives_per_step_mean": 158.57142857142858,
+      "deduped_hard_negatives_per_step_min": 152,
+      "deduped_hard_negatives_per_step_max": 176,
+      "per_fragment_mined_distance_mean": {
+        "fragment_caesar_fragment_2": 0.14364846171305853,
+        "fragment_caesar_fragment_3": 0.14813944279341382,
+        "fragment_caesar_fragment_4": 0.1525026512441828,
+        "fragment_caesar_fragment_5": 0.1687222148845488,
+        "fragment_caesar_fragment_6": 0.16896217768199934,
+        "fragment_caesar_fragment_7": 0.12179262188910064
+      }
+    },
+    {
+      "epoch": 11,
+      "train_loss_mean": 5.649025508335659,
+      "train_loss_per_step": [
+        5.7691240310668945,
+        5.616034507751465,
+        5.66133451461792,
+        5.5586161613464355,
+        5.689568519592285,
+        5.582979202270508,
+        5.665521621704102
+      ],
+      "train_loss_first_step": 5.7691240310668945,
+      "train_loss_last_step": 5.665521621704102,
+      "val_loss": 5.704541718553685,
+      "improved": false,
+      "epochs_without_improvement": 6,
+      "mining_seconds": 6.18478536605835,
+      "training_seconds": 11.029440879821777,
+      "validation_seconds": 0.8905909061431885,
+      "epoch_seconds_total": 18.104817152023315,
+      "peak_gpu_mb": 864.122368,
+      "interface_draw_counts": {
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 185,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 884,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 409,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 839,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 884,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 383
+      },
+      "interface_draw_fractions": {
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.05161830357142857,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.24665178571428573,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.11411830357142858,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.23409598214285715,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.24665178571428573,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.10686383928571429
+      },
+      "deduped_hard_negatives_per_step_mean": 144.28571428571428,
+      "deduped_hard_negatives_per_step_min": 133,
+      "deduped_hard_negatives_per_step_max": 158,
+      "per_fragment_mined_distance_mean": {
+        "fragment_caesar_fragment_2": 0.175354537720135,
+        "fragment_caesar_fragment_3": 0.18431838794918584,
+        "fragment_caesar_fragment_4": 0.19188830893322387,
+        "fragment_caesar_fragment_5": 0.19740418690213096,
+        "fragment_caesar_fragment_6": 0.18720523127569602,
+        "fragment_caesar_fragment_7": 0.1390096673511119
+      }
+    },
+    {
+      "epoch": 12,
+      "train_loss_mean": 5.58697373526437,
+      "train_loss_per_step": [
+        5.607631683349609,
+        5.702125072479248,
+        5.656920433044434,
+        5.550037384033203,
+        5.5382080078125,
+        5.5543084144592285,
+        5.499585151672363
+      ],
+      "train_loss_first_step": 5.607631683349609,
+      "train_loss_last_step": 5.499585151672363,
+      "val_loss": 5.452063536596203,
+      "improved": true,
+      "epochs_without_improvement": 0,
+      "mining_seconds": 6.223853349685669,
+      "training_seconds": 11.090518951416016,
+      "validation_seconds": 0.8532934188842773,
+      "epoch_seconds_total": 18.167665719985962,
+      "peak_gpu_mb": 863.853056,
+      "interface_draw_counts": {
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 811,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 384,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 384,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 907,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 175,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 923
+      },
+      "interface_draw_fractions": {
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.22628348214285715,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.10714285714285714,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.10714285714285714,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.25306919642857145,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.048828125,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.25753348214285715
+      },
+      "deduped_hard_negatives_per_step_mean": 148.28571428571428,
+      "deduped_hard_negatives_per_step_min": 137,
+      "deduped_hard_negatives_per_step_max": 154,
+      "per_fragment_mined_distance_mean": {
+        "fragment_caesar_fragment_2": 0.1410984404298455,
+        "fragment_caesar_fragment_3": 0.1425792557393797,
+        "fragment_caesar_fragment_4": 0.1567756520885536,
+        "fragment_caesar_fragment_5": 0.18966659634696734,
+        "fragment_caesar_fragment_6": 0.20437300094427208,
+        "fragment_caesar_fragment_7": 0.139503597912596
+      }
+    },
+    {
+      "epoch": 13,
+      "train_loss_mean": 5.486462388719831,
+      "train_loss_per_step": [
+        5.50784158706665,
+        5.50499153137207,
+        5.491819858551025,
+        5.544605255126953,
+        5.464727878570557,
+        5.431633949279785,
+        5.459616661071777
+      ],
+      "train_loss_first_step": 5.50784158706665,
+      "train_loss_last_step": 5.459616661071777,
+      "val_loss": 5.523131971607705,
+      "improved": false,
+      "epochs_without_improvement": 1,
+      "mining_seconds": 6.169996738433838,
+      "training_seconds": 11.058043003082275,
+      "validation_seconds": 0.86307692527771,
+      "epoch_seconds_total": 18.091116666793823,
+      "peak_gpu_mb": 851.695616,
+      "interface_draw_counts": {
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 874,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 891,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 350,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 865,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 418,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 186
+      },
+      "interface_draw_fractions": {
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.24386160714285715,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.24860491071428573,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.09765625,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.24135044642857142,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.11662946428571429,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.05189732142857143
+      },
+      "deduped_hard_negatives_per_step_mean": 133.71428571428572,
+      "deduped_hard_negatives_per_step_min": 123,
+      "deduped_hard_negatives_per_step_max": 142,
+      "per_fragment_mined_distance_mean": {
+        "fragment_caesar_fragment_2": 0.15616436818860066,
+        "fragment_caesar_fragment_3": 0.15992632523881203,
+        "fragment_caesar_fragment_4": 0.1556121169397717,
+        "fragment_caesar_fragment_5": 0.14685749994103378,
+        "fragment_caesar_fragment_6": 0.1353060640872289,
+        "fragment_caesar_fragment_7": 0.10588087109306704
+      }
+    },
+    {
+      "epoch": 14,
+      "train_loss_mean": 5.555158274514334,
+      "train_loss_per_step": [
+        5.544918537139893,
+        5.67383337020874,
+        5.424149990081787,
+        5.657979965209961,
+        5.431680679321289,
+        5.645001411437988,
+        5.508543968200684
+      ],
+      "train_loss_first_step": 5.544918537139893,
+      "train_loss_last_step": 5.508543968200684,
+      "val_loss": 5.498921976299706,
+      "improved": false,
+      "epochs_without_improvement": 2,
+      "mining_seconds": 6.175795078277588,
+      "training_seconds": 10.824150800704956,
+      "validation_seconds": 0.862436056137085,
+      "epoch_seconds_total": 17.86238193511963,
+      "peak_gpu_mb": 849.811968,
+      "interface_draw_counts": {
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 887,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 363,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 908,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 853,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 178,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 395
+      },
+      "interface_draw_fractions": {
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.24748883928571427,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.10128348214285714,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.2533482142857143,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.23800223214285715,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.04966517857142857,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.11021205357142858
+      },
+      "deduped_hard_negatives_per_step_mean": 132.0,
+      "deduped_hard_negatives_per_step_min": 119,
+      "deduped_hard_negatives_per_step_max": 141,
+      "per_fragment_mined_distance_mean": {
+        "fragment_caesar_fragment_2": 0.22487270111550195,
+        "fragment_caesar_fragment_3": 0.22129849197560789,
+        "fragment_caesar_fragment_4": 0.20243850646896616,
+        "fragment_caesar_fragment_5": 0.18702534931104592,
+        "fragment_caesar_fragment_6": 0.17854583371335114,
+        "fragment_caesar_fragment_7": 0.13670734585576855
+      }
+    },
+    {
+      "epoch": 15,
+      "train_loss_mean": 5.509438719068255,
+      "train_loss_per_step": [
+        5.580447196960449,
+        5.586170673370361,
+        5.48123025894165,
+        5.560699462890625,
+        5.443909645080566,
+        5.465212821960449,
+        5.448400974273682
+      ],
+      "train_loss_first_step": 5.580447196960449,
+      "train_loss_last_step": 5.448400974273682,
+      "val_loss": 5.578621884386143,
+      "improved": false,
+      "epochs_without_improvement": 3,
+      "mining_seconds": 6.165458917617798,
+      "training_seconds": 10.948344945907593,
+      "validation_seconds": 0.8870894908905029,
+      "epoch_seconds_total": 18.000893354415894,
+      "peak_gpu_mb": 853.886976,
+      "interface_draw_counts": {
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 911,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 183,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 345,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 848,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 915,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 382
+      },
+      "interface_draw_fractions": {
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.25418526785714285,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.051060267857142856,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.09626116071428571,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.23660714285714285,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.2553013392857143,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.10658482142857142
+      },
+      "deduped_hard_negatives_per_step_mean": 140.0,
+      "deduped_hard_negatives_per_step_min": 130,
+      "deduped_hard_negatives_per_step_max": 155,
+      "per_fragment_mined_distance_mean": {
+        "fragment_caesar_fragment_2": 0.18674724944686705,
+        "fragment_caesar_fragment_3": 0.1810658845471878,
+        "fragment_caesar_fragment_4": 0.1907465409980539,
+        "fragment_caesar_fragment_5": 0.17057728839533773,
+        "fragment_caesar_fragment_6": 0.16206669451143496,
+        "fragment_caesar_fragment_7": 0.1186295140545375
+      }
+    },
+    {
+      "epoch": 16,
+      "train_loss_mean": 5.407858644212995,
+      "train_loss_per_step": [
+        5.481594085693359,
+        5.466447353363037,
+        5.425214767456055,
+        5.386829376220703,
+        5.373473167419434,
+        5.365261077880859,
+        5.3561906814575195
+      ],
+      "train_loss_first_step": 5.481594085693359,
+      "train_loss_last_step": 5.3561906814575195,
+      "val_loss": 5.481309154946245,
+      "improved": false,
+      "epochs_without_improvement": 4,
+      "mining_seconds": 6.1338582038879395,
+      "training_seconds": 11.34463882446289,
+      "validation_seconds": 0.8823230266571045,
+      "epoch_seconds_total": 18.360820055007935,
+      "peak_gpu_mb": 838.653952,
+      "interface_draw_counts": {
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 951,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 883,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 900,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 325,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 151,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 374
+      },
+      "interface_draw_fractions": {
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.26534598214285715,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.24637276785714285,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.25111607142857145,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.09068080357142858,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.04213169642857143,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.10435267857142858
+      },
+      "deduped_hard_negatives_per_step_mean": 126.14285714285714,
+      "deduped_hard_negatives_per_step_min": 123,
+      "deduped_hard_negatives_per_step_max": 135,
+      "per_fragment_mined_distance_mean": {
+        "fragment_caesar_fragment_2": 0.16132579200229671,
+        "fragment_caesar_fragment_3": 0.15515039442513417,
+        "fragment_caesar_fragment_4": 0.19422315710278995,
+        "fragment_caesar_fragment_5": 0.21181596183526624,
+        "fragment_caesar_fragment_6": 0.2140149342421538,
+        "fragment_caesar_fragment_7": 0.1550740148625216
+      }
+    },
+    {
+      "epoch": 17,
+      "train_loss_mean": 5.368359974452427,
+      "train_loss_per_step": [
+        5.430782794952393,
+        5.3970537185668945,
+        5.396446228027344,
+        5.339338302612305,
+        5.3621392250061035,
+        5.302420616149902,
+        5.350338935852051
+      ],
+      "train_loss_first_step": 5.430782794952393,
+      "train_loss_last_step": 5.350338935852051,
+      "val_loss": 5.464976760810745,
+      "improved": false,
+      "epochs_without_improvement": 5,
+      "mining_seconds": 6.1647467613220215,
+      "training_seconds": 10.907264947891235,
+      "validation_seconds": 0.8547079563140869,
+      "epoch_seconds_total": 17.926719665527344,
+      "peak_gpu_mb": 851.457536,
+      "interface_draw_counts": {
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 933,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 907,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 339,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 882,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 365,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 158
+      },
+      "interface_draw_fractions": {
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.2603236607142857,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.25306919642857145,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.09458705357142858,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.24609375,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.10184151785714286,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.04408482142857143
+      },
+      "deduped_hard_negatives_per_step_mean": 126.42857142857143,
+      "deduped_hard_negatives_per_step_min": 115,
+      "deduped_hard_negatives_per_step_max": 136,
+      "per_fragment_mined_distance_mean": {
+        "fragment_caesar_fragment_2": 0.1861818326391684,
+        "fragment_caesar_fragment_3": 0.17569882340118106,
+        "fragment_caesar_fragment_4": 0.18851135782418116,
+        "fragment_caesar_fragment_5": 0.1856172028224515,
+        "fragment_caesar_fragment_6": 0.1703180243476079,
+        "fragment_caesar_fragment_7": 0.1246845366900266
+      }
+    },
+    {
+      "epoch": 18,
+      "train_loss_mean": 5.34682171685355,
+      "train_loss_per_step": [
+        5.338161468505859,
+        5.431351661682129,
+        5.327144622802734,
+        5.376704692840576,
+        5.299479961395264,
+        5.3838324546813965,
+        5.2710771560668945
+      ],
+      "train_loss_first_step": 5.338161468505859,
+      "train_loss_last_step": 5.2710771560668945,
+      "val_loss": 5.5219694426160055,
+      "improved": false,
+      "epochs_without_improvement": 6,
+      "mining_seconds": 6.136772394180298,
+      "training_seconds": 10.88564682006836,
+      "validation_seconds": 0.8907291889190674,
+      "epoch_seconds_total": 17.913148403167725,
+      "peak_gpu_mb": 829.747712,
+      "interface_draw_counts": {
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 357,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 339,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 912,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 923,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 867,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 186
+      },
+      "interface_draw_fractions": {
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.099609375,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.09458705357142858,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.2544642857142857,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.25753348214285715,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.24190848214285715,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.05189732142857143
+      },
+      "deduped_hard_negatives_per_step_mean": 116.42857142857143,
+      "deduped_hard_negatives_per_step_min": 106,
+      "deduped_hard_negatives_per_step_max": 124,
+      "per_fragment_mined_distance_mean": {
+        "fragment_caesar_fragment_2": 0.18176825156854104,
+        "fragment_caesar_fragment_3": 0.16501430981836393,
+        "fragment_caesar_fragment_4": 0.17958418137448676,
+        "fragment_caesar_fragment_5": 0.2330901709958663,
+        "fragment_caesar_fragment_6": 0.2320395010499618,
+        "fragment_caesar_fragment_7": 0.14692959112117887
+      }
+    },
+    {
+      "epoch": 19,
+      "train_loss_mean": 5.348049300057547,
+      "train_loss_per_step": [
+        5.348549842834473,
+        5.421970367431641,
+        5.271669387817383,
+        5.4464111328125,
+        5.267104148864746,
+        5.286509990692139,
+        5.394130229949951
+      ],
+      "train_loss_first_step": 5.348549842834473,
+      "train_loss_last_step": 5.394130229949951,
+      "val_loss": 5.477366050880753,
+      "improved": false,
+      "epochs_without_improvement": 7,
+      "mining_seconds": 6.1685497760772705,
+      "training_seconds": 10.714529037475586,
+      "validation_seconds": 0.8507320880889893,
+      "epoch_seconds_total": 17.733810901641846,
+      "peak_gpu_mb": 833.736192,
+      "interface_draw_counts": {
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 387,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 853,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 910,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 881,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 164,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 389
+      },
+      "interface_draw_fractions": {
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.10797991071428571,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.23800223214285715,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.25390625,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.24581473214285715,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.04575892857142857,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.10853794642857142
+      },
+      "deduped_hard_negatives_per_step_mean": 112.85714285714286,
+      "deduped_hard_negatives_per_step_min": 102,
+      "deduped_hard_negatives_per_step_max": 121,
+      "per_fragment_mined_distance_mean": {
+        "fragment_caesar_fragment_2": 0.22335105571289396,
+        "fragment_caesar_fragment_3": 0.20506975309594971,
+        "fragment_caesar_fragment_4": 0.2539234135354705,
+        "fragment_caesar_fragment_5": 0.2534273221705577,
+        "fragment_caesar_fragment_6": 0.23458875389053271,
+        "fragment_caesar_fragment_7": 0.18028200297517116
+      }
+    },
+    {
+      "epoch": 20,
+      "train_loss_mean": 5.315556049346924,
+      "train_loss_per_step": [
+        5.351346015930176,
+        5.359861850738525,
+        5.306562423706055,
+        5.280849933624268,
+        5.382388591766357,
+        5.239621639251709,
+        5.288261890411377
+      ],
+      "train_loss_first_step": 5.351346015930176,
+      "train_loss_last_step": 5.288261890411377,
+      "val_loss": 5.787961128479493,
+      "improved": false,
+      "epochs_without_improvement": 8,
+      "mining_seconds": 6.1435441970825195,
+      "training_seconds": 11.237182855606079,
+      "validation_seconds": 0.860029935836792,
+      "epoch_seconds_total": 18.24075698852539,
+      "peak_gpu_mb": 846.872064,
+      "interface_draw_counts": {
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 857,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 907,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 870,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 164,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 414,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 372
+      },
+      "interface_draw_fractions": {
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.23911830357142858,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.25306919642857145,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.24274553571428573,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.04575892857142857,
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.11551339285714286,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.10379464285714286
+      },
+      "deduped_hard_negatives_per_step_mean": 123.42857142857143,
+      "deduped_hard_negatives_per_step_min": 113,
+      "deduped_hard_negatives_per_step_max": 132,
+      "per_fragment_mined_distance_mean": {
+        "fragment_caesar_fragment_2": 0.2046093791145687,
+        "fragment_caesar_fragment_3": 0.19547946773872535,
+        "fragment_caesar_fragment_4": 0.2212582538041341,
+        "fragment_caesar_fragment_5": 0.23013674894435143,
+        "fragment_caesar_fragment_6": 0.23552583325176668,
+        "fragment_caesar_fragment_7": 0.16097597937805508
+      }
+    }
+  ],
+  "stopped_by": "patience",
+  "stopped_at_epoch": 20,
+  "interface_weights": {
+    "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.10158305934398554,
+    "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.24648238449950224,
+    "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.24648238449950224,
+    "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.10967331025760725,
+    "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.24648238449950224,
+    "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.049296476899900445
+  },
+  "n_train_interfaces": 6,
+  "n_val_pairs": 499,
+  "device": "cuda",
+  "batch_size": 512,
+  "steps_per_epoch": 7
+}

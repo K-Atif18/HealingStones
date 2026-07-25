@@ -599,7 +599,10 @@ steps = ~1.4% of the fold's pairs, so 50 epochs = ~600 gradient steps =
 - Retrieval mAP 0.1065 vs FPFH 0.1053; paired mAP diff +0.0012
   [-0.0019, +0.0042] -- **CI includes zero, NOT a win**.
 - P@1 0.1545 vs FPFH 0.1676 -- below.
-- Condition-3 easy-vs-hard gap 0.261 vs FPFH 0.610 -- **shrunk (MET on fold)**.
+- Condition-3 easy-vs-hard gap 0.261 vs FPFH 0.610 -- ~~shrunk (MET on fold)~~
+  **RETRACTED 2026-07-25: FPFH-mined confound, random baseline gap=0.006; the
+  valid encoder-mined test gives gap 0.722, hard-AUC 0.064 -> condition 3 was
+  NEVER met. See section (j).**
 - Held-out fragment-ID self-retrieval 0.470 vs FPFH 0.895 -- **~half the leakage**.
 - Train loss 6.48->4.64, val loss non-monotonic (best 5.51 @ ep19, drifts to 5.73).
 
@@ -607,9 +610,12 @@ steps = ~1.4% of the fold's pairs, so 50 epochs = ~600 gradient steps =
 `phase5a_runs_capped16/` (kept as provenance, NOT a baseline). Best-val
 checkpoint epoch 27. Held-out fold-1 eval:
 - Retrieval mAP 0.1173 vs FPFH 0.1053; paired mAP diff +0.0120
-  [+0.0085, +0.0157] -- CI excludes zero (mAP win on this fold).
+  [+0.0085, +0.0157] -- CI excludes zero (mAP "win" on this fold -- but see
+  Run 4: the win/tie/loss swing across checkpoints shows this is ~0 +/- 0.01
+  checkpoint-selection noise, NOT a cap effect).
 - P@1 0.1516 vs FPFH 0.1676 -- still below.
-- Condition-3 gap 0.280 vs FPFH 0.610 -- stayed shrunk.
+- Condition-3 gap 0.280 vs FPFH 0.610 -- ~~stayed shrunk~~ **RETRACTED: same
+  FPFH-mined confound; see section (j).**
 - Fragment-ID self-retrieval 0.463 -- ~half FPFH, unchanged.
 
 **Honest caveats on Run 2 (why it is NOT evidence of the cap's effect):**
@@ -657,6 +663,33 @@ pre-framed last turn -- the unit fix does not touch it, as predicted.
 2. **The one regularizer in the pipeline (jitter) was INERT** during all three
    runs -- see section (i). We cannot claim a capacity/data-ratio wall until the
    one regularizer that exists has actually functioned once.
+
+### Run 4 -- WORKING JITTER: same as Run 3, jitter now stochastic (one variable)
+`phase5a_runs_jitter/`. Single-variable vs Run 3: the only change is the
+jitter-seed fix (Deviation 4, section i) -- per-(seed,epoch,frag_index,pid)
+noise instead of the frozen constant-seed version. Budget, epoch unit,
+patience, uncapped -- all identical to Run 3.
+
+Result: **patience fired at epoch 20** (147 steps) vs Run 3's epoch 10.
+Best val **5.4521 @ epoch 12** vs Run 3's 5.5288 @ epoch 2.
+- Working jitter DELAYED overfitting: the best-val epoch moved 2 -> 12 (Run 3
+  peaked on its 2nd epoch and never recovered; Run 4 kept finding new bests
+  through ep12), and patience fired ~2x later. This is what functioning
+  augmentation is supposed to do.
+- The loss improvement itself is small (best val 5.529 -> 5.452, ~1.4%) and the
+  curve is still noisy (5.45-5.79 band; ep5 and ep12 within noise). Directionally
+  a positive result (outcome 1 of the pre-framed three), but small enough that
+  the weak val signal (median 347 positives/patch, §7) cannot confirm it is
+  meaningful. Train continued falling (6.50 -> 5.32).
+
+Honest read: working jitter modestly delayed overfitting -- worth carrying
+forward (it is a correct fix regardless, and it helped rather than hurt) -- but
+it did NOT transform the picture; the small-anchor limited-generalization
+situation persists. **val is still not a pass criterion.** Run 4's checkpoint
+(ep12) is the first trained with BOTH a coherent epoch and working augmentation,
+so its export-and-evaluate (section j) is the closest to a trustworthy
+condition-1/2 reading so far -- still fold-1-only, still checkpoint-selected off
+a noisy signal, but off the unit and jitter defects.
 
 ---
 """
@@ -706,6 +739,69 @@ gain. Revisit only if working jitter still doesn't make val trend.
 """
 
 
+def section_condition3_retraction() -> str:
+    """Section (j): condition 3 was a tautology -- the negative result."""
+    return """## (j) Condition 3 was a tautology -- the negative result (2026-07-25)
+
+Retracts the condition-3 "MET" claims in sections (h) and design-doc §11
+(annotated in place, not deleted -- the record includes that this was believed
+three times). THREE distinct failures.
+
+### Failure A -- metric confound (FPFH-mined hard negatives)
+Condition 3 was measured against FPFH-mined hard negatives = FPFH's own
+nearest-neighbour mistakes. Any embedding that merely DIFFERS from FPFH sees
+them as unremarkable -> near-zero gap, no assembly understanding required.
+Proof (baseline_diagnostics.json): random gap=**0.0064**, centroid=0.098,
+fpfh=0.614. "Encoder gap 0.26-0.30 < FPFH 0.61" only showed "encoder != FPFH",
+which random (0.006) shows trivially. Measured & believed three times.
+
+### Failure B -- the pre-registration's own design gap
+`PHASE5_PREREGISTRATION.md` §3 said "shrink the easy-vs-hard gap" WITHOUT
+specifying WHOSE look-alikes. The hard-negative source was an unlocked degree of
+freedom -- the locked rulebook did not anticipate that a metric's own
+construction could make the criterion near-automatic. Fix for future phases:
+condition 3 must use the CANDIDATE's OWN mined negatives (self-adversarial),
+never a fixed foreign source's.
+
+### Failure C -- the actual negative result (valid, encoder-mined test)
+Encoder mined against ITS OWN look-alikes, scored under the encoder (fold 1,
+held-out): easy=0.785, **hard=0.064 (below chance)**, gap=**0.722** -- WORSE
+than FPFH's own 0.610. **Condition 3 was NEVER met.** The encoder rides
+similarity as hard as FPFH; it learned a different similarity, not
+complementarity.
+
+### Corrected Phase-5A conclusion
+- Conditions 1-2 (retrieval): FAILED on fold 1 (paired mAP diff -0.0067
+  [-0.0095,-0.0039]; P@1 0.141 vs 0.168). Prior "+0.0120 win" / "+0.0012 tie"
+  were checkpoint-selection noise (win/tie/loss across 3 checkpoints => ~0 +/-
+  0.01). Per-fold {F1-F4} confirmation = the 6-fold run.
+- Condition 3 (thesis): NOT MET. Complete on current data (encoder-mined test is
+  over the full embedding, not per-fold -> no 6-fold run needed for this).
+- Condition 6 (fragment-ID): improved (0.519 vs 0.895) -- stands; least
+  thesis-critical.
+
+### Why this is a real result
+Clean, publishable NEGATIVE Level-3 result with a diagnosed cause. Vindicates
+the founding hypothesis: similarity != compatibility is hard -- now
+demonstrably hard for the LEARNED model too. Direct evidence for why H5
+(complementarity needs asymmetric supervision) was DEFERRED not disproven:
+symmetric co-membership labels train a similarity metric, and a similarity
+metric cannot learn complementarity -- exactly as the §5 supervision hierarchy
+predicted. Level 3 was the declared ceiling; the labels are the binding
+constraint, not the model.
+
+### Process lesson (applied to us)
+Caught on the FOURTH measurement, not the first. The apparatus did not "work" --
+a flattering metric got three passes before anyone mined the encoder's own
+negatives, and the check that broke it took ten seconds. Lesson: when a single
+metric is the only survivor, test it FIRST, hardest, and against its own
+construction. A metric that depends on a foreign reference must be re-derived
+from the candidate's own reference before it is believed.
+
+---
+"""
+
+
 def main() -> None:
     with open(JSON_PATH, "r", encoding="utf-8") as fh:
         d = json.load(fh)
@@ -719,6 +815,7 @@ def main() -> None:
         section_dry_run(),
         section_fold1_findings(),
         section_jitter_deviation(),
+        section_condition3_retraction(),
         section_encoder_placeholder(d),
     ]
     with open(OUT_PATH, "w", encoding="utf-8") as fh:

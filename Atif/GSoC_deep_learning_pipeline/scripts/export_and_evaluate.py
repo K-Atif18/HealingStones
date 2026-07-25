@@ -170,13 +170,41 @@ def main() -> int:
     }
 
     # --- Condition 3: easy-vs-hard AUC gap, FOLD-RESTRICTED (held_out=held) ---
-    # The thesis metric. Uses the frozen FPFH-mined hard-negative eval set,
-    # scored under EACH source's own embedding, restricted to pairs not
-    # touching the held-out fragment (the fix from the condition-3 session).
-    hard_neg = rk.mine_hard_negatives(ctx, fpfh, seed=args.seed)
-    report["condition3_easy_vs_hard_heldout"] = {
-        "encoder": rk.easy_vs_hard_separability(ctx, enc, hard_neg, seed=args.seed, held_out=held),
-        "fpfh": rk.easy_vs_hard_separability(ctx, fpfh, hard_neg, seed=args.seed, held_out=held),
+    #
+    # CONFOUND (discovered this session): the "shrink the easy-vs-hard gap"
+    # criterion is near-tautological when hard negatives are FPFH-mined. Those
+    # look-alikes are FPFH's OWN nearest-neighbour mistakes, so ANY non-FPFH
+    # embedding -- even pure random -- sees them as unremarkable and shows a
+    # ~0 gap. Measured baseline gaps (baseline_diagnostics.json): random=0.0064,
+    # centroid=0.0981, fpfh=0.6141. So "encoder gap 0.30 < FPFH 0.61" proves
+    # only "the encoder is not FPFH", which random (0.006) shows trivially. This
+    # is a gap in the pre-registration's own design.
+    #
+    # The ONLY valid thesis test: mine hard negatives with the ENCODER'S OWN
+    # embedding, then measure whether the encoder still resists ITS OWN
+    # look-alikes. That is condition3_encoder_mined below.
+    hard_neg_fpfh = rk.mine_hard_negatives(ctx, fpfh, seed=args.seed)
+    report["condition3_fpfh_mined_CONFOUNDED"] = {
+        "note": ("FPFH-mined hard negatives -> shrinkage is near-automatic for "
+                 "any non-FPFH source (random baseline gap=0.0064). NOT a valid "
+                 "thesis test; kept only for continuity with prior runs."),
+        "encoder": rk.easy_vs_hard_separability(ctx, enc, hard_neg_fpfh, seed=args.seed, held_out=held),
+        "fpfh": rk.easy_vs_hard_separability(ctx, fpfh, hard_neg_fpfh, seed=args.seed, held_out=held),
+    }
+
+    # VALID thesis test: encoder-mined hard negatives, scored under the encoder.
+    # If the encoder still separates positives from ITS OWN look-alikes
+    # (gap stays small / hard-AUC stays high), the thesis holds. If the gap
+    # collapses (hard-AUC -> chance), the encoder is riding similarity too and
+    # condition 3 was never really met.
+    hard_neg_enc = rk.mine_hard_negatives(ctx, enc, seed=args.seed)
+    report["condition3_encoder_mined_VALID"] = {
+        "note": ("Encoder-mined hard negatives, scored under the encoder -- the "
+                 "only non-tautological thesis test. High hard-AUC / small gap "
+                 "here = the encoder resists ITS OWN look-alikes."),
+        "encoder": rk.easy_vs_hard_separability(ctx, enc, hard_neg_enc, seed=args.seed, held_out=held),
+        # For reference, how FPFH fares against the encoder's look-alikes:
+        "fpfh_vs_encoder_mined": rk.easy_vs_hard_separability(ctx, fpfh, hard_neg_enc, seed=args.seed, held_out=held),
     }
 
     os.makedirs(os.path.dirname(args.out), exist_ok=True)
@@ -201,15 +229,20 @@ def main() -> int:
           f"{hp['encoder'].get('heldout_self_retrieval'):.3f} "
           f"fpfh={hp['fpfh'].get('heldout_self_retrieval'):.3f} "
           f"(base rate {hp['encoder'].get('base_rate'):.3f})")
-    c3 = report["condition3_easy_vs_hard_heldout"]
-    ce, cf = c3["encoder"], c3["fpfh"]
-    print(f"  COND-3 easy-vs-hard gap (held-out; SMALLER is better):")
-    print(f"    encoder: easy={ce['auc_pos_vs_easy']:.3f} hard={ce['auc_pos_vs_hard']:.3f} "
-          f"gap={ce['easy_minus_hard_auc_gap']:.3f}")
-    print(f"    fpfh:    easy={cf['auc_pos_vs_easy']:.3f} hard={cf['auc_pos_vs_hard']:.3f} "
-          f"gap={cf['easy_minus_hard_auc_gap']:.3f}")
-    _shrunk = ce['easy_minus_hard_auc_gap'] < cf['easy_minus_hard_auc_gap']
-    print(f"    encoder shrinks the gap vs FPFH: {_shrunk}")
+    c3f = report["condition3_fpfh_mined_CONFOUNDED"]
+    cef, cff = c3f["encoder"], c3f["fpfh"]
+    print(f"  COND-3 (FPFH-mined, CONFOUNDED -- random baseline gap=0.006, ignore):")
+    print(f"    encoder gap={cef['easy_minus_hard_auc_gap']:.3f} "
+          f"(easy={cef['auc_pos_vs_easy']:.3f} hard={cef['auc_pos_vs_hard']:.3f})")
+    print(f"    fpfh    gap={cff['easy_minus_hard_auc_gap']:.3f} "
+          f"(easy={cff['auc_pos_vs_easy']:.3f} hard={cff['auc_pos_vs_hard']:.3f})")
+    c3e = report["condition3_encoder_mined_VALID"]
+    ce = c3e["encoder"]
+    print(f"  COND-3 (ENCODER-mined, VALID thesis test):")
+    print(f"    encoder vs ITS OWN look-alikes: easy={ce['auc_pos_vs_easy']:.3f} "
+          f"hard={ce['auc_pos_vs_hard']:.3f} gap={ce['easy_minus_hard_auc_gap']:.3f}")
+    print(f"    -> hard-AUC near 0.5 = rides similarity (thesis NOT met); "
+          f"high hard-AUC/small gap = resists own look-alikes (thesis holds)")
     print(f"\nWritten -> {args.out}")
     print("REMINDER: one held-out fold. NOT the six-condition verdict.")
     return 0

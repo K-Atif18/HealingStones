@@ -848,28 +848,43 @@ well-supported folds {F1..F4}, which needs all 7 checkpoints.
   inconsistent across training — neither confirmed nor refuted.
 
 ## Held-out fold-1 evaluation (encoder vs FPFH, same fold, paired)
+
+> **⚠️ RETRACTED IN PART — 2026-07-25 (see §12 / results-log section (j)).**
+> The "Condition 3 ... MET / strongly MET" claims in this subsection and the
+> "Honest verdict" below are **WRONG** and must not be relied on. They were
+> measured against **FPFH-mined** hard negatives, which makes the gap shrink
+> near-automatically for ANY non-FPFH embedding (random baseline gap = 0.0064).
+> The VALID test — encoder mined against ITS OWN look-alikes — gives
+> gap = 0.722, hard-AUC = 0.064 (below chance): **condition 3 was NEVER met;
+> the encoder rides similarity as hard as FPFH.** The original text is left
+> BELOW, unedited, on purpose: the record includes that this was believed
+> three times and how the belief broke (§12). Do not silently "fix" it.
+
 | Metric | Encoder | FPFH | Read |
 |---|---:|---:|---|
 | Retrieval mAP | 0.1065 | 0.1053 | tied |
 | Retrieval P@1 | 0.1545 | 0.1676 | encoder slightly worse |
 | Paired mAP diff (enc−fpfh) | +0.0012 [−0.0019, +0.0042] | — | **CI includes zero → NOT a win (condition 1/2 fold-1 fail)** |
-| **Cond-3 easy-vs-hard gap** | **0.261** | **0.610** | **encoder shrinks 57% (condition 3 MET on this fold)** |
-| — pos-vs-hard AUC | 0.603 | 0.073 | FPFH below chance; encoder well above |
+| **Cond-3 easy-vs-hard gap** | **0.261** | **0.610** | ~~encoder shrinks 57% (condition 3 MET on this fold)~~ **RETRACTED — FPFH-mined confound; see §12** |
+| — pos-vs-hard AUC | 0.603 | 0.073 | ~~FPFH below chance; encoder well above~~ RETRACTED |
 | — pos-vs-easy AUC | 0.865 | 0.683 | encoder better on both |
-| Held-out fragment-ID self-retrieval | 0.470 | 0.895 | **encoder ~half FPFH's identity leakage (condition 6 improved)** |
+| Held-out fragment-ID self-retrieval | 0.470 | 0.895 | **encoder ~half FPFH's identity leakage (condition 6 improved — this stands)** |
 | — (base rate) | 0.147 | 0.147 | encoder still above base → some leakage remains |
 
 ## Honest verdict (fold 1 only, per pre-registration framing)
-- **Condition 3 (the thesis metric): strongly MET.** FPFH's pos-vs-hard AUC
+- ~~**Condition 3 (the thesis metric): strongly MET.** FPFH's pos-vs-hard AUC
   0.073 (below chance — it ranks look-alikes as MORE positive-like) → encoder
   0.603. The easy-minus-hard gap, the operational form of "similarity ≠
   compatibility", dropped 0.610 → 0.261. The encoder learned to resist
-  similarity-driven false matches.
+  similarity-driven false matches.~~
+  **↑ RETRACTED 2026-07-25 — this is the tautology (§12). Condition 3 was NOT
+  met; the valid encoder-mined test gives gap 0.722, hard-AUC 0.064.**
 - **Condition 6 (fragment-ID): IMPROVED.** Held-out identity self-retrieval
   0.895 → 0.470 (still above the 0.147 base rate, so residual generalized
   shape-signature leakage, but roughly half of FPFH's). Supports H3 (LOFO +
   density-norm + balanced sampling suppress the shortcut without an adversarial
-  term) — on this fold.
+  term) — on this fold. **[This claim stands — not affected by the condition-3
+  confound.]**
 - **Conditions 1–2 (retrieval mAP/P@1): NOT met on fold 1.** Paired-bootstrap
   CI includes zero; P@1 slightly worse. Tied with FPFH on top-1 retrieval.
 
@@ -905,3 +920,78 @@ the next deviation.
   do we commit to the 7-fold run.
 - **NOT applied globally yet; NOT a goalpost move** — the pass criteria in
   `PHASE5_PREREGISTRATION.md` are unchanged.
+
+---
+
+# 12. Condition 3 was a tautology — the negative result (2026-07-25)
+
+This section retracts the condition-3 claims in §11 (annotated there) and
+records the corrected finding. Three DISTINCT failures, each worth naming.
+
+## Failure A — the metric confound (FPFH-mined hard negatives)
+Condition 3 ("shrink the easy-vs-hard AUC gap vs FPFH") was measured against
+hard negatives **mined by FPFH**. Those look-alikes are FPFH's OWN nearest-
+neighbour mistakes, so any embedding that simply *differs* from FPFH sees them
+as unremarkable and shows a near-zero gap — no assembly understanding required.
+**Proof (baseline_diagnostics.json):**
+- random embeddings (pure noise, zero information): gap = **0.0064**
+- centroid (trivial features): gap = 0.0981
+- FPFH (scored vs its own mistakes): gap = 0.6141
+So "encoder gap 0.26–0.30 < FPFH 0.61" only demonstrated "the encoder is not
+FPFH" — which random (0.006) shows trivially. The gap was measured three times
+(runs 1, capped16, unit-fixed) and read as a win each time. It was a tautology
+every time.
+
+## Failure B — the pre-registration's own design gap
+`PHASE5_PREREGISTRATION.md` §3 specified "shrink the easy-vs-hard gap" **without
+specifying whose look-alikes**. The hard-negative *source* was itself an
+unlocked degree of freedom. The pre-registration existed precisely to stop
+post-hoc rationalisation — but it did not anticipate that a metric's own
+construction (which embedding mines the negatives) could make the criterion
+near-automatic. **This is a flaw in the locked rulebook, named as one.** The
+fix for future phases: condition 3 must be measured against the CANDIDATE
+source's OWN mined hard negatives (self-adversarial), never a fixed foreign
+source's.
+
+## Failure C — the actual negative result (valid test)
+Mining hard negatives with the **encoder's own** embedding and scoring the
+encoder against ITS OWN look-alikes (fold 1, held-out):
+- **easy = 0.785, hard = 0.064, gap = 0.722.**
+- hard-AUC 0.064 is BELOW chance — the encoder ranks its own look-alikes as
+  MORE positive-like than true partners, i.e. it cannot tell a true partner
+  from a similar non-partner. This is *worse* than FPFH's own 0.610.
+- **Condition 3 was NEVER met.** The encoder rides similarity as hard as FPFH;
+  it just learned a *different* similarity. It did not learn complementarity.
+
+## Corrected Phase-5A conclusion (fold 1; conditions 1-2 pending 6-fold)
+- **Conditions 1-2 (retrieval mAP/P@1):** FAILED on fold 1 (paired mAP diff
+  −0.0067 [−0.0095, −0.0039], P@1 0.141 vs 0.168). The earlier capped16 "+0.0120
+  win" and uncapped "+0.0012 tie" were checkpoint-selection noise off a noisy
+  val signal (win/tie/loss across three checkpoints ⇒ the mAP signal is ~0 ±
+  0.01). Formal per-fold confirmation across {F1-F4} is the 6-fold run.
+- **Condition 3 (thesis):** NOT MET (Failure C). This conclusion is complete on
+  current data — `easy_vs_hard_separability` in the encoder-mined test is over
+  the full embedding, not per-fold, so it does NOT need the 6-fold run.
+- **Condition 6 (fragment-ID):** genuinely improved (0.519 vs 0.895) — stands,
+  but it is the least thesis-critical condition.
+
+## Why this is a real result, not just a failure
+This is a clean, publishable **negative Level-3 result with a diagnosed cause**,
+and it vindicates the project's founding hypothesis: *similarity ≠
+compatibility* is hard — now demonstrably hard for the LEARNED model too, not
+only for handcrafted FPFH. It is also direct evidence for why H5
+(complementarity needs asymmetric supervision) was correctly DEFERRED, not
+disproven: **symmetric co-membership labels train a similarity metric, and a
+similarity metric cannot learn complementarity** — exactly as the §5 supervision
+hierarchy predicted. Level 3 (interface association) was the declared ceiling;
+this shows the ceiling is real and the labels are the binding constraint, not
+the model.
+
+## Process lesson (applied to us, not just the tooling)
+We caught this on the FOURTH measurement, not the first. The apparatus did not
+"work" — a flattering metric got three passes before anyone mined the encoder's
+own negatives, and the check that broke it took ten seconds. **Lesson: when a
+single metric is the only one surviving, test it first, hardest, and against its
+own construction.** A metric that depends on a foreign reference (here, FPFH's
+mined negatives) must be re-derived from the candidate's own reference before it
+is believed.
