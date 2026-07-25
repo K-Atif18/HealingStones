@@ -5,9 +5,9 @@
 `scripts/generate_results_log.py` -- do not hand-edit numbers here; regenerate.
 Prose (deviations, decisions) is maintained in the generator template.
 
-- Generated: `2026-07-25T16:18:26.739334+00:00`
+- Generated: `2026-07-25T16:19:03.517334+00:00`
 - Source JSON `run_timestamp`: `2026-07-23T16:53:22.637596+00:00`
-- Git commit at generation: `3a2bc71`
+- Git commit at generation: `b30c253`
 - Fragments: F1, F2, F3, F4, F5, F6, F7
 - Total patches: 6822 | Adjacent pairs: 11
 
