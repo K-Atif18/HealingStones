@@ -821,3 +821,87 @@ this is only a plumbing signal that forward/backward/optimizer are wired.
 Nothing in §10 touches the six pre-registered conditions. It is a timing +
 plumbing gate outcome plus the mining optimization it motivated. Still no
 multi-epoch or multi-fold training run.
+
+---
+
+# 11. First real training + fold-1 held-out evaluation (the key result so far)
+
+Fold 1 was trained to the full 50-epoch cap (patience=50, i.e. early stopping
+disabled to observe the whole curve) and the best-val checkpoint (epoch 19)
+was exported through the unmodified diagnostic battery via
+`scripts/export_and_evaluate.py`. **This is ONE held-out fold, not the
+six-condition verdict** — conditions 1/2 are defined over the majority of
+well-supported folds {F1..F4}, which needs all 7 checkpoints.
+
+## Training-curve finding (`phase5a_runs/fold_..._history.json`)
+- Train loss falls steadily 6.48 → 4.64 over 50 epochs (~24-28 s/epoch,
+  ~21 min total — matches the §10 corrected estimate).
+- **Validation (pair-level) loss does NOT fall: best 5.509 at epoch 19, then
+  drifts upward to 5.73.** stopped_by=epoch_cap (patience disabled).
+- Interpretation: with patience disabled, val had its best at epoch 19 and got
+  worse after — so **patience=5 was NOT the problem** (it would have stopped
+  ~epoch 24 and missed no later gain). This is train-falls/val-flat =
+  overfitting to training pairs, consistent with the known weak pair-level
+  validation signal (median 347 other positives per contact patch, §7).
+- Sampler held solid across all 50 epochs (draw fractions match weights within
+  noise). §2b pool-size→mined-distance relationship remained unstable/
+  inconsistent across training — neither confirmed nor refuted.
+
+## Held-out fold-1 evaluation (encoder vs FPFH, same fold, paired)
+| Metric | Encoder | FPFH | Read |
+|---|---:|---:|---|
+| Retrieval mAP | 0.1065 | 0.1053 | tied |
+| Retrieval P@1 | 0.1545 | 0.1676 | encoder slightly worse |
+| Paired mAP diff (enc−fpfh) | +0.0012 [−0.0019, +0.0042] | — | **CI includes zero → NOT a win (condition 1/2 fold-1 fail)** |
+| **Cond-3 easy-vs-hard gap** | **0.261** | **0.610** | **encoder shrinks 57% (condition 3 MET on this fold)** |
+| — pos-vs-hard AUC | 0.603 | 0.073 | FPFH below chance; encoder well above |
+| — pos-vs-easy AUC | 0.865 | 0.683 | encoder better on both |
+| Held-out fragment-ID self-retrieval | 0.470 | 0.895 | **encoder ~half FPFH's identity leakage (condition 6 improved)** |
+| — (base rate) | 0.147 | 0.147 | encoder still above base → some leakage remains |
+
+## Honest verdict (fold 1 only, per pre-registration framing)
+- **Condition 3 (the thesis metric): strongly MET.** FPFH's pos-vs-hard AUC
+  0.073 (below chance — it ranks look-alikes as MORE positive-like) → encoder
+  0.603. The easy-minus-hard gap, the operational form of "similarity ≠
+  compatibility", dropped 0.610 → 0.261. The encoder learned to resist
+  similarity-driven false matches.
+- **Condition 6 (fragment-ID): IMPROVED.** Held-out identity self-retrieval
+  0.895 → 0.470 (still above the 0.147 base rate, so residual generalized
+  shape-signature leakage, but roughly half of FPFH's). Supports H3 (LOFO +
+  density-norm + balanced sampling suppress the shortcut without an adversarial
+  term) — on this fold.
+- **Conditions 1–2 (retrieval mAP/P@1): NOT met on fold 1.** Paired-bootstrap
+  CI includes zero; P@1 slightly worse. Tied with FPFH on top-1 retrieval.
+
+Per the pre-registered rule this is the **"improved compatibility
+discrimination, not top-1 retrieval"** case — a real, weaker-than-a-clean-win
+finding that must NOT be upgraded to "the encoder beats FPFH." It is, however,
+the first direct evidence that a learned encoder closes the central pathology
+FPFH exhibits.
+
+## Diagnosed cause of the retrieval/condition-3 split (evidence, not speculation)
+The encoder wins pair-discrimination (both AUCs) and shrinks the hard gap, yet
+ties top-1 retrieval. This is exactly the **positive-distance tension**
+pre-documented in §5: the loss optimizes region-scale co-membership + pair
+discrimination (positive pairs' centres are median 18.6 mm apart, only 11.2%
+within one 8 mm patch radius), while P@1 rewards the single geometrically
+nearest partner. The encoder succeeds at what it was trained on; P@1 asks a
+different question. This diagnosis — NOT "the numbers looked better" — motivates
+the next deviation.
+
+## Deviation 3 (proposed, fold-1 test first) — distance-capped positives
+- **Decision (pending fold-1 test):** try training on positives whose centre
+  distance is within a cap (candidate: ~1–2 patch radii, i.e. ≤ 8–16 mm) so the
+  objective aligns with the top-1 retrieval metric, while keeping the
+  condition-3 gain.
+- **Reason (diagnosed, logged):** fold-1 evidence shows condition 3 met but
+  retrieval tied → an objective/metric mismatch on loose region-scale positives,
+  which `center_dist_mm` (already in `pairs.npz`) lets us fix for free. This is
+  a pre-identified §5 follow-up, now evidence-backed.
+- **Test protocol:** fold-1 only (~21 min), compare P@1/mAP AND the condition-3
+  gap against the uncapped fold-1 numbers above. Success = P@1/mAP lift while
+  the condition-3 gap stays shrunk. Failure = no retrieval lift → the tension is
+  fundamental at this patch scale (also a real finding). Only if fold 1 improves
+  do we commit to the 7-fold run.
+- **NOT applied globally yet; NOT a goalpost move** — the pass criteria in
+  `PHASE5_PREREGISTRATION.md` are unchanged.
