@@ -173,6 +173,95 @@ def test_lofo_has_bootstrap_cis():
         assert ci["half_width"] >= 0.0
 
 
+# ----------------------------------------------------------------------
+# Condition-3 fix: easy_vs_hard_separability(held_out=...) must exclude every
+# pair touching the held-out fragment, and lofo_per_fold must wire it through
+# per fold. This is the regression test for
+# PHASE5A_TRAINING_DESIGN_REVISED.md item 1 (the circularity bug).
+# ----------------------------------------------------------------------
+def test_easy_vs_hard_separability_excludes_held_out_fragment():
+    """held_out must drop every positive/easy/hard pair touching that fragment."""
+    from phase5_diagnostics import ranking as rk
+    ctx = _toy_context()
+    emb = _toy_embeddings(ctx)
+
+    # Unrestricted: both positive pairs count (A,B) and (B,C).
+    unrestricted = rk.easy_vs_hard_separability(ctx, emb, hard_negatives=[], seed=0)
+    assert unrestricted["n_positive"] == 2, unrestricted
+
+    # Holding out B must drop BOTH positive pairs, since both touch B.
+    held_b = rk.easy_vs_hard_separability(
+        ctx, emb, hard_negatives=[], seed=0, held_out="B"
+    )
+    assert held_b["n_positive"] == 0, held_b
+    assert held_b["held_out_fragment"] == "B"
+
+    # Holding out C must drop only the (B,C) pair, leaving (A,B).
+    held_c = rk.easy_vs_hard_separability(
+        ctx, emb, hard_negatives=[], seed=0, held_out="C"
+    )
+    assert held_c["n_positive"] == 1, held_c
+
+    # Hard negatives touching the held-out fragment must also be dropped.
+    hard_neg = [("A", 1, "C", 0, 0.5), ("A", 2, "B", 2, 0.3)]
+    held_a = rk.easy_vs_hard_separability(
+        ctx, emb, hard_negatives=hard_neg, seed=0, held_out="C"
+    )
+    # Only the second hard negative (A,B) survives; the first touches C.
+    assert held_a["n_hard_negative"] == 1, held_a
+
+
+def test_lofo_per_fold_wires_held_out_hard_negative_strata():
+    """lofo_per_fold, given hard_negatives, must attach a per-fold
+    hard_negative_strata restricted to that fold's held-out fragment --
+    not the global, unrestricted numbers."""
+    from phase5_diagnostics import ranking as rk
+    ctx = _toy_context()
+    emb = _toy_embeddings(ctx)
+    hard_neg = [("A", 1, "C", 0, 0.5), ("A", 2, "B", 2, 0.3)]
+
+    res = rk.lofo_per_fold(ctx, emb, k_values=(1,), seed=0, hard_negatives=hard_neg)
+    folds = res["folds"]
+
+    for fid, entry in folds.items():
+        assert "hard_negative_strata" in entry, (fid, entry)
+        strata = entry["hard_negative_strata"]
+        assert strata["held_out_fragment"] == fid, (fid, strata)
+        # No positive or hard-negative pair in this fold's strata may touch
+        # the held-out fragment.
+        vocab = ctx.pairs.fragment_vocab
+        for p in range(len(ctx.pairs.labels)):
+            fa, fb = str(vocab[ctx.pairs.fragment_A_idx[p]]), str(vocab[ctx.pairs.fragment_B_idx[p]])
+            if fa == fid or fb == fid:
+                # this pair must not have contributed -- checked indirectly via
+                # counts already covered by test_easy_vs_hard_separability_*;
+                # here we just confirm the strata dict carries the marker.
+                pass
+
+    # Fold B (holding out B) must report zero positives, since both toy
+    # positive pairs touch B -- mirrors test_easy_vs_hard_separability_*.
+    assert folds["B"]["hard_negative_strata"]["n_positive"] == 0, folds["B"]
+    # Fold C must report exactly 1 positive (A,B) and exactly 1 hard negative
+    # (the (A,B) one; the (A,C) one is dropped because it touches C).
+    assert folds["C"]["hard_negative_strata"]["n_positive"] == 1, folds["C"]
+    assert folds["C"]["hard_negative_strata"]["n_hard_negative"] == 1, folds["C"]
+
+
+def test_runner_lofo_entry_differs_from_global_hard_negative_strata():
+    """Sanity: the per-fold (held-out-restricted) strata must not simply
+    equal the unrestricted, global entry -- otherwise the filter is a no-op."""
+    from phase5_diagnostics import ranking as rk
+    ctx = _toy_context()
+    emb = _toy_embeddings(ctx)
+    hard_neg = [("A", 1, "C", 0, 0.5), ("A", 2, "B", 2, 0.3)]
+
+    global_strata = rk.easy_vs_hard_separability(ctx, emb, hard_neg, seed=0)
+    lofo = rk.lofo_per_fold(ctx, emb, k_values=(1,), seed=0, hard_negatives=hard_neg)
+
+    # Fold B's restricted n_positive (0) must differ from the global one (2).
+    assert lofo["folds"]["B"]["hard_negative_strata"]["n_positive"] != global_strata["n_positive"]
+
+
 def test_bootstrap_ci_shrinks_with_n():
     """CI half-width should shrink as the query sample grows (sanity)."""
     from phase5_diagnostics.ranking import _bootstrap_ci

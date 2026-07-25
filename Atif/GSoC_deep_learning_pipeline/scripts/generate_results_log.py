@@ -305,6 +305,150 @@ association" -- reported as such, not upgraded.
     return "## (d) Encoder results\n\n*(encoder sources present: %s -- table generation TBD)*\n" % ", ".join(encoder_sources)
 
 
+def section_training_design() -> str:
+    """Training design decisions -- same discipline as the deviation log
+    (section c): decisions + measured values, not just prose. Populated once
+    PHASE5A_TRAINING_DESIGN_REVISED.md is approved and its items 1-4 are
+    implemented; kept as a template here so it regenerates from the same
+    generator rather than being hand-maintained separately.
+
+    Source of every number below: PHASE5A_TRAINING_DESIGN_REVISED.md, cross-
+    referenced to the file/line citations in that document. This function
+    does not re-derive anything; it summarises what that document already
+    established, so this log and that design doc cannot silently drift.
+    """
+    return """## (f) Training design decisions
+
+Decisions finalised in `PHASE5A_TRAINING_DESIGN_REVISED.md` (round 2,
+approved), implemented in `src/phase5_encoder/{sampler,mining,train}.py` and
+`scripts/{measure_step_memory,train_phase5a}.py`. Training itself has **not**
+been run yet -- this section records the *design*, not results; section (d)
+remains the place encoder results land once a fold actually trains.
+
+### Loss
+- **InfoNCE-style contrastive loss** over (anchor, positive, hard negatives,
+  in-batch randoms), retained unchanged from the original (accepted) design
+  -- see `PHASE5A_TRAINING_DESIGN_REVISED.md` header note ("Points 1, 3, 4 of
+  the *original* design ... are retained unchanged").
+
+### Hard-negative mechanism
+- **Primary:** on-the-fly, per-epoch, fold-restricted mining under the
+  encoder's *current* embedding (`src/phase5_encoder/mining.py::
+  mine_epoch_hard_negatives`), targeting the measured FPFH pathology
+  directly (easy-vs-hard AUC gap = 0.6141, `PHASE5_RESULTS_LOG.md`
+  hard-negative-stratification table above).
+- **Measured supply of the RETIRED alternative** (why it was retired):
+  the FPFH-mined evaluation-only set (`ranking.mine_hard_negatives`) yields
+  2,100 mined pairs, 2,100 distinct anchors, **max 1 hard negative per
+  anchor** (strict `argmin`, `ranking.py:381`), covering only 1,285/2,100
+  contact anchors (29-36% of contact patches per fragment). This set is
+  frozen and evaluation-only (condition 3), never training-visible.
+- **Deduplication:** hard negatives are deduplicated within each training
+  batch before encoding (`train.py::_info_nce_step`) -- verified cheap:
+  `B_a=512` with up to 512 deduped distinct hard negatives peaks at
+  **1436.4 MB**, see the memory table below.
+
+### Mining frequency and candidate-pool policy
+- **Frequency: N = 1 epoch** (not per-step). Justification: a LOFO fold is
+  ~11-12 minibatches/epoch at `B_a=512`; per-step mining would re-encode the
+  full non-adjacent pool ~11-12x more often than per-epoch mining, for a
+  representation that only moves incrementally within an epoch.
+- **Candidate pool: full non-adjacent pool per fragment, no subsampling.**
+  Preserves the real per-fragment pool-size asymmetry (measured via
+  `ctx.neighbors_of`/`ctx.patch_count`): F1/F4=1,822, F5=2,000, F2/F3=2,822,
+  **F6/F7=4,000** -- subsampling to a common size would erase the asymmetry
+  the per-fragment difficulty logging exists to surface.
+- **`no_grad` + cached table:** confirmed mandatory and measured (not
+  assumed): one no_grad forward per fragment's candidate pool, per epoch.
+  Measured peak memory scales with pool size and EXCEEDS a training step's
+  memory for the largest pools (F6/F7 at 4,000 -> 3221.9 MB vs a training
+  step's 1436.4 MB) -- corrects an earlier assumption in the design doc that
+  mining would be cheaper; safe only because mining and a training step
+  never run concurrently (verified: `torch.cuda.empty_cache()` between the
+  mining pass and the resumed training loop).
+- **Per-fragment difficulty logging:** implemented
+  (`MinedNegatives.per_fragment_distance`, surfaced per-epoch in
+  `train_one_fold`'s history JSON as `per_fragment_mined_distance_mean`) --
+  specifically to catch an F6/F7-driven mining-difficulty artifact before it
+  is mistaken for a geometric finding in downstream LOFO results.
+
+### Interface weighting rule
+- **Sampler: fragment -> interface -> partner**, not fragment-uniform
+  (`src/phase5_encoder/sampler.py::FoldSampler.sample_batch`).
+- **Weighting: capped inverse-frequency** (`InterfaceWeighting`,
+  `max_ratio=20.0` default), NOT pure inverse-frequency. Reason: pure
+  inverse-frequency over the measured per-interface positive-pair counts
+  (F6-F7: 214,446 ... F2-F4: 1,232 -- a 174x spread, `phase3_final_review/
+  pairs.npz`, `labels==1` grouped by `fragment_A_idx`/`fragment_B_idx`) would
+  give F2-F4 ~174x the weight of F6-F7, oversampling its small contact-patch
+  set (~72 patches) into overfitting rather than merely correcting the
+  imbalance. The cap is a decision, not a measurement -- 20x was chosen as a
+  bound loose enough to still substantially favour small interfaces without
+  the unbounded 174x extreme; this ratio is a candidate for later tuning
+  based on the per-epoch `interface_draw_counts` logged during training.
+- **Multi-interface rule:** a draw's positive comes ONLY from the interface
+  selected that step, even for patches belonging to more than one interface
+  (measured: F1 has 23.9% multi-interface contact patches, F7 has 0%,
+  `ctx.interface_patch_ids`) -- implemented and unit-tested
+  (`test_multi_interface_patches_detected`).
+- **n_well_supported_interfaces = 10, not 11** (F5-F7 has 0 contact patches
+  on both sides).
+
+### Positive-distance policy
+- **Uncapped -- all positives used**, faithful to the Level-3 co-membership
+  label as declared in `PHASE5_PREREGISTRATION.md`. Acknowledged tension
+  (not hidden): positive-pair centre distances (`center_dist_mm`,
+  `phase3_final_review/pairs.npz`) have median 18.64 mm, p90 33.34 mm, max
+  69.66 mm, against an 8 mm patch radius -- only 11.2% of positives have
+  centres within one radius. The loss optimizes a **region-scale**
+  objective while the pass bar is judged partly by **P@1**, a top-1 metric.
+  A distance-capped positive variant is a free-to-try follow-up
+  (`center_dist_mm` already exists) but out of scope for the first 5A run.
+
+### Norm layer
+- **LayerNorm**, replacing BatchNorm1d in both `pair_mlp` and `point_mlp`
+  (`src/phase5_encoder/model.py`). Reason: BatchNorm's eval-mode running
+  statistics under LOFO would be fit only on the six training fragments,
+  making a held-out fragment's distribution shift indistinguishable from a
+  genuine interface-association failure -- the same confound shape already
+  used to justify PPF over PCA canonicalisation (Deviation 2 above).
+  Re-measured (not assumed) after the change: pose gate still
+  `passed=True, max_deviation=0.0` for both `pair_input=True/False`.
+
+### Stopping rule
+- **Pair-level validation split, held out from every interface** (not a
+  held-out interface, not a held-out fragment) -- `val_fraction=0.10` of
+  each training interface's positive pairs. Patience=5 / epoch_cap=50,
+  retained from the accepted original design.
+- **Stated weakness, measured (not inferred):** of 6,822 total patches,
+  only 4,107 carry >=1 positive pair; among those, the positive-count-per-
+  patch distribution is min 115, p10 187, **median 347**, p90 618, p99 815,
+  max 815. A held-out pair's endpoints typically still appear in a few
+  hundred other training pairs, so **patience may never fire** -- the
+  training history's `stopped_by` field (exactly `"patience"` or
+  `"epoch_cap"`, never ambiguous) must be reported plainly either way.
+
+### Measured batch size (§3)
+- **`B_a = 512`**, verified via `scripts/measure_step_memory.py` (real
+  per-step composition: `B_a` anchors + `B_a` positives + deduped hard
+  negatives, through the real `PointNetEncoder`, forward+loss+backward,
+  peak GPU memory on the RTX 4050):
+
+| B_a | H_distinct (deduped) | total_fwd | peak MB | step ms |
+|---:|---:|---:|---:|---:|
+| 512 | 0 | 1024 | 1085.7 | ~64 |
+| 512 | 512 | 1536 | **1436.4** | ~96 |
+| 1024 | 0 | 2048 | 2153.7 | ~129 |
+| 3072 | 0 | 6144 | **OOM** | -- |
+
+  `B_a=512` with full dedup headroom (up to 512 distinct hard negatives) is
+  the chosen operating point: 1436.4 MB peak, ~3.9x headroom under the
+  ~5.64 GB usable budget on this GPU.
+
+---
+"""
+
+
 def main() -> None:
     with open(JSON_PATH, "r", encoding="utf-8") as fh:
         d = json.load(fh)
@@ -314,6 +458,7 @@ def main() -> None:
         section_prereg(),
         section_fpfh_baseline(d),
         section_deviations(),
+        section_training_design(),
         section_encoder_placeholder(d),
     ]
     with open(OUT_PATH, "w", encoding="utf-8") as fh:

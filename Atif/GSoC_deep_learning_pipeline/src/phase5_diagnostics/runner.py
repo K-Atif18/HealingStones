@@ -142,15 +142,21 @@ def run_diagnostics(
             for held in ctx.fragment_ids
         }
 
-        # Hard-negative stratification.
+        # Hard-negative stratification (unrestricted -- kept for backward
+        # comparability with prior reports; NOT the held-out-safe number).
         entry["hard_negative_strata"] = rk.easy_vs_hard_separability(
             ctx, emb, hard_neg, seed=seed
         )
 
-        # LOFO per fold.
+        # LOFO per fold. hard_neg is passed through so each fold also gets a
+        # held_out-restricted hard_negative_strata entry (condition 3, fixed
+        # per PHASE5A_TRAINING_DESIGN_REVISED.md item 1) -- this is the number
+        # that should actually be compared against the pre-registered
+        # condition-3 threshold, not the unrestricted entry above.
         entry["lofo_per_fold"] = rk.lofo_per_fold(
             ctx, emb, k_values=k_values, seed=seed,
             low_confidence_fragments=low_confidence_fragments,
+            hard_negatives=hard_neg,
         )
 
         per_source[name] = entry

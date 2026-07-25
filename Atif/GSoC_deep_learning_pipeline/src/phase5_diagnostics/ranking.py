@@ -409,6 +409,7 @@ def easy_vs_hard_separability(
     pos_sample: int = 20000,
     easy_sample: int = 20000,
     seed: int = 0,
+    held_out: Optional[str] = None,
 ) -> dict:
     """Pair-level AUC: positives vs easy negatives, and positives vs hard negatives.
 
@@ -416,13 +417,31 @@ def easy_vs_hard_separability(
     positive-like). A method that only resists *easy* negatives (random,
     non-adjacent) but collapses on *hard* negatives (look-alike non-adjacent)
     is riding similarity, not assembly compatibility. The AUC gap quantifies it.
+
+    ``held_out``, if given, restricts every pool (positives, easy negatives,
+    hard negatives) to pairs where *neither* endpoint fragment is
+    ``held_out``. This is what makes condition 3 (the easy-vs-hard gap) a
+    held-out-fold measurement under LOFO instead of a training-set one: if
+    the encoder trains on fold ``f``'s six visible fragments, condition 3 for
+    fold ``f`` must not be scored using any pair touching fragment ``f``.
+    Without this filter the instrument silently measures the training set
+    (see PHASE5A_TRAINING_DESIGN_REVISED.md, item 1).
     """
     rng = np.random.default_rng(seed)
     pairs = ctx.pairs
     vocab = pairs.fragment_vocab
 
+    def _fragment_mask(idx: np.ndarray) -> np.ndarray:
+        """True where the pair at row ``idx`` does not touch ``held_out``."""
+        if held_out is None:
+            return np.ones(idx.shape, dtype=bool)
+        fa = vocab[pairs.fragment_A_idx[idx]]
+        fb = vocab[pairs.fragment_B_idx[idx]]
+        return (fa != held_out) & (fb != held_out)
+
     # Positive distances.
     pos_idx = np.where(pairs.labels == 1)[0]
+    pos_idx = pos_idx[_fragment_mask(pos_idx)]
     if pos_sample and pos_idx.size > pos_sample:
         pos_idx = rng.choice(pos_idx, size=pos_sample, replace=False)
     pos_d = []
@@ -438,6 +457,7 @@ def easy_vs_hard_separability(
 
     # Easy negative distances (random label == -1).
     easy_idx = np.where(pairs.labels == -1)[0]
+    easy_idx = easy_idx[_fragment_mask(easy_idx)]
     if easy_sample and easy_idx.size > easy_sample:
         easy_idx = rng.choice(easy_idx, size=easy_sample, replace=False)
     easy_d = []
@@ -457,6 +477,8 @@ def easy_vs_hard_separability(
     # scored against FPFH distances, which is meaningless.
     hard_d = []
     for (fa, pa, fb, pb, _mined_dist) in hard_negatives:
+        if held_out is not None and (fa == held_out or fb == held_out):
+            continue
         d = _pair_distance(embeddings, fa, pa, fb, pb)
         if d is not None:
             hard_d.append(d)
@@ -472,6 +494,7 @@ def easy_vs_hard_separability(
     auc_easy = _auc(easy_d)
     auc_hard = _auc(hard_d)
     return {
+        "held_out_fragment": held_out,
         "n_positive": int(pos_d.size),
         "n_easy_negative": int(easy_d.size),
         "n_hard_negative": int(hard_d.size),
@@ -529,6 +552,7 @@ def lofo_per_fold(
     bootstrap: bool = True,
     n_boot: int = 2000,
     ci_metric_ks: tuple[int, ...] = (1,),
+    hard_negatives: Optional[list[tuple[str, int, str, int, float]]] = None,
 ) -> dict:
     """Leave-one-fragment-out retrieval, reported per fold (never averaged).
 
@@ -543,6 +567,13 @@ def lofo_per_fold(
     for mAP and P@k (``ci_metric_ks``), computed by resampling queries. These
     quantify per-fold noise so a Phase-5A "beats FPFH" claim can be checked
     against overlapping CIs rather than eyeballed point estimates.
+
+    When ``hard_negatives`` is given, each fold also carries a
+    ``hard_negative_strata`` entry computed with ``held_out=held`` (see
+    ``easy_vs_hard_separability``), so condition 3 (the easy-vs-hard AUC gap)
+    is measured per fold, restricted to pairs that do not touch the held-out
+    fragment -- the fix for the circularity described in
+    PHASE5A_TRAINING_DESIGN_REVISED.md item 1.
     """
     folds = {}
     for held in ctx.fragment_ids:
@@ -574,6 +605,10 @@ def lofo_per_fold(
                     pq["precision_at_k"][str(k)], n_boot=n_boot, seed=seed
                 )
             entry["ci_95"] = ci
+        if hard_negatives is not None:
+            entry["hard_negative_strata"] = easy_vs_hard_separability(
+                ctx, embeddings, hard_negatives, seed=seed, held_out=held
+            )
         folds[held] = entry
     return {
         "folds": folds,
@@ -582,6 +617,9 @@ def lofo_per_fold(
             "weak adjacency support (e.g. peripheral fragments / tiny contacts) "
             "and must be interpreted separately from well-supported folds. "
             "ci_95 are percentile bootstrap CIs over resampled queries: use "
-            "them to check whether a fold's margin over baseline exceeds noise."
+            "them to check whether a fold's margin over baseline exceeds noise. "
+            "hard_negative_strata (when present) is computed with held_out=<fold's "
+            "fragment>, i.e. condition 3 for this fold excludes every pair that "
+            "touches the held-out fragment."
         ),
     }

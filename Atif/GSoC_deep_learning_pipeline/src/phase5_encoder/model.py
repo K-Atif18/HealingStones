@@ -45,6 +45,16 @@ class PointNetEncoder(nn.Module):
     Invariance is inherited from the PPF input (each pair feature is exactly
     rigid-invariant); there is deliberately **no T-Net**. Set ``pair_input=False``
     to consume the single-reference (N,4) features instead (kept for ablation).
+
+    Uses ``nn.LayerNorm`` rather than ``nn.BatchNorm1d`` (see
+    PHASE5A_TRAINING_DESIGN_REVISED.md item 6): BatchNorm's eval-mode running
+    statistics would be fit only on the six LOFO training fragments, so a
+    held-out fragment's distribution shift becomes indistinguishable from a
+    genuine interface-association failure -- the same confound shape already
+    used to justify PPF over PCA canonicalisation in Deviation 2. LayerNorm
+    normalises each row over its own feature dimension, independent of any
+    other row in the batch, which removes both the LOFO confound and the
+    batch-size dependence in one change.
     """
 
     def __init__(self, out_dim: int = 64, pair_input: bool = True):
@@ -52,11 +62,11 @@ class PointNetEncoder(nn.Module):
         self.pair_input = pair_input
         in_dim = PAIR_FEATURE_DIM if pair_input else FEATURE_DIM
         self.pair_mlp = nn.Sequential(
-            nn.Linear(in_dim, 64), nn.BatchNorm1d(64), nn.ReLU(inplace=True),
+            nn.Linear(in_dim, 64), nn.LayerNorm(64), nn.ReLU(inplace=True),
             nn.Linear(64, 128),
         )
         self.point_mlp = nn.Sequential(
-            nn.BatchNorm1d(128), nn.ReLU(inplace=True),
+            nn.LayerNorm(128), nn.ReLU(inplace=True),
             nn.Linear(128, 256),
         )
         self.head = nn.Sequential(
@@ -96,9 +106,13 @@ def build_encode_patch(
 ) -> Callable[[np.ndarray, np.ndarray], np.ndarray]:
     """Wrap the full pipeline into ``encode_patch(points, normals) -> (out_dim,)``.
 
-    Deterministic and eval-mode by default (BatchNorm in eval so single-patch
-    inference is well defined). Used by the pose gate and the exporter alike.
-    Feature kind (pairwise vs single-reference) follows ``model.pair_input``.
+    Deterministic and eval-mode by default. With LayerNorm (see model docstring)
+    eval-mode is not strictly required for single-patch inference the way it
+    was under BatchNorm, but the model is still switched to eval() here for
+    determinism (disables dropout, were any added later) and to keep this
+    function's behaviour independent of the caller's train/eval state.
+    Used by the pose gate and the exporter alike. Feature kind (pairwise vs
+    single-reference) follows ``model.pair_input``.
     """
     def encode_patch(points: np.ndarray, normals: np.ndarray) -> np.ndarray:
         p, nrm = prepare_patch(
