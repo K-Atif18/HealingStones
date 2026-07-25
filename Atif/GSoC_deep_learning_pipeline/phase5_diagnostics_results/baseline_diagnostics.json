@@ -1,0 +1,1679 @@
+{
+  "phase": "Phase 5 pre-registration diagnostics",
+  "run_timestamp": "2026-07-23T16:53:22.637596+00:00",
+  "fragment_ids": [
+    "fragment_caesar_fragment_1",
+    "fragment_caesar_fragment_2",
+    "fragment_caesar_fragment_3",
+    "fragment_caesar_fragment_4",
+    "fragment_caesar_fragment_5",
+    "fragment_caesar_fragment_6",
+    "fragment_caesar_fragment_7"
+  ],
+  "n_total_patches": 6822,
+  "n_adjacent_pairs": 11,
+  "sources": [
+    "random",
+    "centroid",
+    "fpfh"
+  ],
+  "hard_negatives_mined": 2100,
+  "null_calibration": {
+    "random": {
+      "n_queries": 800,
+      "gallery_size": 6822,
+      "mAP": 0.06146739932530638,
+      "precision_at_k": {
+        "1": 0.04875,
+        "5": 0.05449999999999999,
+        "10": 0.061875,
+        "20": 0.059125000000000004
+      },
+      "recall_at_k": {
+        "1": 0.00014278467182336042,
+        "5": 0.0007373516854035892,
+        "10": 0.0017357889917499216,
+        "20": 0.0033324667591381183
+      }
+    },
+    "centroid": {
+      "n_queries": 800,
+      "gallery_size": 6822,
+      "mAP": 0.05117005020163605,
+      "precision_at_k": {
+        "1": 0.0025,
+        "5": 0.00375,
+        "10": 0.0036249999999999998,
+        "20": 0.005062500000000001
+      },
+      "recall_at_k": {
+        "1": 5.624959197187171e-06,
+        "5": 4.951434271038984e-05,
+        "10": 8.752492827789514e-05,
+        "20": 0.0002470572503537556
+      }
+    }
+  },
+  "per_source": {
+    "random": {
+      "ranking_raw_gallery": {
+        "n_queries": 800,
+        "gallery_size": 6822,
+        "mAP": 0.06146739932530638,
+        "precision_at_k": {
+          "1": 0.04875,
+          "5": 0.05449999999999999,
+          "10": 0.061875,
+          "20": 0.059125000000000004
+        },
+        "recall_at_k": {
+          "1": 0.00014278467182336042,
+          "5": 0.0007373516854035892,
+          "10": 0.0017357889917499216,
+          "20": 0.0033324667591381183
+        }
+      },
+      "ranking_contact_only_gallery": {
+        "n_queries": 800,
+        "gallery_size": 4107,
+        "mAP": 0.10215086376820288,
+        "precision_at_k": {
+          "1": 0.08,
+          "5": 0.10175000000000001,
+          "10": 0.10100000000000002,
+          "20": 0.101125
+        },
+        "recall_at_k": {
+          "1": 0.00022636428278833504,
+          "5": 0.0014240888204035856,
+          "10": 0.0028466100736464607,
+          "20": 0.005703950734826862
+        }
+      },
+      "interface_breakdown": {
+        "per_interface": {
+          "fragment_caesar_fragment_1__fragment_caesar_fragment_2": {
+            "n_contact_patches": 545,
+            "n_queries": 200,
+            "mAP": 0.06215836624208692,
+            "precision_at_k": {
+              "1": 0.08,
+              "5": 0.08,
+              "10": 0.07300000000000001,
+              "20": 0.0675
+            },
+            "low_confidence": false
+          },
+          "fragment_caesar_fragment_1__fragment_caesar_fragment_3": {
+            "n_contact_patches": 102,
+            "n_queries": 102,
+            "mAP": 0.075852968960623,
+            "precision_at_k": {
+              "1": 0.049019607843137254,
+              "5": 0.08039215686274509,
+              "10": 0.0872549019607843,
+              "20": 0.07500000000000001
+            },
+            "low_confidence": false
+          },
+          "fragment_caesar_fragment_1__fragment_caesar_fragment_4": {
+            "n_contact_patches": 676,
+            "n_queries": 200,
+            "mAP": 0.07524972322543784,
+            "precision_at_k": {
+              "1": 0.095,
+              "5": 0.08900000000000001,
+              "10": 0.075,
+              "20": 0.0665
+            },
+            "low_confidence": false
+          },
+          "fragment_caesar_fragment_1__fragment_caesar_fragment_5": {
+            "n_contact_patches": 395,
+            "n_queries": 200,
+            "mAP": 0.051903087678279294,
+            "precision_at_k": {
+              "1": 0.08,
+              "5": 0.05,
+              "10": 0.055,
+              "20": 0.05
+            },
+            "low_confidence": false
+          },
+          "fragment_caesar_fragment_2__fragment_caesar_fragment_3": {
+            "n_contact_patches": 652,
+            "n_queries": 200,
+            "mAP": 0.06472920555263531,
+            "precision_at_k": {
+              "1": 0.025,
+              "5": 0.05,
+              "10": 0.06,
+              "20": 0.061750000000000006
+            },
+            "low_confidence": false
+          },
+          "fragment_caesar_fragment_2__fragment_caesar_fragment_4": {
+            "n_contact_patches": 72,
+            "n_queries": 72,
+            "mAP": 0.09499373716548584,
+            "precision_at_k": {
+              "1": 0.06944444444444445,
+              "5": 0.09444444444444446,
+              "10": 0.09583333333333333,
+              "20": 0.09236111111111112
+            },
+            "low_confidence": false
+          },
+          "fragment_caesar_fragment_3__fragment_caesar_fragment_4": {
+            "n_contact_patches": 431,
+            "n_queries": 200,
+            "mAP": 0.04876765216964654,
+            "precision_at_k": {
+              "1": 0.045,
+              "5": 0.03900000000000001,
+              "10": 0.04650000000000001,
+              "20": 0.0435
+            },
+            "low_confidence": false
+          },
+          "fragment_caesar_fragment_4__fragment_caesar_fragment_5": {
+            "n_contact_patches": 643,
+            "n_queries": 200,
+            "mAP": 0.0602930361982399,
+            "precision_at_k": {
+              "1": 0.055,
+              "5": 0.06,
+              "10": 0.0655,
+              "20": 0.06425
+            },
+            "low_confidence": false
+          },
+          "fragment_caesar_fragment_5__fragment_caesar_fragment_6": {
+            "n_contact_patches": 471,
+            "n_queries": 200,
+            "mAP": 0.05281399120172949,
+            "precision_at_k": {
+              "1": 0.085,
+              "5": 0.069,
+              "10": 0.064,
+              "20": 0.060500000000000005
+            },
+            "low_confidence": false
+          },
+          "fragment_caesar_fragment_5__fragment_caesar_fragment_7": {
+            "n_contact_patches": 0,
+            "mAP": NaN,
+            "low_confidence": true
+          },
+          "fragment_caesar_fragment_6__fragment_caesar_fragment_7": {
+            "n_contact_patches": 965,
+            "n_queries": 200,
+            "mAP": 0.08169721709202428,
+            "precision_at_k": {
+              "1": 0.065,
+              "5": 0.08100000000000002,
+              "10": 0.083,
+              "20": 0.07475000000000001
+            },
+            "low_confidence": false
+          }
+        },
+        "macro_mAP_well_supported": 0.06684589854861883,
+        "n_well_supported_interfaces": 10,
+        "note": "macro_mAP averages well-supported interfaces equally (n_contact>=20). Compare with the micro-averaged mAP from the main ranking run: a large micro>macro gap indicates interface-size bias."
+      },
+      "shortcut_battery": {
+        "fragment_id_probe": {
+          "knn_accuracy": 0.1325,
+          "chance": 0.14285714285714285,
+          "ratio_over_chance": 0.9275000000000001,
+          "note": "High accuracy => fragment identity is encoded (memorization risk)."
+        },
+        "contact_vs_noncontact_auc": {
+          "auc": 0.5662459259162854,
+          "n_contact": 4107,
+          "n_noncontact": 2715,
+          "note": "High AUC => embedding encodes contact-ness (Level 1). Necessary, not sufficient."
+        },
+        "neighbor_contact_vs_noncontact_ranking": {
+          "mean_similarity_gap": 0.00015139991937463884,
+          "n_comparisons": 1266,
+          "note": "Positive gap => neighbour's contact patches are ranked above its non-contact patches (real interface signal). ~0 => fragment affinity."
+        },
+        "distinctiveness_similarity_correlation": {
+          "pearson_r": -0.001269192565557614,
+          "n": 50000,
+          "note": "Strong negative r => embedding similarity tracks 'both equally distinctive/rough' (Shortcut 3), not assembly compatibility."
+        },
+        "boundary_openness_explained_variance": {
+          "r_squared": 0.0022430253758520813,
+          "n_components": 10,
+          "note": "High R^2 => embedding largely explained by boundary/openness topology."
+        }
+      },
+      "heldout_fragment_id_probe": {
+        "fragment_caesar_fragment_1": {
+          "held_out": "fragment_caesar_fragment_1",
+          "n_held": 1000,
+          "n_total": 6822,
+          "base_rate": 0.1465845793022574,
+          "heldout_self_retrieval": 0.168,
+          "heldout_knn_same_fraction": 0.147,
+          "ratio_over_base_rate": 1.146096,
+          "note": "Sharper condition-6 instrument (NOT a new condition). High self-retrieval for an UNSEEN fragment => generalized shape-signature leakage, not literal memorization."
+        },
+        "fragment_caesar_fragment_2": {
+          "held_out": "fragment_caesar_fragment_2",
+          "n_held": 1000,
+          "n_total": 6822,
+          "base_rate": 0.1465845793022574,
+          "heldout_self_retrieval": 0.165,
+          "heldout_knn_same_fraction": 0.14639999999999997,
+          "ratio_over_base_rate": 1.1256300000000001,
+          "note": "Sharper condition-6 instrument (NOT a new condition). High self-retrieval for an UNSEEN fragment => generalized shape-signature leakage, not literal memorization."
+        },
+        "fragment_caesar_fragment_3": {
+          "held_out": "fragment_caesar_fragment_3",
+          "n_held": 1000,
+          "n_total": 6822,
+          "base_rate": 0.1465845793022574,
+          "heldout_self_retrieval": 0.142,
+          "heldout_knn_same_fraction": 0.1484,
+          "ratio_over_base_rate": 0.9687239999999999,
+          "note": "Sharper condition-6 instrument (NOT a new condition). High self-retrieval for an UNSEEN fragment => generalized shape-signature leakage, not literal memorization."
+        },
+        "fragment_caesar_fragment_4": {
+          "held_out": "fragment_caesar_fragment_4",
+          "n_held": 1000,
+          "n_total": 6822,
+          "base_rate": 0.1465845793022574,
+          "heldout_self_retrieval": 0.126,
+          "heldout_knn_same_fraction": 0.14660000000000004,
+          "ratio_over_base_rate": 0.859572,
+          "note": "Sharper condition-6 instrument (NOT a new condition). High self-retrieval for an UNSEEN fragment => generalized shape-signature leakage, not literal memorization."
+        },
+        "fragment_caesar_fragment_5": {
+          "held_out": "fragment_caesar_fragment_5",
+          "n_held": 1000,
+          "n_total": 6822,
+          "base_rate": 0.1465845793022574,
+          "heldout_self_retrieval": 0.138,
+          "heldout_knn_same_fraction": 0.1352,
+          "ratio_over_base_rate": 0.941436,
+          "note": "Sharper condition-6 instrument (NOT a new condition). High self-retrieval for an UNSEEN fragment => generalized shape-signature leakage, not literal memorization."
+        },
+        "fragment_caesar_fragment_6": {
+          "held_out": "fragment_caesar_fragment_6",
+          "n_held": 822,
+          "n_total": 6822,
+          "base_rate": 0.12049252418645559,
+          "heldout_self_retrieval": 0.12165450121654502,
+          "heldout_knn_same_fraction": 0.12165450121654502,
+          "ratio_over_base_rate": 1.0096435611913261,
+          "note": "Sharper condition-6 instrument (NOT a new condition). High self-retrieval for an UNSEEN fragment => generalized shape-signature leakage, not literal memorization."
+        },
+        "fragment_caesar_fragment_7": {
+          "held_out": "fragment_caesar_fragment_7",
+          "n_held": 1000,
+          "n_total": 6822,
+          "base_rate": 0.1465845793022574,
+          "heldout_self_retrieval": 0.157,
+          "heldout_knn_same_fraction": 0.14980000000000002,
+          "ratio_over_base_rate": 1.071054,
+          "note": "Sharper condition-6 instrument (NOT a new condition). High self-retrieval for an UNSEEN fragment => generalized shape-signature leakage, not literal memorization."
+        }
+      },
+      "hard_negative_strata": {
+        "n_positive": 20000,
+        "n_easy_negative": 20000,
+        "n_hard_negative": 2100,
+        "mean_distance_positive": 1.4112906768557634,
+        "mean_distance_easy_negative": 1.4114323848106352,
+        "mean_distance_hard_negative": 1.4089659460558543,
+        "auc_pos_vs_easy": 0.5007331375,
+        "auc_pos_vs_hard": 0.49431216666666666,
+        "easy_minus_hard_auc_gap": 0.006420970833333373,
+        "note": "A large easy-minus-hard gap means the embedding separates positives from random negatives but not from look-alike non-adjacent patches -> similarity, not compatibility."
+      },
+      "lofo_per_fold": {
+        "folds": {
+          "fragment_caesar_fragment_1": {
+            "held_out_fragment": "fragment_caesar_fragment_1",
+            "n_queries": 686,
+            "gallery_size": 5822,
+            "n_neighbors": 4,
+            "mAP": 0.0573023877514535,
+            "precision_at_k": {
+              "1": 0.07142857142857142,
+              "5": 0.05947521865889213,
+              "10": 0.05889212827988339,
+              "20": 0.055903790087463566
+            },
+            "recall_at_k": {
+              "1": 0.00022858038036867691,
+              "5": 0.0008970089709850336,
+              "10": 0.0017745562780467328,
+              "20": 0.0034541571326623323
+            },
+            "low_confidence": false,
+            "ci_95": {
+              "mAP": {
+                "mean": 0.0573023877514535,
+                "lo": 0.05580670173515316,
+                "hi": 0.05881680785622992,
+                "half_width": 0.0015050530605383791,
+                "n": 686
+              },
+              "precision_at_1": {
+                "mean": 0.07142857142857142,
+                "lo": 0.05393586005830904,
+                "hi": 0.09037900874635568,
+                "half_width": 0.01822157434402332,
+                "n": 686
+              }
+            }
+          },
+          "fragment_caesar_fragment_2": {
+            "held_out_fragment": "fragment_caesar_fragment_2",
+            "n_queries": 516,
+            "gallery_size": 5822,
+            "n_neighbors": 3,
+            "mAP": 0.0605829013843381,
+            "precision_at_k": {
+              "1": 0.06395348837209303,
+              "5": 0.059689922480620154,
+              "10": 0.05852713178294573,
+              "20": 0.05881782945736434
+            },
+            "recall_at_k": {
+              "1": 0.0002070483123002158,
+              "5": 0.0008674006196412776,
+              "10": 0.001713634329113004,
+              "20": 0.0034577906870358116
+            },
+            "low_confidence": false,
+            "ci_95": {
+              "mAP": {
+                "mean": 0.0605829013843381,
+                "lo": 0.058807456757091925,
+                "hi": 0.06241462860645995,
+                "half_width": 0.0018035859246840133,
+                "n": 516
+              },
+              "precision_at_1": {
+                "mean": 0.06395348837209303,
+                "lo": 0.044573643410852716,
+                "hi": 0.08527131782945736,
+                "half_width": 0.020348837209302324,
+                "n": 516
+              }
+            }
+          },
+          "fragment_caesar_fragment_3": {
+            "held_out_fragment": "fragment_caesar_fragment_3",
+            "n_queries": 573,
+            "gallery_size": 5822,
+            "n_neighbors": 3,
+            "mAP": 0.04457443506087793,
+            "precision_at_k": {
+              "1": 0.034904013961605584,
+              "5": 0.03664921465968586,
+              "10": 0.041884816753926704,
+              "20": 0.040314136125654446
+            },
+            "recall_at_k": {
+              "1": 0.00014456655450091,
+              "5": 0.0007318394208359879,
+              "10": 0.0016874901428413365,
+              "20": 0.0032371482839475114
+            },
+            "low_confidence": false,
+            "ci_95": {
+              "mAP": {
+                "mean": 0.04457443506087793,
+                "lo": 0.0430782849270055,
+                "hi": 0.04611676759436017,
+                "half_width": 0.0015192413336773333,
+                "n": 573
+              },
+              "precision_at_1": {
+                "mean": 0.034904013961605584,
+                "lo": 0.020942408376963352,
+                "hi": 0.0506108202443281,
+                "half_width": 0.014834205933682374,
+                "n": 573
+              }
+            }
+          },
+          "fragment_caesar_fragment_4": {
+            "held_out_fragment": "fragment_caesar_fragment_4",
+            "n_queries": 544,
+            "gallery_size": 5822,
+            "n_neighbors": 4,
+            "mAP": 0.07860405855998398,
+            "precision_at_k": {
+              "1": 0.07720588235294118,
+              "5": 0.08161764705882354,
+              "10": 0.0818014705882353,
+              "20": 0.07582720588235294
+            },
+            "recall_at_k": {
+              "1": 0.00015164611594566015,
+              "5": 0.0008905188949088352,
+              "10": 0.0018038674579789957,
+              "20": 0.0033686103460230923
+            },
+            "low_confidence": false,
+            "ci_95": {
+              "mAP": {
+                "mean": 0.07860405855998398,
+                "lo": 0.07642900022155541,
+                "hi": 0.08092630731050869,
+                "half_width": 0.0022486535444766406,
+                "n": 544
+              },
+              "precision_at_1": {
+                "mean": 0.07720588235294118,
+                "lo": 0.05693933823529412,
+                "hi": 0.10110294117647059,
+                "half_width": 0.022081801470588237,
+                "n": 544
+              }
+            }
+          },
+          "fragment_caesar_fragment_5": {
+            "held_out_fragment": "fragment_caesar_fragment_5",
+            "n_queries": 661,
+            "gallery_size": 5822,
+            "n_neighbors": 4,
+            "mAP": 0.047127752831514276,
+            "precision_at_k": {
+              "1": 0.05446293494704992,
+              "5": 0.04901664145234494,
+              "10": 0.04780635400907716,
+              "20": 0.04652042360060514
+            },
+            "recall_at_k": {
+              "1": 0.00020625341583492473,
+              "5": 0.0009238817413357181,
+              "10": 0.0017899745713259056,
+              "20": 0.0034757283157081974
+            },
+            "low_confidence": false,
+            "ci_95": {
+              "mAP": {
+                "mean": 0.047127752831514276,
+                "lo": 0.04616088691213941,
+                "hi": 0.04814634179415463,
+                "half_width": 0.0009927274410076112,
+                "n": 661
+              },
+              "precision_at_1": {
+                "mean": 0.05446293494704992,
+                "lo": 0.037783661119515886,
+                "hi": 0.07261724659606657,
+                "half_width": 0.01741679273827534,
+                "n": 661
+              }
+            }
+          },
+          "fragment_caesar_fragment_6": {
+            "held_out_fragment": "fragment_caesar_fragment_6",
+            "n_queries": 780,
+            "gallery_size": 6000,
+            "n_neighbors": 2,
+            "mAP": 0.055762958748056674,
+            "precision_at_k": {
+              "1": 0.0641025641025641,
+              "5": 0.052820512820512824,
+              "10": 0.05410256410256411,
+              "20": 0.052243589743589745
+            },
+            "recall_at_k": {
+              "1": 0.00018584577098547774,
+              "5": 0.0007425593799481782,
+              "10": 0.0016197857051133584,
+              "20": 0.0031685817558515213
+            },
+            "low_confidence": true,
+            "ci_95": {
+              "mAP": {
+                "mean": 0.055762958748056674,
+                "lo": 0.054383799689219275,
+                "hi": 0.057131556029612895,
+                "half_width": 0.00137387817019681,
+                "n": 780
+              },
+              "precision_at_1": {
+                "mean": 0.0641025641025641,
+                "lo": 0.04740384615384615,
+                "hi": 0.08205128205128205,
+                "half_width": 0.01732371794871795,
+                "n": 780
+              }
+            }
+          },
+          "fragment_caesar_fragment_7": {
+            "held_out_fragment": "fragment_caesar_fragment_7",
+            "n_queries": 347,
+            "gallery_size": 5822,
+            "n_neighbors": 2,
+            "mAP": 0.1072083184538811,
+            "precision_at_k": {
+              "1": 0.08069164265129683,
+              "5": 0.1031700288184438,
+              "10": 0.10201729106628243,
+              "20": 0.1037463976945245
+            },
+            "recall_at_k": {
+              "1": 0.00013056900105387837,
+              "5": 0.0008347089710230081,
+              "10": 0.0016507652276097479,
+              "20": 0.003357488598528301
+            },
+            "low_confidence": true,
+            "ci_95": {
+              "mAP": {
+                "mean": 0.1072083184538811,
+                "lo": 0.10679570251451796,
+                "hi": 0.10766259290419154,
+                "half_width": 0.0004334451948367901,
+                "n": 347
+              },
+              "precision_at_1": {
+                "mean": 0.08069164265129683,
+                "lo": 0.05468299711815563,
+                "hi": 0.11239193083573487,
+                "half_width": 0.02885446685878962,
+                "n": 347
+              }
+            }
+          }
+        },
+        "note": "Per-fold, not averaged (n=7). Folds flagged low_confidence have weak adjacency support (e.g. peripheral fragments / tiny contacts) and must be interpreted separately from well-supported folds. ci_95 are percentile bootstrap CIs over resampled queries: use them to check whether a fold's margin over baseline exceeds noise."
+      }
+    },
+    "centroid": {
+      "ranking_raw_gallery": {
+        "n_queries": 800,
+        "gallery_size": 6822,
+        "mAP": 0.05117005020163605,
+        "precision_at_k": {
+          "1": 0.0025,
+          "5": 0.00375,
+          "10": 0.0036249999999999998,
+          "20": 0.005062500000000001
+        },
+        "recall_at_k": {
+          "1": 5.624959197187171e-06,
+          "5": 4.951434271038984e-05,
+          "10": 8.752492827789514e-05,
+          "20": 0.0002470572503537556
+        }
+      },
+      "ranking_contact_only_gallery": {
+        "n_queries": 800,
+        "gallery_size": 4107,
+        "mAP": 0.08677243629755192,
+        "precision_at_k": {
+          "1": 0.0075,
+          "5": 0.009750000000000002,
+          "10": 0.011624999999999998,
+          "20": 0.0121875
+        },
+        "recall_at_k": {
+          "1": 2.2219689832433145e-05,
+          "5": 0.00011950345400891446,
+          "10": 0.00028405696744248087,
+          "20": 0.0005837040766855002
+        }
+      },
+      "interface_breakdown": {
+        "per_interface": {
+          "fragment_caesar_fragment_1__fragment_caesar_fragment_2": {
+            "n_contact_patches": 545,
+            "n_queries": 200,
+            "mAP": 0.05275456655955685,
+            "precision_at_k": {
+              "1": 0.0,
+              "5": 0.0,
+              "10": 0.0,
+              "20": 0.0005
+            },
+            "low_confidence": false
+          },
+          "fragment_caesar_fragment_1__fragment_caesar_fragment_3": {
+            "n_contact_patches": 102,
+            "n_queries": 102,
+            "mAP": 0.058595133368062664,
+            "precision_at_k": {
+              "1": 0.0,
+              "5": 0.0,
+              "10": 0.0,
+              "20": 0.0004901960784313725
+            },
+            "low_confidence": false
+          },
+          "fragment_caesar_fragment_1__fragment_caesar_fragment_4": {
+            "n_contact_patches": 676,
+            "n_queries": 200,
+            "mAP": 0.05417653004844603,
+            "precision_at_k": {
+              "1": 0.0,
+              "5": 0.0,
+              "10": 0.001,
+              "20": 0.00125
+            },
+            "low_confidence": false
+          },
+          "fragment_caesar_fragment_1__fragment_caesar_fragment_5": {
+            "n_contact_patches": 395,
+            "n_queries": 200,
+            "mAP": 0.039211925385189215,
+            "precision_at_k": {
+              "1": 0.005,
+              "5": 0.002,
+              "10": 0.0025,
+              "20": 0.0025
+            },
+            "low_confidence": false
+          },
+          "fragment_caesar_fragment_2__fragment_caesar_fragment_3": {
+            "n_contact_patches": 652,
+            "n_queries": 200,
+            "mAP": 0.05197645125738516,
+            "precision_at_k": {
+              "1": 0.0,
+              "5": 0.001,
+              "10": 0.002,
+              "20": 0.0022500000000000003
+            },
+            "low_confidence": false
+          },
+          "fragment_caesar_fragment_2__fragment_caesar_fragment_4": {
+            "n_contact_patches": 72,
+            "n_queries": 72,
+            "mAP": 0.0752007282877689,
+            "precision_at_k": {
+              "1": 0.0,
+              "5": 0.0,
+              "10": 0.0041666666666666675,
+              "20": 0.0020833333333333337
+            },
+            "low_confidence": false
+          },
+          "fragment_caesar_fragment_3__fragment_caesar_fragment_4": {
+            "n_contact_patches": 431,
+            "n_queries": 200,
+            "mAP": 0.03929002908692345,
+            "precision_at_k": {
+              "1": 0.0,
+              "5": 0.0,
+              "10": 0.0005,
+              "20": 0.0005
+            },
+            "low_confidence": false
+          },
+          "fragment_caesar_fragment_4__fragment_caesar_fragment_5": {
+            "n_contact_patches": 643,
+            "n_queries": 200,
+            "mAP": 0.059102246480885946,
+            "precision_at_k": {
+              "1": 0.0,
+              "5": 0.0,
+              "10": 0.0,
+              "20": 0.00025
+            },
+            "low_confidence": false
+          },
+          "fragment_caesar_fragment_5__fragment_caesar_fragment_6": {
+            "n_contact_patches": 471,
+            "n_queries": 200,
+            "mAP": 0.04084908481369796,
+            "precision_at_k": {
+              "1": 0.0,
+              "5": 0.0030000000000000005,
+              "10": 0.005,
+              "20": 0.0075
+            },
+            "low_confidence": false
+          },
+          "fragment_caesar_fragment_5__fragment_caesar_fragment_7": {
+            "n_contact_patches": 0,
+            "mAP": NaN,
+            "low_confidence": true
+          },
+          "fragment_caesar_fragment_6__fragment_caesar_fragment_7": {
+            "n_contact_patches": 965,
+            "n_queries": 200,
+            "mAP": 0.06636259087280214,
+            "precision_at_k": {
+              "1": 0.03,
+              "5": 0.018000000000000002,
+              "10": 0.019999999999999997,
+              "20": 0.018500000000000003
+            },
+            "low_confidence": false
+          }
+        },
+        "macro_mAP_well_supported": 0.05375192861607183,
+        "n_well_supported_interfaces": 10,
+        "note": "macro_mAP averages well-supported interfaces equally (n_contact>=20). Compare with the micro-averaged mAP from the main ranking run: a large micro>macro gap indicates interface-size bias."
+      },
+      "shortcut_battery": {
+        "fragment_id_probe": {
+          "knn_accuracy": 0.6595,
+          "chance": 0.14285714285714285,
+          "ratio_over_chance": 4.6165,
+          "note": "High accuracy => fragment identity is encoded (memorization risk)."
+        },
+        "contact_vs_noncontact_auc": {
+          "auc": 0.6176370175011295,
+          "n_contact": 4107,
+          "n_noncontact": 2715,
+          "note": "High AUC => embedding encodes contact-ness (Level 1). Necessary, not sufficient."
+        },
+        "neighbor_contact_vs_noncontact_ranking": {
+          "mean_similarity_gap": 0.007413768003974073,
+          "n_comparisons": 1266,
+          "note": "Positive gap => neighbour's contact patches are ranked above its non-contact patches (real interface signal). ~0 => fragment affinity."
+        },
+        "distinctiveness_similarity_correlation": {
+          "pearson_r": -0.07506857547824733,
+          "n": 50000,
+          "note": "Strong negative r => embedding similarity tracks 'both equally distinctive/rough' (Shortcut 3), not assembly compatibility."
+        },
+        "boundary_openness_explained_variance": {
+          "r_squared": 0.0005705909653199726,
+          "n_components": 10,
+          "note": "High R^2 => embedding largely explained by boundary/openness topology."
+        }
+      },
+      "heldout_fragment_id_probe": {
+        "fragment_caesar_fragment_1": {
+          "held_out": "fragment_caesar_fragment_1",
+          "n_held": 1000,
+          "n_total": 6822,
+          "base_rate": 0.1465845793022574,
+          "heldout_self_retrieval": 0.638,
+          "heldout_knn_same_fraction": 0.55,
+          "ratio_over_base_rate": 4.352436,
+          "note": "Sharper condition-6 instrument (NOT a new condition). High self-retrieval for an UNSEEN fragment => generalized shape-signature leakage, not literal memorization."
+        },
+        "fragment_caesar_fragment_2": {
+          "held_out": "fragment_caesar_fragment_2",
+          "n_held": 1000,
+          "n_total": 6822,
+          "base_rate": 0.1465845793022574,
+          "heldout_self_retrieval": 0.656,
+          "heldout_knn_same_fraction": 0.6086,
+          "ratio_over_base_rate": 4.475232,
+          "note": "Sharper condition-6 instrument (NOT a new condition). High self-retrieval for an UNSEEN fragment => generalized shape-signature leakage, not literal memorization."
+        },
+        "fragment_caesar_fragment_3": {
+          "held_out": "fragment_caesar_fragment_3",
+          "n_held": 1000,
+          "n_total": 6822,
+          "base_rate": 0.1465845793022574,
+          "heldout_self_retrieval": 0.637,
+          "heldout_knn_same_fraction": 0.5892000000000001,
+          "ratio_over_base_rate": 4.345614,
+          "note": "Sharper condition-6 instrument (NOT a new condition). High self-retrieval for an UNSEEN fragment => generalized shape-signature leakage, not literal memorization."
+        },
+        "fragment_caesar_fragment_4": {
+          "held_out": "fragment_caesar_fragment_4",
+          "n_held": 1000,
+          "n_total": 6822,
+          "base_rate": 0.1465845793022574,
+          "heldout_self_retrieval": 0.576,
+          "heldout_knn_same_fraction": 0.4912,
+          "ratio_over_base_rate": 3.9294719999999996,
+          "note": "Sharper condition-6 instrument (NOT a new condition). High self-retrieval for an UNSEEN fragment => generalized shape-signature leakage, not literal memorization."
+        },
+        "fragment_caesar_fragment_5": {
+          "held_out": "fragment_caesar_fragment_5",
+          "n_held": 1000,
+          "n_total": 6822,
+          "base_rate": 0.1465845793022574,
+          "heldout_self_retrieval": 0.752,
+          "heldout_knn_same_fraction": 0.6738,
+          "ratio_over_base_rate": 5.130144,
+          "note": "Sharper condition-6 instrument (NOT a new condition). High self-retrieval for an UNSEEN fragment => generalized shape-signature leakage, not literal memorization."
+        },
+        "fragment_caesar_fragment_6": {
+          "held_out": "fragment_caesar_fragment_6",
+          "n_held": 822,
+          "n_total": 6822,
+          "base_rate": 0.12049252418645559,
+          "heldout_self_retrieval": 0.8454987834549879,
+          "heldout_knn_same_fraction": 0.7637469586374696,
+          "ratio_over_base_rate": 7.0170227502797164,
+          "note": "Sharper condition-6 instrument (NOT a new condition). High self-retrieval for an UNSEEN fragment => generalized shape-signature leakage, not literal memorization."
+        },
+        "fragment_caesar_fragment_7": {
+          "held_out": "fragment_caesar_fragment_7",
+          "n_held": 1000,
+          "n_total": 6822,
+          "base_rate": 0.1465845793022574,
+          "heldout_self_retrieval": 0.771,
+          "heldout_knn_same_fraction": 0.6984000000000001,
+          "ratio_over_base_rate": 5.259762,
+          "note": "Sharper condition-6 instrument (NOT a new condition). High self-retrieval for an UNSEEN fragment => generalized shape-signature leakage, not literal memorization."
+        }
+      },
+      "hard_negative_strata": {
+        "n_positive": 20000,
+        "n_easy_negative": 20000,
+        "n_hard_negative": 2100,
+        "mean_distance_positive": 1.479902909443924,
+        "mean_distance_easy_negative": 1.3778092861451139,
+        "mean_distance_hard_negative": 1.2561548680102117,
+        "auc_pos_vs_easy": 0.420992225,
+        "auc_pos_vs_hard": 0.32290166666666664,
+        "easy_minus_hard_auc_gap": 0.09809055833333336,
+        "note": "A large easy-minus-hard gap means the embedding separates positives from random negatives but not from look-alike non-adjacent patches -> similarity, not compatibility."
+      },
+      "lofo_per_fold": {
+        "folds": {
+          "fragment_caesar_fragment_1": {
+            "held_out_fragment": "fragment_caesar_fragment_1",
+            "n_queries": 686,
+            "gallery_size": 5822,
+            "n_neighbors": 4,
+            "mAP": 0.04395399242878698,
+            "precision_at_k": {
+              "1": 0.0014577259475218659,
+              "5": 0.0002915451895043732,
+              "10": 0.0014577259475218659,
+              "20": 0.001967930029154519
+            },
+            "recall_at_k": {
+              "1": 7.008297824624356e-06,
+              "5": 7.008297824624356e-06,
+              "10": 5.331535722839479e-05,
+              "20": 0.00013474585932840195
+            },
+            "low_confidence": false,
+            "ci_95": {
+              "mAP": {
+                "mean": 0.04395399242878698,
+                "lo": 0.04277234388263321,
+                "hi": 0.045077794862056694,
+                "half_width": 0.0011527254897117437,
+                "n": 686
+              },
+              "precision_at_1": {
+                "mean": 0.0014577259475218659,
+                "lo": 0.0,
+                "hi": 0.004373177842565598,
+                "half_width": 0.002186588921282799,
+                "n": 686
+              }
+            }
+          },
+          "fragment_caesar_fragment_2": {
+            "held_out_fragment": "fragment_caesar_fragment_2",
+            "n_queries": 516,
+            "gallery_size": 5822,
+            "n_neighbors": 3,
+            "mAP": 0.051681570800634694,
+            "precision_at_k": {
+              "1": 0.0,
+              "5": 0.0003875968992248062,
+              "10": 0.0009689922480620155,
+              "20": 0.001065891472868217
+            },
+            "recall_at_k": {
+              "1": 0.0,
+              "5": 5.195668890412952e-06,
+              "10": 2.597834445206476e-05,
+              "20": 5.7152357794542465e-05
+            },
+            "low_confidence": false,
+            "ci_95": {
+              "mAP": {
+                "mean": 0.051681570800634694,
+                "lo": 0.050357476183901406,
+                "hi": 0.05318949585024992,
+                "half_width": 0.001416009833174258,
+                "n": 516
+              },
+              "precision_at_1": {
+                "mean": 0.0,
+                "lo": 0.0,
+                "hi": 0.0,
+                "half_width": 0.0,
+                "n": 516
+              }
+            }
+          },
+          "fragment_caesar_fragment_3": {
+            "held_out_fragment": "fragment_caesar_fragment_3",
+            "n_queries": 573,
+            "gallery_size": 5822,
+            "n_neighbors": 3,
+            "mAP": 0.037172944307096174,
+            "precision_at_k": {
+              "1": 0.0,
+              "5": 0.0,
+              "10": 0.0005235602094240838,
+              "20": 0.0008726003490401396
+            },
+            "recall_at_k": {
+              "1": 0.0,
+              "5": 0.0,
+              "10": 1.8765598904089025e-05,
+              "20": 6.024521458122698e-05
+            },
+            "low_confidence": false,
+            "ci_95": {
+              "mAP": {
+                "mean": 0.037172944307096174,
+                "lo": 0.03590452759380627,
+                "hi": 0.03839157435506714,
+                "half_width": 0.0012435233806304367,
+                "n": 573
+              },
+              "precision_at_1": {
+                "mean": 0.0,
+                "lo": 0.0,
+                "hi": 0.0,
+                "half_width": 0.0,
+                "n": 573
+              }
+            }
+          },
+          "fragment_caesar_fragment_4": {
+            "held_out_fragment": "fragment_caesar_fragment_4",
+            "n_queries": 544,
+            "gallery_size": 5822,
+            "n_neighbors": 4,
+            "mAP": 0.06654758056489755,
+            "precision_at_k": {
+              "1": 0.0,
+              "5": 0.0003676470588235294,
+              "10": 0.0011029411764705882,
+              "20": 0.0014705882352941176
+            },
+            "recall_at_k": {
+              "1": 0.0,
+              "5": 6.046826625386996e-06,
+              "10": 2.5536893422851072e-05,
+              "20": 7.060588374254306e-05
+            },
+            "low_confidence": false,
+            "ci_95": {
+              "mAP": {
+                "mean": 0.06654758056489755,
+                "lo": 0.06464883013757333,
+                "hi": 0.06851478294861707,
+                "half_width": 0.001932976405521869,
+                "n": 544
+              },
+              "precision_at_1": {
+                "mean": 0.0,
+                "lo": 0.0,
+                "hi": 0.0,
+                "half_width": 0.0,
+                "n": 544
+              }
+            }
+          },
+          "fragment_caesar_fragment_5": {
+            "held_out_fragment": "fragment_caesar_fragment_5",
+            "n_queries": 661,
+            "gallery_size": 5822,
+            "n_neighbors": 4,
+            "mAP": 0.04331483447016763,
+            "precision_at_k": {
+              "1": 0.0,
+              "5": 0.0024205748865355524,
+              "10": 0.0019667170953101363,
+              "20": 0.002571860816944024
+            },
+            "recall_at_k": {
+              "1": 0.0,
+              "5": 3.7837390213619226e-05,
+              "10": 5.908541414739338e-05,
+              "20": 0.00016827655807230706
+            },
+            "low_confidence": false,
+            "ci_95": {
+              "mAP": {
+                "mean": 0.04331483447016763,
+                "lo": 0.042101189198046444,
+                "hi": 0.044667111551541135,
+                "half_width": 0.001282961176747345,
+                "n": 661
+              },
+              "precision_at_1": {
+                "mean": 0.0,
+                "lo": 0.0,
+                "hi": 0.0,
+                "half_width": 0.0,
+                "n": 661
+              }
+            }
+          },
+          "fragment_caesar_fragment_6": {
+            "held_out_fragment": "fragment_caesar_fragment_6",
+            "n_queries": 780,
+            "gallery_size": 6000,
+            "n_neighbors": 2,
+            "mAP": 0.044021151244784035,
+            "precision_at_k": {
+              "1": 0.011538461538461539,
+              "5": 0.01076923076923077,
+              "10": 0.010384615384615386,
+              "20": 0.010384615384615384
+            },
+            "recall_at_k": {
+              "1": 3.3252050543116824e-05,
+              "5": 0.0001505778883300497,
+              "10": 0.000281794734244302,
+              "20": 0.0005405977307994599
+            },
+            "low_confidence": true,
+            "ci_95": {
+              "mAP": {
+                "mean": 0.044021151244784035,
+                "lo": 0.04255522385510454,
+                "hi": 0.045433153807934445,
+                "half_width": 0.0014389649764149533,
+                "n": 780
+              },
+              "precision_at_1": {
+                "mean": 0.011538461538461539,
+                "lo": 0.005128205128205128,
+                "hi": 0.019230769230769232,
+                "half_width": 0.007051282051282052,
+                "n": 780
+              }
+            }
+          },
+          "fragment_caesar_fragment_7": {
+            "held_out_fragment": "fragment_caesar_fragment_7",
+            "n_queries": 347,
+            "gallery_size": 5822,
+            "n_neighbors": 2,
+            "mAP": 0.08633814704739153,
+            "precision_at_k": {
+              "1": 0.01440922190201729,
+              "5": 0.01095100864553314,
+              "10": 0.012968299711815562,
+              "20": 0.015273775216138328
+            },
+            "recall_at_k": {
+              "1": 2.3315893045335425e-05,
+              "5": 8.86003935722746e-05,
+              "10": 0.0002098430374080188,
+              "20": 0.0004942969325611109
+            },
+            "low_confidence": true,
+            "ci_95": {
+              "mAP": {
+                "mean": 0.08633814704739153,
+                "lo": 0.08449450712410493,
+                "hi": 0.0881902410694766,
+                "half_width": 0.0018478669726858313,
+                "n": 347
+              },
+              "precision_at_1": {
+                "mean": 0.01440922190201729,
+                "lo": 0.002881844380403458,
+                "hi": 0.02881844380403458,
+                "half_width": 0.012968299711815562,
+                "n": 347
+              }
+            }
+          }
+        },
+        "note": "Per-fold, not averaged (n=7). Folds flagged low_confidence have weak adjacency support (e.g. peripheral fragments / tiny contacts) and must be interpreted separately from well-supported folds. ci_95 are percentile bootstrap CIs over resampled queries: use them to check whether a fold's margin over baseline exceeds noise."
+      }
+    },
+    "fpfh": {
+      "ranking_raw_gallery": {
+        "n_queries": 800,
+        "gallery_size": 6822,
+        "mAP": 0.1091701718716972,
+        "precision_at_k": {
+          "1": 0.11875,
+          "5": 0.10850000000000001,
+          "10": 0.11074999999999999,
+          "20": 0.1071875
+        },
+        "recall_at_k": {
+          "1": 0.00043642530164897495,
+          "5": 0.001985544985431811,
+          "10": 0.0041410457956742594,
+          "20": 0.008045562502737948
+        }
+      },
+      "ranking_contact_only_gallery": {
+        "n_queries": 800,
+        "gallery_size": 4107,
+        "mAP": 0.1490483354040454,
+        "precision_at_k": {
+          "1": 0.14,
+          "5": 0.13125,
+          "10": 0.13375,
+          "20": 0.131875
+        },
+        "recall_at_k": {
+          "1": 0.0005156257435381391,
+          "5": 0.0024364194675940277,
+          "10": 0.004985048253794999,
+          "20": 0.009757998484593933
+        }
+      },
+      "interface_breakdown": {
+        "per_interface": {
+          "fragment_caesar_fragment_1__fragment_caesar_fragment_2": {
+            "n_contact_patches": 545,
+            "n_queries": 200,
+            "mAP": 0.13728790287441706,
+            "precision_at_k": {
+              "1": 0.185,
+              "5": 0.16200000000000003,
+              "10": 0.1635,
+              "20": 0.15599999999999997
+            },
+            "low_confidence": false
+          },
+          "fragment_caesar_fragment_1__fragment_caesar_fragment_3": {
+            "n_contact_patches": 102,
+            "n_queries": 102,
+            "mAP": 0.18734712702296735,
+            "precision_at_k": {
+              "1": 0.4019607843137255,
+              "5": 0.3803921568627451,
+              "10": 0.3578431372549019,
+              "20": 0.32598039215686275
+            },
+            "low_confidence": false
+          },
+          "fragment_caesar_fragment_1__fragment_caesar_fragment_4": {
+            "n_contact_patches": 676,
+            "n_queries": 200,
+            "mAP": 0.12743372311101314,
+            "precision_at_k": {
+              "1": 0.24,
+              "5": 0.233,
+              "10": 0.24100000000000002,
+              "20": 0.21875
+            },
+            "low_confidence": false
+          },
+          "fragment_caesar_fragment_1__fragment_caesar_fragment_5": {
+            "n_contact_patches": 395,
+            "n_queries": 200,
+            "mAP": 0.06382003333790495,
+            "precision_at_k": {
+              "1": 0.125,
+              "5": 0.10700000000000001,
+              "10": 0.09849999999999999,
+              "20": 0.0785
+            },
+            "low_confidence": false
+          },
+          "fragment_caesar_fragment_2__fragment_caesar_fragment_3": {
+            "n_contact_patches": 652,
+            "n_queries": 200,
+            "mAP": 0.1525647909713073,
+            "precision_at_k": {
+              "1": 0.215,
+              "5": 0.233,
+              "10": 0.2305,
+              "20": 0.21575000000000003
+            },
+            "low_confidence": false
+          },
+          "fragment_caesar_fragment_2__fragment_caesar_fragment_4": {
+            "n_contact_patches": 72,
+            "n_queries": 72,
+            "mAP": 0.2350705514684164,
+            "precision_at_k": {
+              "1": 0.2222222222222222,
+              "5": 0.3277777777777778,
+              "10": 0.35833333333333334,
+              "20": 0.37222222222222223
+            },
+            "low_confidence": false
+          },
+          "fragment_caesar_fragment_3__fragment_caesar_fragment_4": {
+            "n_contact_patches": 431,
+            "n_queries": 200,
+            "mAP": 0.1342492561568676,
+            "precision_at_k": {
+              "1": 0.17,
+              "5": 0.168,
+              "10": 0.17350000000000002,
+              "20": 0.184
+            },
+            "low_confidence": false
+          },
+          "fragment_caesar_fragment_4__fragment_caesar_fragment_5": {
+            "n_contact_patches": 643,
+            "n_queries": 200,
+            "mAP": 0.06968826695936786,
+            "precision_at_k": {
+              "1": 0.04,
+              "5": 0.047,
+              "10": 0.049,
+              "20": 0.05075
+            },
+            "low_confidence": false
+          },
+          "fragment_caesar_fragment_5__fragment_caesar_fragment_6": {
+            "n_contact_patches": 471,
+            "n_queries": 200,
+            "mAP": 0.17937237101478984,
+            "precision_at_k": {
+              "1": 0.13,
+              "5": 0.16200000000000003,
+              "10": 0.16400000000000003,
+              "20": 0.162
+            },
+            "low_confidence": false
+          },
+          "fragment_caesar_fragment_5__fragment_caesar_fragment_7": {
+            "n_contact_patches": 0,
+            "mAP": NaN,
+            "low_confidence": true
+          },
+          "fragment_caesar_fragment_6__fragment_caesar_fragment_7": {
+            "n_contact_patches": 965,
+            "n_queries": 200,
+            "mAP": 0.08531784001610697,
+            "precision_at_k": {
+              "1": 0.0,
+              "5": 0.001,
+              "10": 0.004,
+              "20": 0.009250000000000001
+            },
+            "low_confidence": false
+          }
+        },
+        "macro_mAP_well_supported": 0.13721518629331586,
+        "n_well_supported_interfaces": 10,
+        "note": "macro_mAP averages well-supported interfaces equally (n_contact>=20). Compare with the micro-averaged mAP from the main ranking run: a large micro>macro gap indicates interface-size bias."
+      },
+      "shortcut_battery": {
+        "fragment_id_probe": {
+          "knn_accuracy": 0.892,
+          "chance": 0.14285714285714285,
+          "ratio_over_chance": 6.244000000000001,
+          "note": "High accuracy => fragment identity is encoded (memorization risk)."
+        },
+        "contact_vs_noncontact_auc": {
+          "auc": 0.7310553945237621,
+          "n_contact": 4107,
+          "n_noncontact": 2715,
+          "note": "High AUC => embedding encodes contact-ness (Level 1). Necessary, not sufficient."
+        },
+        "neighbor_contact_vs_noncontact_ranking": {
+          "mean_similarity_gap": 0.07340295269964342,
+          "n_comparisons": 1266,
+          "note": "Positive gap => neighbour's contact patches are ranked above its non-contact patches (real interface signal). ~0 => fragment affinity."
+        },
+        "distinctiveness_similarity_correlation": {
+          "pearson_r": -0.40040260244301734,
+          "n": 50000,
+          "note": "Strong negative r => embedding similarity tracks 'both equally distinctive/rough' (Shortcut 3), not assembly compatibility."
+        },
+        "boundary_openness_explained_variance": {
+          "r_squared": 0.002052854030342055,
+          "n_components": 10,
+          "note": "High R^2 => embedding largely explained by boundary/openness topology."
+        }
+      },
+      "heldout_fragment_id_probe": {
+        "fragment_caesar_fragment_1": {
+          "held_out": "fragment_caesar_fragment_1",
+          "n_held": 1000,
+          "n_total": 6822,
+          "base_rate": 0.1465845793022574,
+          "heldout_self_retrieval": 0.895,
+          "heldout_knn_same_fraction": 0.7706000000000001,
+          "ratio_over_base_rate": 6.10569,
+          "note": "Sharper condition-6 instrument (NOT a new condition). High self-retrieval for an UNSEEN fragment => generalized shape-signature leakage, not literal memorization."
+        },
+        "fragment_caesar_fragment_2": {
+          "held_out": "fragment_caesar_fragment_2",
+          "n_held": 1000,
+          "n_total": 6822,
+          "base_rate": 0.1465845793022574,
+          "heldout_self_retrieval": 0.876,
+          "heldout_knn_same_fraction": 0.7018,
+          "ratio_over_base_rate": 5.976072,
+          "note": "Sharper condition-6 instrument (NOT a new condition). High self-retrieval for an UNSEEN fragment => generalized shape-signature leakage, not literal memorization."
+        },
+        "fragment_caesar_fragment_3": {
+          "held_out": "fragment_caesar_fragment_3",
+          "n_held": 1000,
+          "n_total": 6822,
+          "base_rate": 0.1465845793022574,
+          "heldout_self_retrieval": 0.935,
+          "heldout_knn_same_fraction": 0.7968,
+          "ratio_over_base_rate": 6.37857,
+          "note": "Sharper condition-6 instrument (NOT a new condition). High self-retrieval for an UNSEEN fragment => generalized shape-signature leakage, not literal memorization."
+        },
+        "fragment_caesar_fragment_4": {
+          "held_out": "fragment_caesar_fragment_4",
+          "n_held": 1000,
+          "n_total": 6822,
+          "base_rate": 0.1465845793022574,
+          "heldout_self_retrieval": 0.85,
+          "heldout_knn_same_fraction": 0.7246,
+          "ratio_over_base_rate": 5.798699999999999,
+          "note": "Sharper condition-6 instrument (NOT a new condition). High self-retrieval for an UNSEEN fragment => generalized shape-signature leakage, not literal memorization."
+        },
+        "fragment_caesar_fragment_5": {
+          "held_out": "fragment_caesar_fragment_5",
+          "n_held": 1000,
+          "n_total": 6822,
+          "base_rate": 0.1465845793022574,
+          "heldout_self_retrieval": 0.979,
+          "heldout_knn_same_fraction": 0.9298,
+          "ratio_over_base_rate": 6.678738,
+          "note": "Sharper condition-6 instrument (NOT a new condition). High self-retrieval for an UNSEEN fragment => generalized shape-signature leakage, not literal memorization."
+        },
+        "fragment_caesar_fragment_6": {
+          "held_out": "fragment_caesar_fragment_6",
+          "n_held": 822,
+          "n_total": 6822,
+          "base_rate": 0.12049252418645559,
+          "heldout_self_retrieval": 1.0,
+          "heldout_knn_same_fraction": 0.9997566909975668,
+          "ratio_over_base_rate": 8.2992700729927,
+          "note": "Sharper condition-6 instrument (NOT a new condition). High self-retrieval for an UNSEEN fragment => generalized shape-signature leakage, not literal memorization."
+        },
+        "fragment_caesar_fragment_7": {
+          "held_out": "fragment_caesar_fragment_7",
+          "n_held": 1000,
+          "n_total": 6822,
+          "base_rate": 0.1465845793022574,
+          "heldout_self_retrieval": 0.997,
+          "heldout_knn_same_fraction": 0.9788,
+          "ratio_over_base_rate": 6.801534,
+          "note": "Sharper condition-6 instrument (NOT a new condition). High self-retrieval for an UNSEEN fragment => generalized shape-signature leakage, not literal memorization."
+        }
+      },
+      "hard_negative_strata": {
+        "n_positive": 20000,
+        "n_easy_negative": 20000,
+        "n_hard_negative": 2100,
+        "mean_distance_positive": 0.40877921377199516,
+        "mean_distance_easy_negative": 0.5541103980312054,
+        "mean_distance_hard_negative": 0.1519743971777537,
+        "auc_pos_vs_easy": 0.7063014875,
+        "auc_pos_vs_hard": 0.09217804761904762,
+        "easy_minus_hard_auc_gap": 0.6141234398809524,
+        "note": "A large easy-minus-hard gap means the embedding separates positives from random negatives but not from look-alike non-adjacent patches -> similarity, not compatibility."
+      },
+      "lofo_per_fold": {
+        "folds": {
+          "fragment_caesar_fragment_1": {
+            "held_out_fragment": "fragment_caesar_fragment_1",
+            "n_queries": 686,
+            "gallery_size": 5822,
+            "n_neighbors": 4,
+            "mAP": 0.10528834670508665,
+            "precision_at_k": {
+              "1": 0.16763848396501457,
+              "5": 0.16705539358600582,
+              "10": 0.15903790087463557,
+              "20": 0.1509475218658892
+            },
+            "recall_at_k": {
+              "1": 0.0005267341667920553,
+              "5": 0.0025705192134292372,
+              "10": 0.004912267559566468,
+              "20": 0.00930241719344123
+            },
+            "low_confidence": false,
+            "ci_95": {
+              "mAP": {
+                "mean": 0.10528834670508665,
+                "lo": 0.10152835004093771,
+                "hi": 0.10907715051246418,
+                "half_width": 0.0037744002357632325,
+                "n": 686
+              },
+              "precision_at_1": {
+                "mean": 0.16763848396501457,
+                "lo": 0.13994169096209913,
+                "hi": 0.19533527696793002,
+                "half_width": 0.027696793002915443,
+                "n": 686
+              }
+            }
+          },
+          "fragment_caesar_fragment_2": {
+            "held_out_fragment": "fragment_caesar_fragment_2",
+            "n_queries": 516,
+            "gallery_size": 5822,
+            "n_neighbors": 3,
+            "mAP": 0.13912742210555498,
+            "precision_at_k": {
+              "1": 0.1937984496124031,
+              "5": 0.1875968992248062,
+              "10": 0.1866279069767442,
+              "20": 0.17732558139534885
+            },
+            "recall_at_k": {
+              "1": 0.0006176272441901534,
+              "5": 0.002830691792527488,
+              "10": 0.00562105810160562,
+              "20": 0.010461092487364279
+            },
+            "low_confidence": false,
+            "ci_95": {
+              "mAP": {
+                "mean": 0.13912742210555498,
+                "lo": 0.13386787136995618,
+                "hi": 0.14480489040503206,
+                "half_width": 0.0054685095175379395,
+                "n": 516
+              },
+              "precision_at_1": {
+                "mean": 0.1937984496124031,
+                "lo": 0.16085271317829458,
+                "hi": 0.22868217054263565,
+                "half_width": 0.033914728682170533,
+                "n": 516
+              }
+            }
+          },
+          "fragment_caesar_fragment_3": {
+            "held_out_fragment": "fragment_caesar_fragment_3",
+            "n_queries": 573,
+            "gallery_size": 5822,
+            "n_neighbors": 3,
+            "mAP": 0.11012781402366491,
+            "precision_at_k": {
+              "1": 0.16928446771378708,
+              "5": 0.16998254799301918,
+              "10": 0.1670157068062827,
+              "20": 0.162565445026178
+            },
+            "recall_at_k": {
+              "1": 0.0005976046331786124,
+              "5": 0.0028465431156375954,
+              "10": 0.005853529935170913,
+              "20": 0.01197527444515227
+            },
+            "low_confidence": false,
+            "ci_95": {
+              "mAP": {
+                "mean": 0.11012781402366491,
+                "lo": 0.10552134632550954,
+                "hi": 0.11484028608066749,
+                "half_width": 0.004659469877578974,
+                "n": 573
+              },
+              "precision_at_1": {
+                "mean": 0.16928446771378708,
+                "lo": 0.13961605584642234,
+                "hi": 0.19895287958115182,
+                "half_width": 0.02966841186736474,
+                "n": 573
+              }
+            }
+          },
+          "fragment_caesar_fragment_4": {
+            "held_out_fragment": "fragment_caesar_fragment_4",
+            "n_queries": 544,
+            "gallery_size": 5822,
+            "n_neighbors": 4,
+            "mAP": 0.12801247713114486,
+            "precision_at_k": {
+              "1": 0.18382352941176472,
+              "5": 0.17647058823529413,
+              "10": 0.17977941176470588,
+              "20": 0.16920955882352942
+            },
+            "recall_at_k": {
+              "1": 0.00038562809624862875,
+              "5": 0.001880091121945959,
+              "10": 0.0038654791823342673,
+              "20": 0.007428831177054327
+            },
+            "low_confidence": false,
+            "ci_95": {
+              "mAP": {
+                "mean": 0.12801247713114486,
+                "lo": 0.12316463666428344,
+                "hi": 0.13274717369336048,
+                "half_width": 0.004791268514538517,
+                "n": 544
+              },
+              "precision_at_1": {
+                "mean": 0.18382352941176472,
+                "lo": 0.15073529411764705,
+                "hi": 0.21875,
+                "half_width": 0.034007352941176475,
+                "n": 544
+              }
+            }
+          },
+          "fragment_caesar_fragment_5": {
+            "held_out_fragment": "fragment_caesar_fragment_5",
+            "n_queries": 661,
+            "gallery_size": 5822,
+            "n_neighbors": 4,
+            "mAP": 0.07780057284783924,
+            "precision_at_k": {
+              "1": 0.07413010590015129,
+              "5": 0.07201210287443267,
+              "10": 0.06777609682299546,
+              "20": 0.06732223903177005
+            },
+            "recall_at_k": {
+              "1": 0.00027989760588628893,
+              "5": 0.0012864058188043056,
+              "10": 0.0023651930240617494,
+              "20": 0.004666255388898184
+            },
+            "low_confidence": false,
+            "ci_95": {
+              "mAP": {
+                "mean": 0.07780057284783924,
+                "lo": 0.07313551366508006,
+                "hi": 0.08252094157625109,
+                "half_width": 0.004692713955585515,
+                "n": 661
+              },
+              "precision_at_1": {
+                "mean": 0.07413010590015129,
+                "lo": 0.055937972768532525,
+                "hi": 0.09379727685325265,
+                "half_width": 0.01892965204236006,
+                "n": 661
+              }
+            }
+          },
+          "fragment_caesar_fragment_6": {
+            "held_out_fragment": "fragment_caesar_fragment_6",
+            "n_queries": 780,
+            "gallery_size": 6000,
+            "n_neighbors": 2,
+            "mAP": 0.11294134605519957,
+            "precision_at_k": {
+              "1": 0.03205128205128205,
+              "5": 0.042820512820512815,
+              "10": 0.04987179487179487,
+              "20": 0.05737179487179487
+            },
+            "recall_at_k": {
+              "1": 0.00027870680044593093,
+              "5": 0.0018133611505369433,
+              "10": 0.004170955525422384,
+              "20": 0.008857770680224007
+            },
+            "low_confidence": true,
+            "ci_95": {
+              "mAP": {
+                "mean": 0.11294134605519957,
+                "lo": 0.10568576561983005,
+                "hi": 0.12126857122076486,
+                "half_width": 0.0077914028004674035,
+                "n": 780
+              },
+              "precision_at_1": {
+                "mean": 0.03205128205128205,
+                "lo": 0.020512820512820513,
+                "hi": 0.04487179487179487,
+                "half_width": 0.01217948717948718,
+                "n": 780
+              }
+            }
+          },
+          "fragment_caesar_fragment_7": {
+            "held_out_fragment": "fragment_caesar_fragment_7",
+            "n_queries": 347,
+            "gallery_size": 5822,
+            "n_neighbors": 2,
+            "mAP": 0.09172772416717279,
+            "precision_at_k": {
+              "1": 0.0,
+              "5": 0.00345821325648415,
+              "10": 0.006628242074927955,
+              "20": 0.010662824207492795
+            },
+            "recall_at_k": {
+              "1": 0.0,
+              "5": 2.797907165440251e-05,
+              "10": 0.00010725310800854294,
+              "20": 0.00034507521707096426
+            },
+            "low_confidence": true,
+            "ci_95": {
+              "mAP": {
+                "mean": 0.09172772416717279,
+                "lo": 0.08817339356795678,
+                "hi": 0.09534034701197332,
+                "half_width": 0.0035834767220082678,
+                "n": 347
+              },
+              "precision_at_1": {
+                "mean": 0.0,
+                "lo": 0.0,
+                "hi": 0.0,
+                "half_width": 0.0,
+                "n": 347
+              }
+            }
+          }
+        },
+        "note": "Per-fold, not averaged (n=7). Folds flagged low_confidence have weak adjacency support (e.g. peripheral fragments / tiny contacts) and must be interpreted separately from well-supported folds. ci_95 are percentile bootstrap CIs over resampled queries: use them to check whether a fold's margin over baseline exceeds noise."
+      }
+    }
+  },
+  "density_fingerprint_probe": {
+    "knn_accuracy_from_density": 0.3555,
+    "chance": 0.14285714285714285,
+    "ratio_over_chance": 2.4885,
+    "note": "High => per-fragment density/spacing leaks identity; normalise it away."
+  }
+}
