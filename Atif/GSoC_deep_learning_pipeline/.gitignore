@@ -39,8 +39,8 @@ config/*.bak.*
 # Model checkpoints from scripts/train_phase5a.py are throwaway per-fold
 # binaries (a full 7-fold run produces 7). The small per-fold history JSONs
 # ARE tracked as provenance for the numbers cited in PHASE5_RESULTS_LOG.md;
-# the .pt checkpoints are not.
-phase5a_runs/*.pt
+# the .pt checkpoints are not. Covers every phase5a_runs* output dir.
+phase5a_runs*/*.pt
 
 # ─── Source meshes excluded (kept out of the repo by request) ────────────────
 # The raw scans in data/ total ~99 MB. They are inputs, not outputs, and are
