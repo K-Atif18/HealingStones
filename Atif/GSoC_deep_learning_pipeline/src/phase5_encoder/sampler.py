@@ -176,6 +176,7 @@ def build_fold_sampler(
     val_fraction: float = 0.10,
     val_pair_cap: int = 500,
     weighting: Optional[InterfaceWeighting] = None,
+    positive_max_center_dist_mm: Optional[float] = None,
     seed: int = 0,
 ) -> FoldSampler:
     """Build a :class:`FoldSampler` for LOFO fold ``held_out``.
@@ -197,6 +198,17 @@ def build_fold_sampler(
     its own pairs, not a uniform slice that would starve small interfaces),
     then the whole set is downsampled proportionally to ``val_pair_cap`` if
     the raw total exceeds it.
+
+    ``positive_max_center_dist_mm`` (Deviation 3, design §11): if set, only
+    positive pairs whose ``center_dist_mm`` <= this cap are used for BOTH
+    training and validation. ``None`` (default) preserves the original
+    uncapped/all-positives behaviour. Motivation (diagnosed, not cosmetic):
+    fold-1 evidence showed condition 3 met but top-1 retrieval tied with FPFH
+    -- the loss optimizes region-scale co-membership (positive centres median
+    18.6 mm apart, only 11.2% within one 8 mm patch radius) while P@1 rewards
+    the single nearest partner. Capping positive centre distance aligns the
+    training objective with the retrieval metric. This filter is applied to
+    the positive rows BEFORE the train/val split, so both splits respect it.
     """
     weighting = weighting or InterfaceWeighting()
     rng = np.random.default_rng(seed)
@@ -211,6 +223,9 @@ def build_fold_sampler(
     fa_all = vocab[ctx.pairs.fragment_A_idx]
     fb_all = vocab[ctx.pairs.fragment_B_idx]
     is_pos = ctx.pairs.labels == 1
+    # Deviation 3: distance-capped positives (applied to BOTH train and val).
+    if positive_max_center_dist_mm is not None:
+        is_pos = is_pos & (ctx.pairs.center_dist_mm <= positive_max_center_dist_mm)
 
     # Pass 1: compute the raw (uncapped) per-interface val/train split at
     # val_fraction, same as before -- this preserves per-interface

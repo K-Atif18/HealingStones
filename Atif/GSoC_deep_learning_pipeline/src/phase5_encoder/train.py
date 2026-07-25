@@ -58,6 +58,8 @@ class TrainConfig:
     val_pair_cap: int = 500        # HARD cap on total validation pairs -- fixes the
                                     # measured 49,569-pair OOM bug (see build_fold_sampler)
     val_minibatch_size: int = 256  # validation is chunked, never one shot (same bug)
+    positive_max_center_dist_mm: float | None = None  # Deviation 3 (§11): distance-capped
+                                    # positives; None = uncapped/all-positives (original)
     steps_per_epoch: int = 12      # ~ LOFO fold size / batch_size, per PHASE5_RESULTS_LOG.md:160
     interface_weight_max_ratio: float = 5.0  # design §4, corrected semantics -- see
                                               # sampler.InterfaceWeighting docstring
@@ -264,6 +266,7 @@ def train_one_fold(
         ctx, held_out, val_fraction=cfg.val_fraction,
         val_pair_cap=cfg.val_pair_cap,
         weighting=InterfaceWeighting(max_ratio=cfg.interface_weight_max_ratio),
+        positive_max_center_dist_mm=cfg.positive_max_center_dist_mm,
         seed=cfg.seed,
     )
 

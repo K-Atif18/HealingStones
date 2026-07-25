@@ -410,3 +410,39 @@ def test_mining_cache_uses_eval_mode_no_jitter():
                                   n_points=8, k=4, device="cpu", seed=0)
     for key in a.lookup:
         assert a.lookup[key] == b.lookup[key], (key, a.lookup[key], b.lookup[key])
+
+
+# ----------------------------------------------------------------------
+# Deviation 3: distance-capped positives. A cap must (a) reduce or keep the
+# positive-pair count, (b) never let a pair above the cap survive, (c) leave
+# the None default identical to the uncapped behaviour.
+# ----------------------------------------------------------------------
+def test_positive_distance_cap_filters_and_default_is_uncapped():
+    from types import SimpleNamespace
+    ctx = _toy_context_two_interfaces()
+    # Attach synthetic center_dist_mm to the toy pairs: 6 positive pairs.
+    n = len(ctx.pairs.labels)
+    # give the (A,B) interface pairs small distances, (B,C) large ones
+    dists = np.array([2.0, 3.0, 4.0, 20.0, 25.0, 30.0], dtype=np.float64)[:n]
+    ctx.pairs = SimpleNamespace(
+        fragment_vocab=ctx.pairs.fragment_vocab,
+        fragment_A_idx=ctx.pairs.fragment_A_idx,
+        fragment_B_idx=ctx.pairs.fragment_B_idx,
+        patch_A_ids=ctx.pairs.patch_A_ids,
+        patch_B_ids=ctx.pairs.patch_B_ids,
+        labels=ctx.pairs.labels,
+        center_dist_mm=dists,
+    )
+    uncapped = build_fold_sampler(ctx, held_out="D", val_fraction=0.0, seed=0)
+    capped = build_fold_sampler(ctx, held_out="D", val_fraction=0.0,
+                                positive_max_center_dist_mm=10.0, seed=0)
+    tot_uncapped = sum(len(v) for v in uncapped.train_interface_pair_rows.values())
+    tot_capped = sum(len(v) for v in capped.train_interface_pair_rows.values())
+    assert tot_capped <= tot_uncapped
+    # No surviving pair may exceed the cap.
+    for iface, rows in capped.train_interface_pair_rows.items():
+        for r in rows.tolist():
+            assert ctx.pairs.center_dist_mm[r] <= 10.0, (iface, r)
+    # The (B,C) interface (large distances) should be gone under a 10mm cap.
+    assert ("B", "C") not in capped.train_interface_pair_rows or \
+        len(capped.train_interface_pair_rows.get(("B", "C"), [])) == 0

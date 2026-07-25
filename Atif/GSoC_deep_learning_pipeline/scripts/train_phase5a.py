@@ -241,6 +241,12 @@ def main() -> int:
                           "semantics: bounds a rare interface's weight to "
                           "at most this many times uniform, not relative "
                           "to the largest interface's raw inverse weight.")
+    ap.add_argument("--positive-max-center-dist-mm", type=float, default=None,
+                     help="Deviation 3 (design §11): if set, train only on "
+                          "positive pairs whose centre distance <= this cap "
+                          "(mm). Aligns the loss with top-1 retrieval. Default "
+                          "None = uncapped/all-positives (original behaviour). "
+                          "Candidate values ~8-16 (1-2 patch radii).")
     ap.add_argument("--seed", type=int, default=0)
     args = ap.parse_args()
 
@@ -278,6 +284,7 @@ def main() -> int:
         patience=args.patience, seed=args.seed, out_dir=args.out_dir,
         val_pair_cap=args.val_pair_cap,
         interface_weight_max_ratio=args.interface_weight_max_ratio,
+        positive_max_center_dist_mm=args.positive_max_center_dist_mm,
     )
     if args.max_epochs is not None:
         print(f"NOTE: --max-epochs {args.max_epochs} overrides --epoch-cap "
