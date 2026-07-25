@@ -306,7 +306,102 @@ def main() -> int:
           f"stopped_at_epoch={history['stopped_at_epoch']}", flush=True)
     print(f"History: {history['history_path']}")
     print(f"Checkpoint (best val): {history['checkpoint_path']}")
+
+    _print_dry_run_report(history)
     return 0
+
+
+def _print_dry_run_report(history: dict) -> None:
+    """Print exactly the six items the reviewer asked back from the fold-1
+    dry run, plus the standing caution. Reads only from the history dict --
+    no re-computation, so what is printed is what was logged."""
+    eps = history.get("epochs", [])
+    if not eps:
+        print("\n(no epochs recorded -- nothing to report)")
+        return
+    print("\n" + "=" * 72)
+    print("FOLD-1 DRY-RUN REPORT (timing + plumbing gate only -- NOT a claim")
+    print("about the encoder; nothing here touches the 6 pre-registered")
+    print("conditions in PHASE5_PREREGISTRATION.md)")
+    print("=" * 72)
+
+    for e in eps:
+        ep = e["epoch"]
+        print(f"\n--- epoch {ep} ---")
+        # 1. Wall clock split three ways (validation reported SEPARATELY).
+        print(f"1. wall clock: mining={e['mining_seconds']:.2f}s  "
+              f"training={e['training_seconds']:.2f}s  "
+              f"validation={e['validation_seconds']:.2f}s  "
+              f"(total {e['epoch_seconds_total']:.2f}s)")
+        # 2. Deduped hard-negative count per step.
+        print(f"2. deduped hard negs/step: mean={e['deduped_hard_negatives_per_step_mean']:.1f} "
+              f"min={e['deduped_hard_negatives_per_step_min']} "
+              f"max={e['deduped_hard_negatives_per_step_max']}  "
+              f"(vs batch_size={history.get('batch_size')})")
+        # 3. Per-fragment mean mined distance (F6/F7 asymmetry check).
+        print("3. per-fragment mean mined distance (watch F6/F7 vs F1/F4):")
+        for fid, d in sorted(e["per_fragment_mined_distance_mean"].items()):
+            print(f"     {fid}: {d:.4f}")
+        # 4. Per-interface draw counts vs the weights that produced them.
+        total_draws_ep = sum(e["interface_draw_counts"].values())
+        print(f"4. interface draw fractions (observed, n_draws={total_draws_ep}) "
+              f"vs weights (expected):")
+        weights = history.get("interface_weights", {})
+        for k in sorted(set(list(e["interface_draw_fractions"].keys()) + list(weights.keys()))):
+            obs = e["interface_draw_fractions"].get(k, 0.0)
+            exp = weights.get(k, float("nan"))
+            flag = ""
+            if exp == exp and total_draws_ep > 0:
+                # Scale-aware: flag only if the deviation exceeds 5 standard
+                # errors of a binomial fraction at n_draws. On the real run
+                # (~6,144 draws) SE near p=0.25 is ~0.0055, so this fires only
+                # on a genuine sampler bug; on a tiny debug run the band widens
+                # automatically so it does NOT false-fire on sampling noise.
+                se = (exp * (1.0 - exp) / total_draws_ep) ** 0.5
+                if se > 0 and abs(obs - exp) > 5 * se:
+                    flag = f"  <-- DIVERGES >{5*se:.3f} (5*SE @ n={total_draws_ep}); sampler bug, not tuning"
+            print(f"     {k}: observed={obs:.3f}  weight={exp:.3f}{flag}")
+        # 5. Peak GPU memory observed vs the measured design figures.
+        print(f"5. peak GPU memory: {e['peak_gpu_mb']:.1f} MB  "
+              f"(design: step 1436.4 MB, mining pass 3221.9 MB -- peak should "
+              f"sit near the larger of the two)")
+        # 6. Did the loss move at all this epoch (plumbing signal only).
+        moved = e["train_loss_last_step"] - e["train_loss_first_step"]
+        import math as _m
+        nan_flag = " <-- NaN, PLUMBING BUG" if _m.isnan(e["train_loss_mean"]) else ""
+        flat_flag = " <-- exactly flat, check plumbing" if moved == 0.0 else ""
+        print(f"6. loss movement (1 epoch, {history.get('steps_per_epoch')} steps): "
+              f"first={e['train_loss_first_step']:.4f} "
+              f"last={e['train_loss_last_step']:.4f} "
+              f"delta={moved:+.4f}{nan_flag}{flat_flag}")
+
+    print("\n" + "-" * 72)
+    print("CAUTION: a single epoch's numbers say nothing about whether the")
+    print("encoder learns interface association. This is a timing + plumbing")
+    print("gate. The honest output is a revised 7-fold wall-clock estimate,")
+    print("NOT any claim about the encoder or the pre-registered conditions.")
+    print("If these numbers diverge wildly from the ~17.7 s/epoch estimate")
+    print("in PHASE5A_TRAINING_DESIGN_REVISED.md §9, the response is to")
+    print("DIAGNOSE which measured building block was wrong (most likely the")
+    print("per-patch Python loop in _encode_patch_ids -- ~1000+ sequential")
+    print("knn_ppf_features calls/step, never measured end-to-end on real")
+    print("patch data) -- NOT to adjust the estimate to match.")
+    n_epochs_measured = len(eps)
+    total = eps[-1]["epoch_seconds_total"]
+    print(f"\nRevised estimate, extrapolated from {n_epochs_measured} measured "
+          f"epoch(s) at {total:.1f}s/epoch (this run's last epoch):")
+    print(f"  1 fold @ 50-epoch cap: {total*50/60:.1f} min")
+    print(f"  7 folds @ 50-epoch cap: {total*50*7/60:.1f} min "
+          f"({total*50*7/3600:.2f} h)")
+    print(f"  ASSUMPTION: every epoch costs like epoch {eps[-1]['epoch']}, and")
+    print("  patience never fires (upper bound). The mining pass re-encodes")
+    print("  its full candidate pool every epoch, so its COST is epoch-stable")
+    print("  even though the mined distances drift as the encoder trains --")
+    print("  i.e. the per-epoch TIME is a fair thing to extrapolate, but only")
+    print(f"  from >1 epoch; a single-epoch ({n_epochs_measured==1}) extrapolation")
+    print("  cannot see warm-up/caching effects on epoch 0.")
+    print("=" * 72)
+    return
 
 
 if __name__ == "__main__":

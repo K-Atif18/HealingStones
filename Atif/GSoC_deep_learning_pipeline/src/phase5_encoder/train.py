@@ -282,10 +282,28 @@ def train_one_fold(
     best_val = float("inf")
     best_state = None
     epochs_without_improvement = 0
-    history = {"held_out": held_out, "epochs": [], "stopped_by": None,
-               "stopped_at_epoch": None}
+    history = {
+        "held_out": held_out,
+        "epochs": [],
+        "stopped_by": None,
+        "stopped_at_epoch": None,
+        # Sampler config surfaced once so per-epoch interface_draw_counts can be
+        # checked against the WEIGHTS that produced them: if observed draw
+        # fractions diverge from these weights, that is a sampler bug, not a
+        # tuning question (per the reviewer's fold-1 checklist).
+        "interface_weights": {f"{k[0]}-{k[1]}": v
+                              for k, v in sampler.interface_weights.items()},
+        "n_train_interfaces": len(sampler.interface_weights),
+        "n_val_pairs": sampler.n_val_pairs(),
+        "device": cfg.device,
+        "batch_size": cfg.batch_size,
+        "steps_per_epoch": cfg.steps_per_epoch,
+    }
 
     for epoch in range(cfg.epoch_cap):
+        if cfg.device == "cuda":
+            torch.cuda.reset_peak_memory_stats()
+
         t0 = time.time()
         mined = mine_epoch_hard_negatives(
             ctx, model, held_out, train_anchor_ids,
@@ -312,7 +330,15 @@ def train_one_fold(
             deduped_hard_counts.append(n_deduped_hard)
         train_dt = time.time() - t1
 
+        # Validation timed SEPARATELY -- this is the term that was omitted from
+        # the original (wrong) wall-clock estimate; report it on its own.
+        t2 = time.time()
         val_loss = _validation_loss(model, ctx, sampler, cfg)
+        val_dt = time.time() - t2
+
+        peak_mb = (torch.cuda.max_memory_allocated() / 1e6
+                   if cfg.device == "cuda" else float("nan"))
+
         improved = val_loss < best_val - 1e-4
         if improved:
             best_val = val_loss
@@ -321,15 +347,31 @@ def train_one_fold(
         else:
             epochs_without_improvement += 1
 
+        # Observed per-interface draw FRACTIONS, for direct comparison against
+        # history["interface_weights"] above.
+        total_draws = sum(interface_draw_counts.values()) or 1
+        interface_draw_fractions = {
+            k: v / total_draws for k, v in interface_draw_counts.items()
+        }
+
         history["epochs"].append({
             "epoch": epoch,
             "train_loss_mean": float(np.mean(step_losses)),
+            # Full per-step trajectory so "did the loss move at all in one
+            # epoch" is answerable (first vs last step), not just the mean.
+            "train_loss_per_step": [float(x) for x in step_losses],
+            "train_loss_first_step": float(step_losses[0]),
+            "train_loss_last_step": float(step_losses[-1]),
             "val_loss": val_loss,
             "improved": improved,
             "epochs_without_improvement": epochs_without_improvement,
             "mining_seconds": mine_dt,
             "training_seconds": train_dt,
+            "validation_seconds": val_dt,
+            "epoch_seconds_total": mine_dt + train_dt + val_dt,
+            "peak_gpu_mb": peak_mb,
             "interface_draw_counts": interface_draw_counts,
+            "interface_draw_fractions": interface_draw_fractions,
             "deduped_hard_negatives_per_step_mean": float(np.mean(deduped_hard_counts)),
             "deduped_hard_negatives_per_step_min": int(np.min(deduped_hard_counts)),
             "deduped_hard_negatives_per_step_max": int(np.max(deduped_hard_counts)),

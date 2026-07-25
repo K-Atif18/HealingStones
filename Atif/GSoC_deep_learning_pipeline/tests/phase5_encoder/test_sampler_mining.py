@@ -167,10 +167,22 @@ def test_train_one_fold_smoke():
         assert len(history["epochs"]) >= 1
         assert os.path.exists(history["history_path"])
         assert os.path.exists(history["checkpoint_path"])
+        # Top-level fields the dry-run report reads.
+        assert "interface_weights" in history
+        assert "n_val_pairs" in history
         for ep in history["epochs"]:
             assert "interface_draw_counts" in ep
+            assert "interface_draw_fractions" in ep
             assert "per_fragment_mined_distance_mean" in ep
             assert "deduped_hard_negatives_per_step_mean" in ep
+            # The three fields added for the fold-1 dry-run report:
+            assert "validation_seconds" in ep
+            assert "epoch_seconds_total" in ep
+            assert "peak_gpu_mb" in ep
+            assert "train_loss_first_step" in ep
+            assert "train_loss_last_step" in ep
+            assert "train_loss_per_step" in ep
+            assert len(ep["train_loss_per_step"]) == 2  # steps_per_epoch=2 in this cfg
 
 
 # ----------------------------------------------------------------------
