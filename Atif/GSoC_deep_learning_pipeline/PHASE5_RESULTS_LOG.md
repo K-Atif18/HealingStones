@@ -5,9 +5,9 @@
 `scripts/generate_results_log.py` -- do not hand-edit numbers here; regenerate.
 Prose (deviations, decisions) is maintained in the generator template.
 
-- Generated: `2026-07-25T13:57:57.428410+00:00`
+- Generated: `2026-07-25T15:37:46.862720+00:00`
 - Source JSON `run_timestamp`: `2026-07-23T16:53:22.637596+00:00`
-- Git commit at generation: `525c716`
+- Git commit at generation: `1316343`
 - Fragments: F1, F2, F3, F4, F5, F6, F7
 - Total patches: 6822 | Adjacent pairs: 11
 
@@ -365,9 +365,10 @@ separately, and they overlap. Real work: 18,887 patch-encodes (15,466 pool
 
 ### Recurring failure class (named explicitly)
 
-This is the FIFTH unit/scope mismatch in the project. The citation rule
-catches a wrong *location*; it does not catch a number correctly copied
-from a real measurement of the WRONG QUANTITY:
+This is the FIFTH unit/scope mismatch in the project (a SIXTH was found
+later -- see section (h)). The citation rule catches a wrong *location*; it
+does not catch a number correctly copied from a real measurement of the
+WRONG QUANTITY:
 
 | # | Symptom | wrong unit/scope |
 |---|---|---|
@@ -376,6 +377,7 @@ from a real measurement of the WRONG QUANTITY:
 | 3 | H=4 hard-neg ratio | per-*anchor* asserted, code mines per-*patch* |
 | 4 | mined-distance asymmetry | §2b pool sizes are *full-dataset*, no *fold* sees them |
 | 5 | ~17.7 s/epoch | measured *one* pool, code does *six* overlapping |
+| 6 | `steps_per_epoch=12` "epoch" | 12 steps is ~1.4% of pairs / ~90 anchor-passes-worth is 600 steps; "epoch" was never one pass, so patience=5 spanned noise not a real epoch (see section (h)) |
 
 **Added rule:** every measurement states its UNIT and SCOPE (per patch / per
 step / per epoch; per fold / full dataset; one pool / all pools), not just
@@ -413,6 +415,68 @@ random-embedding geometry, not interface signal -- so the §2b mechanism is
 unconfirmed and must be rechecked after real training. Also: F6's fold-1
 pool is 3,000, not the 4,000 in the §2b full-dataset table -- every LOFO
 fold shrinks the pool, so no fold sees the table's 2.2x asymmetry.
+
+---
+
+## (h) Fold-1 training runs (honest record; NOT the verdict)
+
+Two fold-1 training runs exist. BOTH were run with the `steps_per_epoch=12`
+unit bug present (failure-class #6, section c): an "epoch" was 12 gradient
+steps = ~1.4% of the fold's pairs, so 50 epochs = ~600 gradient steps =
+~90 anchor-passes over the 3,421 fold-1 anchors. Patience measured over such
+"epochs" spans noise, not real passes.
+
+### Run 1 -- uncapped, 50 epochs, patience disabled (BASELINE)
+`phase5a_runs/`. Best-val checkpoint epoch 19. Held-out fold-1 eval:
+- Retrieval mAP 0.1065 vs FPFH 0.1053; paired mAP diff +0.0012
+  [-0.0019, +0.0042] -- **CI includes zero, NOT a win**.
+- P@1 0.1545 vs FPFH 0.1676 -- below.
+- Condition-3 easy-vs-hard gap 0.261 vs FPFH 0.610 -- **shrunk (MET on fold)**.
+- Held-out fragment-ID self-retrieval 0.470 vs FPFH 0.895 -- **~half the leakage**.
+- Train loss 6.48->4.64, val loss non-monotonic (best 5.51 @ ep19, drifts to 5.73).
+
+### Run 2 -- 16 mm distance-capped positives, 50 epochs, patience disabled (CONFOUNDED SIDE-BRANCH)
+`phase5a_runs_capped16/` (kept as provenance, NOT a baseline). Best-val
+checkpoint epoch 27. Held-out fold-1 eval:
+- Retrieval mAP 0.1173 vs FPFH 0.1053; paired mAP diff +0.0120
+  [+0.0085, +0.0157] -- CI excludes zero (mAP win on this fold).
+- P@1 0.1516 vs FPFH 0.1676 -- still below.
+- Condition-3 gap 0.280 vs FPFH 0.610 -- stayed shrunk.
+- Fragment-ID self-retrieval 0.463 -- ~half FPFH, unchanged.
+
+**Honest caveats on Run 2 (why it is NOT evidence of the cap's effect):**
+1. The steps_per_epoch unit bug is present in both runs.
+2. Its validation curve is NON-MONOTONIC noise (5.5<->6.3, no trend, on 499
+   val pairs / 12 steps); "best @ epoch 27" is the low-point of a noisy
+   signal (ep15=5.48, ep35=5.50 are within noise of ep27=5.19). The evaluated
+   checkpoint is effectively arbitrary within the run.
+3. Train loss falls cleanly (6.49->4.49) while val wanders -- the signature of
+   fitting too-few gradient steps of data that doesn't generalize (small-anchor
+   overfitting), NOT a converged-then-overfit model.
+4. Fold-1 only, and "wins mAP / loses P@1" is NOT a pass (pre-registration
+   requires BOTH on the majority of {F1-F4}).
+
+The mAP win is promising and not dismissed, but three of the four inputs to it
+are compromised (arbitrary checkpoint, unfixed epoch bug, and -- corrected --
+the two runs actually differ only by the cap, both 50-epoch/patience-off, so
+the confound is the unit bug + noisy checkpoint, not duration). Not yet durable
+evidence. **Do not tune the cap to chase P@1 until the training loop is sound.**
+
+### Next step (agreed, single-variable): clean re-run at a coherent epoch unit
+- Fix ONLY the unit: `steps_per_epoch=7` (one anchor-pass over 3,421 anchors at
+  batch 512 = ~6.7 steps), `epoch_cap=85`, `patience=8`. **Uncapped** -- so the
+  re-run differs from the BASELINE (Run 1) in EXACTLY ONE thing (the epoch unit).
+- `epoch_cap=85` is a **deliberate control, not tuning**: 85*7=595 steps ~= the
+  ~600/~90-passes budget of both prior runs, so the budget is HELD CONSTANT to
+  isolate the unit fix from a training-duration change. Nobody should read
+  cap-50 -> cap-85 as "trained longer because results improved."
+- **Pre-framed likely outcome (a legitimate result, not a problem to knob-turn):**
+  a coherent epoch may make patience fire early with the val curve still flat,
+  because the diagnosed pathology is overfitting a small anchor set and the unit
+  fix does not touch that. If so, the honest finding is "the encoder overfits the
+  ~3,400 fold-1 anchors and does not generalize to held-out pairs at this
+  capacity/regularization" -- and the next lever is regularization / the existing
+  jitter augmentation, NOT more steps and NOT the cap.
 
 ---
 

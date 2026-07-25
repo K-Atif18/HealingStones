@@ -232,6 +232,14 @@ def main() -> int:
                           "wall-clock against the estimate in this script's "
                           "docstring before committing to the full cap.")
     ap.add_argument("--patience", type=int, default=5)
+    ap.add_argument("--steps-per-epoch", type=int, default=12,
+                     help="Gradient steps per epoch. Default 12 is the ORIGINAL "
+                          "(buggy) value where an 'epoch' was ~1.4%% of pairs and "
+                          "patience spanned noise (failure-class #6). For a "
+                          "coherent epoch = one anchor-pass, use ~7 (3,421 fold "
+                          "anchors / batch 512). When changing this, hold total "
+                          "steps (steps_per_epoch * epoch_cap) constant to isolate "
+                          "the unit fix from a training-duration change.")
     ap.add_argument("--val-pair-cap", type=int, default=500,
                      help="Hard cap on total validation pairs (see the "
                           "'BUGS FOUND AND FIXED' section above -- do not "
@@ -285,6 +293,7 @@ def main() -> int:
         val_pair_cap=args.val_pair_cap,
         interface_weight_max_ratio=args.interface_weight_max_ratio,
         positive_max_center_dist_mm=args.positive_max_center_dist_mm,
+        steps_per_epoch=args.steps_per_epoch,
     )
     if args.max_epochs is not None:
         print(f"NOTE: --max-epochs {args.max_epochs} overrides --epoch-cap "
