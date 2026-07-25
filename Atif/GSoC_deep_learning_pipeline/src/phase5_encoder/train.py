@@ -35,7 +35,7 @@ import torch
 
 from phase5_diagnostics.context import DiagnosticContext
 from phase5_encoder.model import PointNetEncoder, build_encode_patch
-from phase5_encoder.sampler import build_fold_sampler, FoldSampler
+from phase5_encoder.sampler import build_fold_sampler, FoldSampler, InterfaceWeighting
 from phase5_encoder.mining import mine_epoch_hard_negatives
 from phase5_encoder.preprocess import prepare_patch
 from phase5_encoder.features import knn_ppf_features
@@ -54,9 +54,13 @@ class TrainConfig:
     lr: float = 1e-3
     epoch_cap: int = 50            # retained from accepted original design
     patience: int = 5              # retained from accepted original design
-    val_fraction: float = 0.10     # design §7
+    val_fraction: float = 0.10     # design §7 (per-interface proportion, pre-cap)
+    val_pair_cap: int = 500        # HARD cap on total validation pairs -- fixes the
+                                    # measured 49,569-pair OOM bug (see build_fold_sampler)
+    val_minibatch_size: int = 256  # validation is chunked, never one shot (same bug)
     steps_per_epoch: int = 12      # ~ LOFO fold size / batch_size, per PHASE5_RESULTS_LOG.md:160
-    interface_weight_max_ratio: float = 20.0  # design §4
+    interface_weight_max_ratio: float = 5.0  # design §4, corrected semantics -- see
+                                              # sampler.InterfaceWeighting docstring
     device: str = "cuda" if torch.cuda.is_available() else "cpu"
     seed: int = 0
     out_dir: str = "phase5a_runs"
@@ -75,10 +79,54 @@ def _encode_patch_ids(model, ctx: DiagnosticContext, fid: str, pids, cfg: TrainC
     return model(t)
 
 
-def _info_nce_step(model, ctx, batch, mined, cfg: TrainConfig) -> torch.Tensor:
+def _build_positive_partner_lookup(ctx: DiagnosticContext) -> dict[tuple, set]:
+    """(fid, pid) -> set of (fid, pid) that are its Phase-3 positive partners,
+    built once per fold (not per step) directly from ``ctx.pairs`` -- a
+    lighter-weight equivalent of ``phase5_diagnostics.ranking.
+    positive_partner_map`` that doesn't require building a ``Gallery`` first
+    (the training loop doesn't have a full-dataset embedding gallery on
+    hand every step; it only needs pairwise partner lookups for masking).
+
+    Used to fix a measured bug (Deviation 2): with in-batch cross_entropy,
+    two draws from the SAME interface can be genuine positive partners of
+    each other (median contact patch has 347 positives), so an unmasked
+    denominator penalises true positives as negatives -- common, not rare,
+    at the draw rates produced by interface weighting.
+    """
+    pairs = ctx.pairs
+    vocab = pairs.fragment_vocab
+    pos_idx = np.where(pairs.labels == 1)[0]
+    out: dict[tuple, set] = {}
+    for p in pos_idx.tolist():
+        fa = str(vocab[pairs.fragment_A_idx[p]])
+        fb = str(vocab[pairs.fragment_B_idx[p]])
+        pa = int(pairs.patch_A_ids[p])
+        pb = int(pairs.patch_B_ids[p])
+        out.setdefault((fa, pa), set()).add((fb, pb))
+        out.setdefault((fb, pb), set()).add((fa, pa))
+    return out
+
+
+def _info_nce_step(
+    model, ctx, batch, mined, cfg: TrainConfig,
+    positive_lookup: dict[tuple, set],
+) -> tuple[torch.Tensor, int]:
     """One training step's loss. Hard negatives are deduplicated within the
     batch (design §3: 'dedup is mandatory, not a fallback') -- each DISTINCT
-    (fid,pid) mined negative across the whole batch is encoded once."""
+    (fid,pid) mined negative across the whole batch is encoded once.
+
+    Same-interface in-batch positives are masked out of the InfoNCE
+    denominator (Deviation 2 fix): a candidate column is excluded from row
+    i's denominator if it is anchor i's designated positive (the target
+    itself, kept) OR any candidate that is ALSO a true positive partner of
+    anchor i per ``positive_lookup`` -- otherwise cross_entropy penalises a
+    real positive as if it were a negative whenever two draws from the same
+    (or another) interface happen to be partners, which is common (not
+    rare) given a median of 347 positives per contact patch.
+
+    Returns ``(loss, n_deduped_hard_negatives)`` so the caller can log the
+    measured deduped count per step (Deviation 2's other requirement).
+    """
     anchors = list(zip(batch["anchor_fid"], batch["anchor_pid"]))
     positives = list(zip(batch["partner_fid"], batch["partner_pid"]))
 
@@ -108,56 +156,95 @@ def _info_nce_step(model, ctx, batch, mined, cfg: TrainConfig) -> torch.Tensor:
         if key not in seen:
             seen.add(key)
             hard_keys.append(key)
+    n_deduped_hard = len(hard_keys)
     hard_emb = encode_list(hard_keys) if hard_keys else torch.empty(
         0, anc_emb.shape[1], device=cfg.device
     )
 
     candidates = torch.cat([pos_emb, hard_emb], dim=0)
-    sim = anc_emb @ candidates.t() / cfg.temperature
+    candidate_keys = positives + hard_keys  # parallel to `candidates` rows
+    sim = anc_emb @ candidates.t() / cfg.temperature  # (B_a, B_a + n_deduped_hard)
     targets = torch.arange(anc_emb.shape[0], device=cfg.device)
-    return torch.nn.functional.cross_entropy(sim, targets)
+
+    # Build the same-interface / cross-interface true-positive mask: for row
+    # i (anchor_i), mask out every column j != target_i whose candidate is
+    # ALSO a genuine positive partner of anchor_i.
+    n_anc = len(anchors)
+    n_cand = len(candidate_keys)
+    mask = torch.zeros(n_anc, n_cand, dtype=torch.bool, device=cfg.device)
+    for i, anchor_key in enumerate(anchors):
+        true_partners = positive_lookup.get(anchor_key, set())
+        if not true_partners:
+            continue
+        for j, cand_key in enumerate(candidate_keys):
+            if j == i:
+                continue  # never mask the actual target column
+            if cand_key in true_partners:
+                mask[i, j] = True
+    sim = sim.masked_fill(mask, float("-inf"))
+
+    loss = torch.nn.functional.cross_entropy(sim, targets)
+    return loss, n_deduped_hard
 
 
 def _validation_loss(model, ctx, sampler: FoldSampler, cfg: TrainConfig) -> float:
     """Pair-level validation loss (design §7): no mining, no hard negatives --
     just anchor/positive separation among in-batch randoms, on the FIXED
     held-out-from-every-interface pair set. Not part of the pre-registered
-    pass criteria; used only to decide when to stop (or log that the cap did)."""
+    pass criteria; used only to decide when to stop (or log that the cap did).
+
+    Evaluated in minibatches of ``cfg.val_minibatch_size`` (default 256),
+    never as one shot. This fixes a measured bug: an earlier version built
+    ``all_rows`` from every validation pair and encoded them all in one
+    matrix -- on fold 1 that was 49,569 pairs (99,138 patch encodes, a
+    ~9.8 GB fp32 similarity matrix) because ``val_fraction`` was applied to
+    raw pair-row counts dominated by F6-F7's 214k positives, not to a
+    capped patch/pair budget. The sampler now caps the total validation set
+    at ``val_pair_cap`` (default 500, see ``build_fold_sampler``), and this
+    function additionally chunks that capped set into minibatches so no
+    single validation step's similarity matrix or encode-call count scales
+    with the (still potentially several-hundred-pair) total.
+    """
     rows_by_iface = sampler.val_interface_pair_rows
     all_rows = [(iface, r) for iface, rs in rows_by_iface.items() for r in rs.tolist()]
     if not all_rows:
         return float("nan")
     model.eval()
-    anchors, positives = [], []
     vocab = ctx.pairs.fragment_vocab
+
+    def encode_list(pairs):
+        by_frag: dict[str, list[int]] = {}
+        order = []
+        for fid, pid in pairs:
+            by_frag.setdefault(fid, []).append(pid)
+            order.append((fid, len(by_frag[fid]) - 1))
+        embs_by_frag = {
+            fid: _encode_patch_ids(model, ctx, fid, pids, cfg, training=False)
+            for fid, pids in by_frag.items()
+        }
+        return torch.stack([embs_by_frag[fid][i] for fid, i in order])
+
+    losses = []
+    mb = max(1, cfg.val_minibatch_size)
     with torch.no_grad():
-        for _, row in all_rows:
-            fa = str(vocab[ctx.pairs.fragment_A_idx[row]])
-            fb = str(vocab[ctx.pairs.fragment_B_idx[row]])
-            pa = int(ctx.pairs.patch_A_ids[row])
-            pb = int(ctx.pairs.patch_B_ids[row])
-            anchors.append((fa, pa))
-            positives.append((fb, pb))
-
-        def encode_list(pairs):
-            by_frag: dict[str, list[int]] = {}
-            order = []
-            for fid, pid in pairs:
-                by_frag.setdefault(fid, []).append(pid)
-                order.append((fid, len(by_frag[fid]) - 1))
-            embs_by_frag = {
-                fid: _encode_patch_ids(model, ctx, fid, pids, cfg, training=False)
-                for fid, pids in by_frag.items()
-            }
-            return torch.stack([embs_by_frag[fid][i] for fid, i in order])
-
-        anc_emb = encode_list(anchors)
-        pos_emb = encode_list(positives)
-        sim = anc_emb @ pos_emb.t() / cfg.temperature
-        targets = torch.arange(anc_emb.shape[0], device=cfg.device)
-        loss = torch.nn.functional.cross_entropy(sim, targets)
+        for start in range(0, len(all_rows), mb):
+            chunk = all_rows[start:start + mb]
+            anchors, positives = [], []
+            for _, row in chunk:
+                fa = str(vocab[ctx.pairs.fragment_A_idx[row]])
+                fb = str(vocab[ctx.pairs.fragment_B_idx[row]])
+                pa = int(ctx.pairs.patch_A_ids[row])
+                pb = int(ctx.pairs.patch_B_ids[row])
+                anchors.append((fa, pa))
+                positives.append((fb, pb))
+            anc_emb = encode_list(anchors)
+            pos_emb = encode_list(positives)
+            sim = anc_emb @ pos_emb.t() / cfg.temperature
+            targets = torch.arange(anc_emb.shape[0], device=cfg.device)
+            loss = torch.nn.functional.cross_entropy(sim, targets)
+            losses.append(float(loss.item()) * len(chunk))
     model.train()
-    return float(loss.item())
+    return float(sum(losses) / len(all_rows))
 
 
 def train_one_fold(
@@ -175,6 +262,8 @@ def train_one_fold(
     optim = torch.optim.Adam(model.parameters(), lr=cfg.lr)
     sampler = build_fold_sampler(
         ctx, held_out, val_fraction=cfg.val_fraction,
+        val_pair_cap=cfg.val_pair_cap,
+        weighting=InterfaceWeighting(max_ratio=cfg.interface_weight_max_ratio),
         seed=cfg.seed,
     )
 
@@ -184,6 +273,11 @@ def train_one_fold(
         fid: np.array(sorted(ctx.contact_patch_ids.get(fid, set())), dtype=np.int64)
         for fid in sampler.train_fragments
     }
+
+    # Built once per fold (not per step): (fid,pid) -> set of true positive
+    # partners, used to mask same-/cross-interface in-batch positives out of
+    # the InfoNCE denominator (Deviation 2 fix).
+    positive_lookup = _build_positive_partner_lookup(ctx)
 
     best_val = float("inf")
     best_state = None
@@ -201,6 +295,7 @@ def train_one_fold(
 
         interface_draw_counts: dict[str, int] = {}
         step_losses = []
+        deduped_hard_counts = []
         t1 = time.time()
         for _ in range(cfg.steps_per_epoch):
             batch = sampler.sample_batch(ctx, cfg.batch_size, rng)
@@ -208,10 +303,13 @@ def train_one_fold(
                 key = f"{iface[0]}-{iface[1]}"
                 interface_draw_counts[key] = interface_draw_counts.get(key, 0) + 1
             optim.zero_grad()
-            loss = _info_nce_step(model, ctx, batch, mined, cfg)
+            loss, n_deduped_hard = _info_nce_step(
+                model, ctx, batch, mined, cfg, positive_lookup
+            )
             loss.backward()
             optim.step()
             step_losses.append(float(loss.item()))
+            deduped_hard_counts.append(n_deduped_hard)
         train_dt = time.time() - t1
 
         val_loss = _validation_loss(model, ctx, sampler, cfg)
@@ -232,6 +330,9 @@ def train_one_fold(
             "mining_seconds": mine_dt,
             "training_seconds": train_dt,
             "interface_draw_counts": interface_draw_counts,
+            "deduped_hard_negatives_per_step_mean": float(np.mean(deduped_hard_counts)),
+            "deduped_hard_negatives_per_step_min": int(np.min(deduped_hard_counts)),
+            "deduped_hard_negatives_per_step_max": int(np.max(deduped_hard_counts)),
             "per_fragment_mined_distance_mean": {
                 fid: float(np.mean(ds)) for fid, ds in mined.per_fragment_distance.items()
             },

@@ -5,9 +5,9 @@
 `scripts/generate_results_log.py` -- do not hand-edit numbers here; regenerate.
 Prose (deviations, decisions) is maintained in the generator template.
 
-- Generated: `2026-07-25T13:07:13.776356+00:00`
+- Generated: `2026-07-25T13:25:24.364165+00:00`
 - Source JSON `run_timestamp`: `2026-07-23T16:53:22.637596+00:00`
-- Git commit at generation: `95734a4`
+- Git commit at generation: `e57c903`
 - Fragments: F1, F2, F3, F4, F5, F6, F7
 - Total patches: 6822 | Adjacent pairs: 11
 
@@ -289,6 +289,56 @@ remains the place encoder results land once a fold actually trains.
   `B_a=512` with full dedup headroom (up to 512 distinct hard negatives) is
   the chosen operating point: 1436.4 MB peak, ~3.9x headroom under the
   ~5.64 GB usable budget on this GPU.
+
+### Four bugs found and fixed in a second review pass (before any run)
+
+1. **Validation set was uncapped.** `val_fraction` applied to raw
+   per-interface pair counts gave **49,569 validation pairs on real fold
+   1** (dominated by F6-F7's 21,445) -- a ~9.8 GB fp32 similarity matrix
+   and 99,138 sequential patch encodes, which would OOM or dominate the
+   epoch wall-clock. Fixed: `build_fold_sampler(..., val_pair_cap=500)`
+   downsamples proportionally across interfaces; `_validation_loss` now
+   chunks into `val_minibatch_size=256` minibatches. Measured after the
+   fix on real fold 1: **499 total validation pairs**.
+2. **Interface weighting inverted (measured: 55.4% of draws to the rarest
+   interface).** The original `max_ratio` clamp bounded weight against the
+   wrong reference (the largest interface's inverse weight, not uniform).
+   A first fix attempt (clamp the weight, renormalise) was ALSO measured
+   wrong (90.8%, worse). Correct fix: clamp EFFECTIVE COUNTS before taking
+   inverse-frequency, `max_ratio` lowered 20.0->5.0. Measured on real fold
+   1 after the fix: rarest interface (F2-F4) at **24.65% (1.48x uniform)**
+   -- lifted meaningfully, not dominant.
+3. **Hard-negative dedup count was unmeasured.** Now returned from
+   `_info_nce_step` and logged per epoch
+   (`deduped_hard_negatives_per_step_mean/min/max`).
+4. **In-batch positives were unmasked in the InfoNCE denominator.** Two
+   draws can be genuine partners of each other (median 347 positives per
+   contact patch) -- now masked via `_build_positive_partner_lookup`.
+
+**Corrected fold-1 wall-clock** (an earlier estimate of 1.3-1.5 s/epoch was
+wrong -- it omitted the validation term and undercounted feature-extraction
+cost). Measured directly, Python-loop feature extraction included:
+
+| Component | Measured | Frequency | Per-epoch |
+|---|---:|---|---:|
+| Training step (512+512) | ~1123 ms | 12/epoch | ~13.5 s |
+| Mining pass (4,000-patch pool) | ~3388 ms | 1/epoch | ~3.4 s |
+| Validation (499 pairs, 4 minibatches) | ~211 ms/mb | 1/epoch | ~0.84 s |
+| **Total** | | | **~17.7 s** |
+
+50-epoch cap (fold 1, if patience never fires): **~885 s (~14.8 min)**.
+
+**Operational finding:** a fresh process hit spurious CUDA OOM at
+previously-safe sizes (allocator fragmentation, not real capacity --
+`nvidia-smi` showed the GPU idle). Fixed by
+`export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True`, now required in
+the training command. `scripts/train_phase5a.py` gained `--max-epochs`
+(for a quick first real-data run before committing to the full cap),
+`--val-pair-cap`, and `--interface-weight-max-ratio` as CLI parameters.
+
+All four fixes are covered by regression tests in
+`tests/phase5_encoder/test_sampler_mining.py`. Full targeted suite:
+**46 passed**. Full repo suite: **182 passed**.
 
 ---
 

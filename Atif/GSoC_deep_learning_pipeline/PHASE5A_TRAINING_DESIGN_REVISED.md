@@ -603,3 +603,122 @@ runs the actual training; see `scripts/train_phase5a.py`'s docstring for the
 exact command, the fold-1 wall-clock estimate (not yet measured on real
 data — the script has only been smoke-tested on a toy fixture), output file
 locations, and the patience-vs-cap reporting requirement.
+
+---
+
+## 9. Four bugs found and fixed before any run (second review pass)
+
+A second review of the implementation, before any real-data execution, found
+four measured bugs — the same pattern as the round-1 citation errors: a
+number or assumption stated for one quantity, applied in code to a different
+one.
+
+1. **Validation set was uncapped (the OOM blocker).** `val_fraction=0.10`
+   was applied directly to raw per-interface pair-row counts. Measured on
+   real fold 1: **49,569 validation pairs** (F6-F7 alone: 21,445), because
+   `val_fraction` was applied to counts already dominated by the 174x
+   interface-size spread (§4), not to a bounded pair/patch budget — the
+   docstring's "a few hundred pairs at most" was wrong for the same reason
+   the original "batch 512" claim was wrong: asserted for one quantity,
+   applied to another. 49,569 pairs = 99,138 sequential per-patch encode
+   calls (the un-batched Python-loop path) plus a ~9.8 GB fp32 similarity
+   matrix on a 5.64 GB card. **Fixed:** `build_fold_sampler` now takes
+   `val_pair_cap` (default 500), downsampling each interface's raw val
+   slice proportionally to its own share of the uncapped total (so the
+   capped set still reflects roughly the same per-interface mix). Measured
+   on real fold 1 after the fix: **499 total validation pairs** (down from
+   49,569), proportions preserved (F6-F7: 216, F2-F3: 105, ... F2-F4: 1).
+   `_validation_loss` additionally chunks into `val_minibatch_size` (default
+   256) minibatches so no single validation step's cost scales with the
+   (still several-hundred-pair) total.
+
+2. **Interface weighting inverted (measured: rarest interface got 55.4% of
+   all draws).** The original `InterfaceWeighting.weights_for` clamped
+   `inv` against `inv.min() * max_ratio` — but `inv.min()` is the inverse
+   weight of the LARGEST interface, so "cap of 20" actually meant "allow
+   the rarest interface up to 20x the largest interface's own inverse
+   weight," which on fold 1's real 174x count spread resolved to **F2-F4
+   receiving 55.4% of all draws** (measured directly) — exactly the
+   overfitting failure §4 was written to prevent, not a mitigation of it.
+   **First fix attempt (clamping the post-normalisation WEIGHT against
+   uniform, then renormalising) was ALSO wrong, and this is worth stating
+   plainly rather than hiding the false start:** with a 174x true spread,
+   pure inverse-frequency already puts ~91.5% of weight on the single
+   rarest interface before any cap; clamping that one value and
+   renormalising the remainder redistributes mass through the SAME skewed
+   proportions among the rest, so the clamped interface still ends up
+   dominant after renormalisation (measured: 90.8% for F2-F4, WORSE than
+   the bug it was meant to fix). **Correct fix:** clamp EFFECTIVE COUNTS,
+   not weights — each interface's raw count is floored at
+   `max_count / max_ratio` (never treated as rarer than `1/max_ratio` of
+   the largest interface's real count) BEFORE taking inverse-frequency,
+   which cannot let one interface dominate because the floor bounds the
+   ratio between the two most extreme *counts* directly, not a weight that
+   gets renormalised afterward. Default `max_ratio` also lowered from 20.0
+   to 5.0 (20.0 still overshot to 3.33x uniform even under the correct
+   method). Measured on real fold 1 with the corrected method and
+   `max_ratio=5.0`: **F2-F4 at 24.65% (1.48x uniform)** — lifted
+   meaningfully above its raw 0.17%-of-pairs share, without dominating.
+
+3. **Hard-negative dedup count was unmeasured.** `mine_epoch_hard_negatives`
+   mines one negative per *contact patch*, not per draw; with 512 draws
+   funnelled through interface weighting into a small set of repeatedly-
+   drawn patches, the deduped hard-negative count per step is typically far
+   smaller than 512 — the original design's "every-step signal" framing
+   asserted a ratio that was never measured. **Fixed:** `_info_nce_step`
+   now returns `n_deduped_hard` alongside the loss;
+   `train_one_fold` logs `deduped_hard_negatives_per_step_mean/min/max` per
+   epoch, so the real ratio is a reported number, not an assumed one.
+
+4. **In-batch positives were unmasked in the InfoNCE denominator.**
+   `cross_entropy(sim, targets)` treated every non-target candidate column
+   as a negative — but two draws from the same (or even a different)
+   interface can be genuine positive partners of each other (median 347
+   positives per contact patch, §7), and at the draw rates interface
+   weighting produces this is common, not rare. **Fixed:**
+   `_build_positive_partner_lookup` builds a `(fid,pid) -> {(fid,pid)}`
+   true-partner lookup once per fold from `ctx.pairs` (a lighter-weight
+   analogue of `phase5_diagnostics.ranking.positive_partner_map` that
+   doesn't require a pre-built `Gallery`); `_info_nce_step` masks any
+   candidate column that is a true positive of the row's anchor (except the
+   actual target column) to `-inf` before `cross_entropy`.
+
+**Corrected fold-1 wall-clock estimate**, with real per-component
+measurements this time (Python-loop feature extraction included, not
+assumed negligible — the earlier 1.3-1.5 s/epoch estimate omitted the
+validation term's cost AND undercounted feature-extraction cost for the
+training step itself):
+
+| Component | Measured cost | Frequency |
+|---|---:|---|
+| Training step (512+512, feat+fwd+bwd) | ~1123 ms | 12/epoch → ~13.5 s |
+| Mining pass (4,000-patch pool, feat+fwd) | ~3388 ms | 1/epoch → ~3.4 s |
+| Validation (499 pairs, capped, 4 minibatches) | ~211 ms/minibatch | 1/epoch → ~0.84 s |
+| **Per-epoch total** | | **~17.7 s** |
+| **50-epoch cap (fold 1, if patience never fires)** | | **~885 s (~14.8 min)** |
+
+An operational finding, also folded into `scripts/train_phase5a.py`'s
+docstring: a fresh process on this machine's RTX 4050 hit spurious CUDA OOM
+errors at batch/pool sizes previously measured safe, despite `nvidia-smi`
+showing the GPU nearly idle — confirmed to be PyTorch allocator
+fragmentation, fixed by `export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True`
+(re-measuring with this set reproduced the original design-doc numbers
+exactly). This is now a required environment variable in the training
+command, not optional.
+
+`scripts/train_phase5a.py` gained `--max-epochs` (overrides `--epoch-cap`
+for a quick first real-data run, e.g. `--max-epochs 1`, to sanity-check
+wall-clock against the table above before committing to the full cap),
+`--val-pair-cap`, and `--interface-weight-max-ratio` as CLI-exposed
+parameters rather than hardcoded.
+
+All four fixes are covered by new regression tests in
+`tests/phase5_encoder/test_sampler_mining.py`
+(`test_validation_set_is_capped_not_proportional_to_raw_pair_counts`,
+`test_interface_weighting_does_not_let_rarest_interface_dominate`,
+`test_interface_weighting_uniform_when_all_counts_equal`,
+`test_info_nce_step_masks_same_interface_true_positives`,
+`test_deduped_hard_negative_count_is_returned`) — **46 passed**
+(`tests/phase5_diagnostics/ tests/phase5_encoder/ tests/baseline_geometry/`).
+
+No training has been run. The human runs it, per standing instruction.
