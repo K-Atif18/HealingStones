@@ -1,0 +1,127 @@
+{
+  "checkpoint": "phase5a_runs_6fold/fold4/fold_fragment_caesar_fragment_4_best.pt",
+  "held_out": "fragment_caesar_fragment_4",
+  "VALIDITY_NOTE": "Only the held-out fold (this checkpoint's held_out fragment) is a valid held-out LOFO number. Other folds require their own checkpoints. This is ONE fold, not the six-condition verdict.",
+  "heldout_fold_retrieval": {
+    "encoder": {
+      "mAP": 0.11145906865643786,
+      "precision_at_k": {
+        "1": 0.10845588235294118,
+        "5": 0.10073529411764705,
+        "10": 0.09963235294117648,
+        "20": 0.10284926470588236
+      },
+      "recall_at_k": {
+        "1": 0.0002584656469339675,
+        "5": 0.0011882114066832687,
+        "10": 0.002382706809663871,
+        "20": 0.0049094145234149155
+      },
+      "n_queries": 544
+    },
+    "fpfh": {
+      "mAP": 0.12801247713114486,
+      "precision_at_k": {
+        "1": 0.18382352941176472,
+        "5": 0.17647058823529413,
+        "10": 0.17977941176470588,
+        "20": 0.16920955882352942
+      },
+      "recall_at_k": {
+        "1": 0.00038562809624862875,
+        "5": 0.001880091121945959,
+        "10": 0.0038654791823342673,
+        "20": 0.007428831177054327
+      },
+      "n_queries": 544
+    }
+  },
+  "paired_mAP_diff_encoder_minus_fpfh": {
+    "mean": -0.01655340847470699,
+    "ci95_lo": -0.019968275814935273,
+    "ci95_hi": -0.013117000331967043,
+    "excludes_zero": true,
+    "n_queries": 544,
+    "note": "positive & CI excludes zero => encoder beats FPFH on this fold's mAP"
+  },
+  "heldout_fragment_id_probe": {
+    "encoder": {
+      "held_out": "fragment_caesar_fragment_4",
+      "n_held": 1000,
+      "n_total": 6822,
+      "base_rate": 0.1465845793022574,
+      "heldout_self_retrieval": 0.488,
+      "heldout_knn_same_fraction": 0.40720000000000006,
+      "ratio_over_base_rate": 3.3291359999999997,
+      "note": "Sharper condition-6 instrument (NOT a new condition). High self-retrieval for an UNSEEN fragment => generalized shape-signature leakage, not literal memorization."
+    },
+    "fpfh": {
+      "held_out": "fragment_caesar_fragment_4",
+      "n_held": 1000,
+      "n_total": 6822,
+      "base_rate": 0.1465845793022574,
+      "heldout_self_retrieval": 0.85,
+      "heldout_knn_same_fraction": 0.7246,
+      "ratio_over_base_rate": 5.798699999999999,
+      "note": "Sharper condition-6 instrument (NOT a new condition). High self-retrieval for an UNSEEN fragment => generalized shape-signature leakage, not literal memorization."
+    }
+  },
+  "condition3_fpfh_mined_CONFOUNDED": {
+    "note": "FPFH-mined hard negatives -> shrinkage is near-automatic for any non-FPFH source (random baseline gap=0.0064). NOT a valid thesis test; kept only for continuity with prior runs.",
+    "encoder": {
+      "held_out_fragment": "fragment_caesar_fragment_4",
+      "n_positive": 20000,
+      "n_easy_negative": 20000,
+      "n_hard_negative": 1552,
+      "mean_distance_positive": 0.15031856210642966,
+      "mean_distance_easy_negative": 0.18646600112908707,
+      "mean_distance_hard_negative": 0.12964003395208476,
+      "auc_pos_vs_easy": 0.60812191,
+      "auc_pos_vs_hard": 0.4098451675257732,
+      "easy_minus_hard_auc_gap": 0.19827674247422683,
+      "note": "A large easy-minus-hard gap means the embedding separates positives from random negatives but not from look-alike non-adjacent patches -> similarity, not compatibility."
+    },
+    "fpfh": {
+      "held_out_fragment": "fragment_caesar_fragment_4",
+      "n_positive": 20000,
+      "n_easy_negative": 20000,
+      "n_hard_negative": 1552,
+      "mean_distance_positive": 0.41447037182183777,
+      "mean_distance_easy_negative": 0.549073928077882,
+      "mean_distance_hard_negative": 0.15333481067909582,
+      "auc_pos_vs_easy": 0.6939547575,
+      "auc_pos_vs_hard": 0.08266211340206185,
+      "easy_minus_hard_auc_gap": 0.6112926440979382,
+      "note": "A large easy-minus-hard gap means the embedding separates positives from random negatives but not from look-alike non-adjacent patches -> similarity, not compatibility."
+    }
+  },
+  "condition3_encoder_mined_VALID": {
+    "note": "Encoder-mined hard negatives, scored under the encoder -- the only non-tautological thesis test. High hard-AUC / small gap here = the encoder resists ITS OWN look-alikes.",
+    "encoder": {
+      "held_out_fragment": "fragment_caesar_fragment_4",
+      "n_positive": 20000,
+      "n_easy_negative": 20000,
+      "n_hard_negative": 1583,
+      "mean_distance_positive": 0.15031856210642966,
+      "mean_distance_easy_negative": 0.18646600112908707,
+      "mean_distance_hard_negative": 0.035510458402212404,
+      "auc_pos_vs_easy": 0.60812191,
+      "auc_pos_vs_hard": 0.039001200252684776,
+      "easy_minus_hard_auc_gap": 0.5691207097473152,
+      "note": "A large easy-minus-hard gap means the embedding separates positives from random negatives but not from look-alike non-adjacent patches -> similarity, not compatibility."
+    },
+    "fpfh_vs_encoder_mined": {
+      "held_out_fragment": "fragment_caesar_fragment_4",
+      "n_positive": 20000,
+      "n_easy_negative": 20000,
+      "n_hard_negative": 1583,
+      "mean_distance_positive": 0.41447037182183777,
+      "mean_distance_easy_negative": 0.549073928077882,
+      "mean_distance_hard_negative": 0.3701349586919654,
+      "auc_pos_vs_easy": 0.6939547575,
+      "auc_pos_vs_hard": 0.4156994314592546,
+      "easy_minus_hard_auc_gap": 0.27825532604074543,
+      "note": "A large easy-minus-hard gap means the embedding separates positives from random negatives but not from look-alike non-adjacent patches -> similarity, not compatibility."
+    }
+  }
+}

@@ -905,12 +905,22 @@ different question. This diagnosis — NOT "the numbers looked better" — motiv
 the next deviation.
 
 ## Deviation 3 (proposed, fold-1 test first) — distance-capped positives
+
+> **⚠️ Premise RETRACTED 2026-07-25 (§12 / results-log (j)).** This deviation's
+> stated reason ("condition 3 met but retrieval tied") rests on the RETRACTED
+> condition-3 claim — condition 3 was never met (FPFH-mined tautology; valid
+> encoder-mined test gives hard-AUC 0.02-0.06 below chance on all 4 folds).
+> The cap was tested anyway (Run 2 / capped16) and its apparent mAP "win" was
+> later shown to be checkpoint-selection noise (win/tie/loss across 3
+> checkpoints). Left below unedited as part of the audit trail.
+
 - **Decision (pending fold-1 test):** try training on positives whose centre
   distance is within a cap (candidate: ~1–2 patch radii, i.e. ≤ 8–16 mm) so the
   objective aligns with the top-1 retrieval metric, while keeping the
   condition-3 gain.
-- **Reason (diagnosed, logged):** fold-1 evidence shows condition 3 met but
-  retrieval tied → an objective/metric mismatch on loose region-scale positives,
+- **Reason (diagnosed, logged):** ~~fold-1 evidence shows condition 3 met but
+  retrieval tied~~ **[RETRACTED — condition 3 was NOT met; see §12]** → an
+  objective/metric mismatch on loose region-scale positives,
   which `center_dist_mm` (already in `pairs.npz`) lets us fix for free. This is
   a pre-identified §5 follow-up, now evidence-backed.
 - **Test protocol:** fold-1 only (~21 min), compare P@1/mAP AND the condition-3

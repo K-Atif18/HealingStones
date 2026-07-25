@@ -282,27 +282,77 @@ wording. Each was flagged for sign-off before implementation, with a measurement
 
 
 def section_encoder_placeholder(d: dict) -> str:
-    # If encoder sources appear in the JSON later, generate their tables here.
-    known = {"random", "centroid", "fpfh"}
-    encoder_sources = [s for s in d.get("sources", []) if s not in known]
-    if not encoder_sources:
+    # Section (d): generate the real encoder-results table from the 6-fold eval
+    # JSONs if they exist on disk; else the pending placeholder.
+    fold_files = {
+        "F1": os.path.join(REPO, "phase5a_runs_jitter", "eval_encoder.json"),
+        "F2": os.path.join(REPO, "phase5a_runs_6fold", "fold2", "eval.json"),
+        "F3": os.path.join(REPO, "phase5a_runs_6fold", "fold3", "eval.json"),
+        "F4": os.path.join(REPO, "phase5a_runs_6fold", "fold4", "eval.json"),
+    }
+    have = {k: v for k, v in fold_files.items() if os.path.exists(v)}
+    if len(have) < 4:
         return """## (d) Encoder results
 
-*No encoder trained yet.* This section is generated from the JSON once encoder
-sources are present. Pose-invariance gate status for the untrained pipeline:
-`passed=True, max_dev=0.000e+00` (see `tests/phase5_encoder/test_pose_gate.py`).
+*No complete encoder eval yet (%d/4 pass-bar folds present).* Generated from the
+6-fold eval JSONs once all of {F1,F2,F3,F4} exist. Pose-invariance gate for the
+untrained pipeline: `passed=True, max_dev=0.000e+00`.
 
 ---
 
 ## (e) Six-condition verdict
 
-*Pending encoder results.* Will be generated against the frozen thresholds in
-section (a). Per the pre-registered rule: if condition 1 passes but 2-4 fail, the
-honest conclusion is "improved contact/fragment discrimination, not interface
-association" -- reported as such, not upgraded.
-"""
-    # (Generation for real encoder sources added when they exist.)
-    return "## (d) Encoder results\n\n*(encoder sources present: %s -- table generation TBD)*\n" % ", ".join(encoder_sources)
+*Pending.* See section (j) for the concluded verdict once eval JSONs are present.
+""" % len(have)
+
+    rows_r, rows_c3, rows_c6 = [], [], []
+    for fold in ("F1", "F2", "F3", "F4"):
+        r = json.load(open(have[fold]))
+        er = r["heldout_fold_retrieval"]["encoder"]
+        fr = r["heldout_fold_retrieval"]["fpfh"]
+        pd = r["paired_mAP_diff_encoder_minus_fpfh"]
+        rows_r.append([fold, _fmt(er["mAP"]), _fmt(fr["mAP"]),
+                       f"{_fmt(pd['mean'])} [{_fmt(pd['ci95_lo'])}, {_fmt(pd['ci95_hi'])}]",
+                       _fmt(er["precision_at_k"].get("1")), _fmt(fr["precision_at_k"].get("1"))])
+        c3 = r["condition3_encoder_mined_VALID"]["encoder"]
+        rows_c3.append([fold, _fmt(c3["auc_pos_vs_easy"], 3), _fmt(c3["auc_pos_vs_hard"], 3),
+                        _fmt(c3["easy_minus_hard_auc_gap"], 3)])
+        hp = r["heldout_fragment_id_probe"]
+        rows_c6.append([fold, _fmt(hp["encoder"]["heldout_self_retrieval"], 3),
+                        _fmt(hp["fpfh"]["heldout_self_retrieval"], 3),
+                        _fmt(hp["encoder"]["base_rate"], 3)])
+
+    out = ["## (d) Encoder results (Phase 5A, 6-fold LOFO)\n"]
+    out.append("Provenance: `phase5a_runs_jitter/eval_encoder.json` (F1), "
+               "`phase5a_runs_6fold/fold{2,3,4}/eval.json`, produced by "
+               "`scripts/export_and_evaluate.py`. All numbers read from those JSONs.\n")
+    out.append("### Conditions 1-2 -- retrieval (paired mAP diff, encoder - FPFH)\n")
+    out.append(_table(["fold", "enc mAP", "FPFH mAP", "paired diff [95% CI]", "enc P@1", "FPFH P@1"], rows_r))
+    out.append("\n> All four paired CIs exclude zero on the LOSING side; P@1 below "
+               "FPFH on all four. **Conditions 1-2 FAILED, 0/4.**\n")
+    out.append("### Condition 3 -- VALID encoder-mined easy-vs-hard (thesis)\n")
+    out.append(_table(["fold", "easy AUC", "hard AUC", "gap"], rows_c3))
+    out.append("\n> hard-AUC BELOW CHANCE on all four folds. **Condition 3 NOT MET.** "
+               "The FPFH-mined version of this metric was a tautology (section j).\n")
+    out.append("### Condition 6 -- held-out fragment-ID self-retrieval\n")
+    out.append(_table(["fold", "enc self-retr", "FPFH self-retr", "base rate"], rows_c6))
+    out.append("\n> Encoder ~half FPFH's identity leakage across folds -- improved, "
+               "but least thesis-critical.\n")
+    out.append("\n---\n\n## (e) Six-condition verdict: NEGATIVE Level-3 result\n")
+    out.append("- **1-2 (retrieval):** FAILED 0/4 (table above).\n"
+               "- **3 (compatibility/thesis):** NOT MET, unanimously (valid test above).\n"
+               "- **4 (neighbour contact gap):** not separately re-run on the encoder; "
+               "moot given 1-3.\n"
+               "- **5 (pose gate):** PASSED (`max_dev=0.0`, re-verified each run).\n"
+               "- **6 (fragment-ID / boundary):** fragment-ID leakage improved vs FPFH; "
+               "does not rescue 1-3.\n\n"
+               "Per the pre-registered rule (condition 1 fails, 3 fails): this is NOT a "
+               "Level-3 success. Honest conclusion in section (j): a learned PointNet "
+               "contrastive encoder on ~100-point/8mm patches with symmetric co-membership "
+               "labels on one 7-fragment artifact does not beat FPFH at interface-"
+               "association retrieval and does not learn complementarity. A clean, "
+               "diagnosed NEGATIVE result -- see section (j).\n")
+    return "\n".join(out)
 
 
 def section_training_design() -> str:
@@ -770,15 +820,53 @@ than FPFH's own 0.610. **Condition 3 was NEVER met.** The encoder rides
 similarity as hard as FPFH; it learned a different similarity, not
 complementarity.
 
-### Corrected Phase-5A conclusion
-- Conditions 1-2 (retrieval): FAILED on fold 1 (paired mAP diff -0.0067
-  [-0.0095,-0.0039]; P@1 0.141 vs 0.168). Prior "+0.0120 win" / "+0.0012 tie"
-  were checkpoint-selection noise (win/tie/loss across 3 checkpoints => ~0 +/-
-  0.01). Per-fold {F1-F4} confirmation = the 6-fold run.
-- Condition 3 (thesis): NOT MET. Complete on current data (encoder-mined test is
-  over the full embedding, not per-fold -> no 6-fold run needed for this).
-- Condition 6 (fragment-ID): improved (0.519 vs 0.895) -- stands; least
-  thesis-critical.
+### Corrected Phase-5A conclusion -- FULL {F1,F2,F3,F4} verdict (6-fold run)
+
+The 6-fold run was executed (F1-F4; F5-F7 skipped -- not in the pass-bar set
+and cannot change the verdict). Fold-1 alone looked like noise-near-zero on
+mAP; F2-F4 showed the effect is real and sizeable -- which is exactly why the
+run was RUN rather than assumed from fold 1.
+
+**Conditions 1-2 (retrieval) -- FAILED, 0/4.** Paired bootstrap on per-query
+mAP difference (encoder - FPFH), each fold's own held-out eval JSON
+(`phase5a_runs_6fold/fold{2,3,4}/eval.json`, `phase5a_runs_jitter/eval_encoder.json`):
+
+| Fold | enc mAP | FPFH mAP | paired mAP diff [95% CI] | enc P@1 | FPFH P@1 |
+|---|---:|---:|---|---:|---:|
+| F1 | 0.099 | 0.105 | **-0.0067 [-0.0095, -0.0039]** | 0.141 | 0.168 |
+| F2 | 0.107 | 0.139 | **-0.0322 [-0.0358, -0.0286]** | 0.128 | 0.194 |
+| F3 | 0.088 | 0.110 | **-0.0220 [-0.0242, -0.0199]** | 0.100 | 0.169 |
+| F4 | 0.112 | 0.128 | **-0.0166 [-0.0200, -0.0131]** | 0.109 | 0.184 |
+
+All four CIs exclude zero ON THE LOSING SIDE; P@1 below FPFH on all four. The
+encoder is significantly WORSE than FPFH at interface-association retrieval
+across the entire well-supported set. This is a robust negative, not fold-1 noise.
+
+**Condition 3 (thesis) -- NOT MET, unanimously.** Valid encoder-mined test
+(encoder vs ITS OWN look-alikes), each fold's eval JSON
+`condition3_encoder_mined_VALID.encoder`:
+
+| Fold | easy AUC | hard AUC | gap |
+|---|---:|---:|---:|
+| F1 | 0.785 | **0.064** | 0.722 |
+| F2 | 0.545 | **0.022** | 0.523 |
+| F3 | 0.507 | **0.045** | 0.462 |
+| F4 | 0.608 | **0.039** | 0.569 |
+
+hard-AUC is BELOW CHANCE on all four folds -- the encoder ranks its own
+look-alikes as MORE positive-like than true partners, everywhere. It rides
+similarity, not complementarity, on every fold.
+
+**Condition 6 (fragment-ID) -- improved and consistent.** Held-out
+self-retrieval: F1 0.519, F2 0.489, F3 0.518, F4 0.488 vs FPFH 0.85-0.94
+(base rate 0.147). ~Half FPFH's leakage across folds. Stands, but least
+thesis-critical (less identity leakage, not learned assembly).
+
+**Note on the prior commit messages.** Commits in the capped16 era
+(369bbab "condition 3 MET (gap 0.610->0.261)") stated condition 3 was met.
+Those messages were based on the FPFH-mined confounded metric (Failure A) and
+are WRONG. Git history is immutable and left as-is; this section is the
+correction of record. Do not cite those commit subjects as results.
 
 ### Why this is a real result
 Clean, publishable NEGATIVE Level-3 result with a diagnosed cause. Vindicates
@@ -790,15 +878,17 @@ metric cannot learn complementarity -- exactly as the §5 supervision hierarchy
 predicted. Level 3 was the declared ceiling; the labels are the binding
 constraint, not the model.
 
-### Process lesson (applied to us)
+### Process lesson (applied to us) + failure-class #8
 Caught on the FOURTH measurement, not the first. The apparatus did not "work" --
 a flattering metric got three passes before anyone mined the encoder's own
-negatives, and the check that broke it took ten seconds. Lesson: when a single
-metric is the only survivor, test it FIRST, hardest, and against its own
-construction. A metric that depends on a foreign reference must be re-derived
-from the candidate's own reference before it is believed.
-
----
+negatives, and the check that broke it took ten seconds. **Failure-class #8
+(this session):** when a single metric is the only survivor, test it FIRST,
+hardest, and against its own construction. A metric that depends on a foreign
+reference (here, FPFH's mined negatives) must be re-derived from the
+candidate's OWN reference before it is believed. The recurring class is now:
+1-5 unit/scope mismatches; 6 steps_per_epoch epoch-unit; 7 inert jitter (looked
+active, was frozen); 8 confounded surviving metric (looked like the thesis, was
+a foreign-reference tautology).
 """
 
 

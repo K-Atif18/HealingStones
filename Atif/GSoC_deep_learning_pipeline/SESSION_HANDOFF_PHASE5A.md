@@ -1,5 +1,17 @@
 # Session Handoff — Phase 5A, Post-Implementation, Pre-Training
 
+> **STATUS UPDATE 2026-07-25 — PHASE 5A CONCLUDED (negative result).** The
+> sections below were written pre-training; they remain accurate about the
+> infrastructure but are superseded on outcome by the "PHASE 5A CONCLUSION"
+> section appended at the END of this file. Read that section first for current
+> state. Short version: the encoder was trained (F1-F4 LOFO) and does NOT beat
+> FPFH at interface-association retrieval (conditions 1-2 FAILED 0/4,
+> significant) and does NOT learn complementarity (condition 3 NOT MET —
+> hard-AUC below chance on its own look-alikes, all 4 folds), while it reduces
+> fragment-ID leakage. A clean pre-registered NEGATIVE Level-3 result. Full
+> detail + provenance in `PHASE5_RESULTS_LOG.md` sections (d)/(e)/(j) and
+> `PHASE5A_TRAINING_DESIGN_REVISED.md` §11-§12.
+
 Paste this whole file (or the "Prompt to paste" block at the bottom) as the
 first message to a new AI session, alongside `MASTER_PROMPT.md`,
 `CODING_AI_RESUME_CONTEXT.md`, `PHASE5_PREREGISTRATION.md`, and
@@ -332,3 +344,79 @@ judge against all 6 pre-registered conditions — not just raw mAP.
 > 1-epoch dry run; regenerate and commit `PHASE5_RESULTS_LOG.md` as a
 > follow-up after any Phase 5 code commit so its provenance line stays
 > real.
+
+---
+
+# PHASE 5A CONCLUSION (2026-07-25) — pre-registered NEGATIVE Level-3 result
+
+Phase 5A is concluded. The small PointNet contrastive encoder was trained
+per-fold LOFO on {F1,F2,F3,F4} (the pre-registered well-supported set) with the
+sound pipeline (coherent epoch unit, working jitter, on-the-fly fold-restricted
+hard-negative mining) and evaluated through the unmodified diagnostic battery.
+
+## The verdict (all numbers: `PHASE5_RESULTS_LOG.md` (d)/(e)/(j), per-fold eval JSONs)
+- **Conditions 1-2 (interface-association retrieval): FAILED, 0/4.** Paired
+  bootstrap on per-query mAP diff (encoder − FPFH), all CIs exclude zero on the
+  LOSING side: F1 −0.0067 [−0.0095,−0.0039], F2 −0.0322 [−0.0358,−0.0286],
+  F3 −0.0220 [−0.0242,−0.0199], F4 −0.0166 [−0.0200,−0.0131]. P@1 below FPFH on
+  all four. The encoder is significantly WORSE than FPFH at retrieval.
+- **Condition 3 (compatibility / the thesis): NOT MET, unanimously.** The VALID
+  test (encoder mined against ITS OWN look-alikes) gives hard-AUC below chance
+  on every fold: F1 0.064, F2 0.022, F3 0.045, F4 0.039 (gaps 0.462–0.722). The
+  encoder rides similarity as hard as FPFH — it learned a *different* similarity,
+  not complementarity.
+- **Condition 6 (fragment-ID): improved, consistent** — encoder 0.49–0.52 vs
+  FPFH 0.85–0.94 (base rate 0.147). Least thesis-critical; does not rescue 1-3.
+
+## What this means (scientific reading)
+A learned PointNet contrastive encoder, on ~100-point / 8 mm patches, trained
+with **symmetric co-membership labels** on **one 7-fragment artifact**, does not
+beat FPFH at interface-association retrieval and does not learn complementarity.
+This **vindicates the founding hypothesis**: similarity ≠ compatibility is hard
+— now demonstrably hard for the *learned* model too, not just handcrafted FPFH.
+It is **evidence for why H5 was DEFERRED, not against it**: symmetric
+co-membership labels can only train a *similarity* metric, and a similarity
+metric cannot learn complementarity — exactly what the §5/§6 supervision
+hierarchy predicted. Level 3 was the declared ceiling; the **labels are the
+binding constraint, not the model**.
+
+## The confound that nearly caused a false positive (read this)
+Condition 3 was measured against FPFH-mined hard negatives THREE times and read
+as "MET" each time. It was a tautology: FPFH-mined look-alikes are FPFH's own
+mistakes, so any non-FPFH embedding (even random, gap 0.006) "shrinks the gap."
+The valid test — mine with the CANDIDATE's own embedding — took ten seconds and
+reversed the conclusion. The wrong "MET" claims are RETRACTED BY ANNOTATION
+(struck + dated, left visible) in §11 and log (h); the correction is §12 / log
+(j). This is also a flaw in the pre-registration itself (it never specified
+whose look-alikes) — named in log (j) Failure B.
+
+## Next-steps options (OPEN, not decided)
+1. **Accept and write up the negative result** as-is — it is clean, diagnosed,
+   and scientifically valuable (a Level-3 ceiling demonstrated for both
+   handcrafted and learned descriptors on this data).
+2. **Asymmetric supervision (H5 / Level 6):** the diagnosed cause points here —
+   complementarity needs convex↔concave / directional labels, not symmetric
+   co-membership. This is a Phase-6+ data/label question, not a model tweak.
+3. **More data:** one 7-fragment artifact is a hard regime; a synthetic
+   multi-object fracture dataset (already noted as deferred in the
+   pre-registration) would test whether the negative is data-scale or fundamental.
+4. **F5-F7 for completeness** (~1h): adds low-confidence per-fold rows; CANNOT
+   change the verdict (1-2 decided on {F1-F4}; 3 is full-embedding). Optional
+   record-keeping only.
+5. **Architecture (DGCNN/PTv3, the deferred 5B/5C):** NOT indicated by this
+   result — the failure is a supervision/label ceiling (condition 3 below chance
+   is not a capacity symptom), so a bigger encoder on the same symmetric labels
+   would be expected to hit the same ceiling. Pursue only with a hypothesis for
+   why capacity is the bottleneck, which the current evidence does not support.
+
+## Repo state at conclusion
+- Trained fold dirs on disk: `phase5a_runs/` (F1 uncapped baseline),
+  `phase5a_runs_capped16/` (confounded side-branch), `phase5a_runs_unit7/`
+  (unit-fixed), `phase5a_runs_jitter/` (F1 sound), `phase5a_runs_6fold/fold{2,3,4}/`.
+  `.pt` checkpoints gitignored (`phase5a_runs*/*.pt`); history + eval JSONs tracked.
+- F5-F7 NOT trained (deliberate; cannot change the verdict).
+- All condition-3 "MET" claims retracted by annotation; §12 / log (j) is the
+  correction of record. Prior commit subjects saying "condition 3 MET" are wrong
+  and noted as such in log (j) — git history left immutable.
+- Recurring-failure-class list now at 8 (log section c/j): 1-5 unit/scope
+  mismatches, 6 epoch-unit, 7 inert jitter, 8 confounded surviving metric.
