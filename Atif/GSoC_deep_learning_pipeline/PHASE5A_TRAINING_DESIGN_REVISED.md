@@ -722,3 +722,102 @@ All four fixes are covered by new regression tests in
 (`tests/phase5_diagnostics/ tests/phase5_encoder/ tests/baseline_geometry/`).
 
 No training has been run. The human runs it, per standing instruction.
+
+---
+
+## 10. Fold-1 dry run executed; the ~17.7 s estimate was wrong (5th building-block error) and is now measured
+
+The human ran the 1-epoch fold-1 dry run
+(`--held-out fragment_caesar_fragment_1 --max-epochs 1`). Results, from
+`phase5a_runs/fold_fragment_caesar_fragment_1_history.json`:
+
+| Component | §9 estimate | **Measured (real fold 1)** |
+|---|---:|---:|
+| Mining pass | ~3.4 s | **18.17 s** |
+| Training (12 steps) | ~13.5 s | **20.92 s** |
+| Validation | ~0.84 s | **0.85 s** |
+| **Per-epoch total** | ~17.7 s | **39.95 s** |
+| Peak GPU memory | (1436 step / 3222 mining) | **956.9 MB** |
+
+**Diagnosis of the mining miss (NOT retrofitted — the building block was
+wrong, per the standing rule):** §9/§2b measured mining as a *single*
+4,000-patch pool encode (~3.4 s). But the code encodes each anchor
+fragment's non-adjacent pool *separately*, and those pools overlap heavily
+across the 6 anchor fragments. Measured real work for fold 1: **18,887
+patch-encodes** (15,466 pool + 3,421 anchor), against only **5,822 distinct
+training patches** — a ~3.2× redundancy. The estimate measured one pool;
+the code encoded six overlapping ones.
+
+**This is the FIFTH instance of one recurring failure class in this
+project**, and it is worth naming explicitly because the citation rule does
+not catch it:
+
+| # | Symptom | The unit that was wrong |
+|---|---|---|
+| 1 | "batch 512" | measured per-*patch* memory, applied per-*step* |
+| 2 | `val_fraction=0.10` | applied to *pairs*, reasoned about as *patches* |
+| 3 | H=4 hard-neg ratio | asserted per-*anchor*, code mines per-*patch* |
+| 4 | mined-distance asymmetry | §2b pool sizes are *full-dataset*, no *fold* sees them |
+| 5 | ~17.7 s/epoch | measured *one* pool encode, code does *six* overlapping |
+
+The citation rule ("cite a file:line / JSON field / pasted output") catches
+a wrong *location*. It does not catch a wrong *unit* — a number correctly
+copied from a real measurement of the wrong quantity. **Added rule: every
+measurement must state its UNIT and the SCOPE it was measured over** (per
+patch vs per step vs per epoch; per fold vs full dataset; one pool vs all
+pools), not just where it came from. All five errors above are unit/scope
+mismatches, not sourcing errors.
+
+**Mining optimization (pure refactor, applied):** encode all 5,822 distinct
+training-fragment patches once per epoch into an eval-mode cached table
+(`_encode_training_table`), then both pool and anchor accesses are index
+lookups (an anchor patch's embedding is the same vector whether mined *for*
+or *against*). Proven mathematically identical to the per-anchor-pool
+version by `test_mining_cache_matches_uncached` (same lookup dict, same
+distances, cached vs uncached) and reproducible-within-epoch by
+`test_mining_cache_uses_eval_mode_no_jitter`. **Measured on real fold 1:
+mining 18.17 s → 6.30 s** (2.9×; slightly under the 3.2× encode-count
+ratio due to fixed overhead). Corrected per-epoch ≈ **28 s**; 7 folds ×
+50 epochs ≈ **2.7 hours** (upper bound, patience never firing).
+
+**Deduped hard negatives — now a measured fact (Deviation 2 closed):**
+268.1 mean distinct hard negatives per step (min 258, max 280) against 512
+anchors — ~52% of anchors contribute a distinct negative, the rest collide.
+This is **not dilution**: the 268 are *shared denominator candidates* seen
+by every anchor, so each anchor is contrasted against all 268 hard + 511
+in-batch-positive-as-negative = ~34% of the denominator is hard. Whether
+34% is enough to move the easy-vs-hard AUC gap is exactly condition 3's
+job to answer on real training — not something to pre-tune.
+
+**Interface draw fractions matched the weights (sampler verified):**
+observed F2-F4 = 0.236 vs weight 0.246; F3-F4 = 0.249 vs 0.246; F5-F6 =
+0.251 vs 0.246; F6-F7 = 0.053 vs 0.049 — all within sampling noise at
+6,144 draws (5·SE ≈ 0.028). The fragment→interface→partner sampler and the
+corrected capped-count weighting behave as designed; no sampler bug.
+
+**§2b mined-distance prediction — PREDICTED, NOT OBSERVED on the untrained
+baseline; recheck post-training.** §2b hypothesized larger candidate pool →
+closer mined negatives. Fold-1 measured the opposite: F5 (0.0458) and F6
+(0.0485) mine ~1.8× *farther* than F2/F3/F4/F7 (0.0246–0.0264), and F6 has
+the largest fold-1 pool yet mines farthest. On an untrained random-init
+encoder this reflects the random embedding's geometry, not interface
+signal, so it neither confirms nor refutes the hypothesis — but the §2b
+mechanism is **unconfirmed** and must be re-checked after real training
+rather than treated as established.
+
+**Correction to the §2b pool-size table:** its figures (F1/F4=1,822 …
+F6/F7=4,000, a 2.2× asymmetry) are computed over **all 7 fragments**. Every
+LOFO fold removes the held-out fragment from every candidate pool, so no
+fold ever sees those numbers. For fold 1 (F1 held out), F6's pool is
+**3,000**, not 4,000. The full-dataset asymmetry figure is an upper bound
+that no training fold actually experiences — this is failure-class #4 in
+the table above.
+
+**Loss moved within the epoch (plumbing OK, not a learning claim):** train
+loss 6.524 → 6.455 over 12 steps (not flat, not NaN); val loss 5.518. One
+epoch on an untrained encoder says nothing about interface association —
+this is only a plumbing signal that forward/backward/optimizer are wired.
+
+Nothing in §10 touches the six pre-registered conditions. It is a timing +
+plumbing gate outcome plus the mining optimization it motivated. Still no
+multi-epoch or multi-fold training run.

@@ -303,3 +303,110 @@ def test_deduped_hard_negative_count_is_returned():
     }})()
     loss, n_dedup = _info_nce_step(model, ctx, batch, mined, cfg, positive_lookup)
     assert n_dedup == 2, f"expected 2 distinct hard negatives (D,0) and (D,1), got {n_dedup}"
+
+
+# ----------------------------------------------------------------------
+# Mining cache optimization: the refactor that encodes every training patch
+# once per epoch (instead of re-encoding overlapping pools ~3.2x) must be a
+# PURE refactor -- identical mined lookup dict and identical distances,
+# cached vs uncached. This test proves that on the toy fixture rather than
+# assuming it, and protects the 3.2x speedup claim from silently changing
+# the mined output later.
+# ----------------------------------------------------------------------
+def _mine_uncached_reference(ctx, model, held_out, train_anchor_ids, *,
+                             n_points, k, device):
+    """Byte-for-byte reproduction of the PRE-optimization mining path:
+    re-encode each anchor fragment's non-adjacent pool separately (no shared
+    table). Kept only in the test as the reference the optimized production
+    code must match exactly."""
+    import numpy as np
+    from phase5_encoder.mining import _encode_pool
+    per_fragment_distance = {}
+    lookup = {}
+    train_fragments = [f for f in ctx.fragment_ids if f != held_out]
+    for fid in train_fragments:
+        if fid not in train_anchor_ids or train_anchor_ids[fid].size == 0:
+            continue
+        neighbors = ctx.neighbors_of(fid)
+        non_adj_frags = [f for f in train_fragments if f != fid and f not in neighbors]
+        if not non_adj_frags:
+            continue
+        pool_emb_chunks, pool_fid_arr, pool_pid_arr = [], [], []
+        for nfid in non_adj_frags:
+            pt = ctx.patch_tables[nfid]
+            ids = np.arange(pt.patch_count, dtype=np.int64)
+            emb = _encode_pool(model, pt, ids, n_points=n_points, k=k, device=device)
+            pool_emb_chunks.append(emb)
+            pool_fid_arr.extend([nfid] * pt.patch_count)
+            pool_pid_arr.extend(ids.tolist())
+        pool_emb = np.concatenate(pool_emb_chunks, axis=0)
+        pool_fid_arr = np.array(pool_fid_arr, dtype=object)
+        pool_pid_arr = np.array(pool_pid_arr, dtype=np.int64)
+        anchor_pt = ctx.patch_tables[fid]
+        anchor_emb = _encode_pool(model, anchor_pt, train_anchor_ids[fid],
+                                  n_points=n_points, k=k, device=device)
+        dists = np.linalg.norm(pool_emb[None, :, :] - anchor_emb[:, None, :], axis=2)
+        j = np.argmin(dists, axis=1)
+        for row, pid in enumerate(train_anchor_ids[fid].tolist()):
+            lookup[(fid, pid)] = (str(pool_fid_arr[j[row]]),
+                                  int(pool_pid_arr[j[row]]),
+                                  float(dists[row, j[row]]))
+            per_fragment_distance.setdefault(fid, []).append(float(dists[row, j[row]]))
+    return lookup, per_fragment_distance
+
+
+def test_mining_cache_matches_uncached():
+    """The cached (production) mining path must produce an IDENTICAL lookup
+    dict and identical mined distances to the uncached reference -- same
+    keys, same (neg_fid, neg_pid), same float distances. Pure refactor."""
+    ctx = _toy_context_two_interfaces()
+    torch.manual_seed(0)
+    model = PointNetEncoder(out_dim=16, pair_input=True)
+    # Mine a negative for every contact patch of every training fragment,
+    # so the test exercises the full anchor set, not just one fragment.
+    anchor_ids = {
+        fid: np.array(sorted(ctx.contact_patch_ids.get(fid, set())), dtype=np.int64)
+        for fid in ctx.fragment_ids if fid != "C"
+    }
+
+    # Production (cached) path.
+    cached = mine_epoch_hard_negatives(
+        ctx, model, held_out="C", train_anchor_ids=anchor_ids,
+        n_points=8, k=4, device="cpu", seed=0,
+    )
+    # Uncached reference path (same model weights, model is deterministic in
+    # eval mode with training=False features).
+    ref_lookup, ref_perfrag = _mine_uncached_reference(
+        ctx, model, "C", anchor_ids, n_points=8, k=4, device="cpu",
+    )
+
+    assert set(cached.lookup.keys()) == set(ref_lookup.keys()), "key sets differ"
+    for key in ref_lookup:
+        c_fid, c_pid, c_dist = cached.lookup[key]
+        r_fid, r_pid, r_dist = ref_lookup[key]
+        assert (c_fid, c_pid) == (r_fid, r_pid), (key, cached.lookup[key], ref_lookup[key])
+        assert c_dist == pytest.approx(r_dist, abs=1e-6), (key, c_dist, r_dist)
+    # Per-fragment distance lists must match element-wise too.
+    assert set(cached.per_fragment_distance.keys()) == set(ref_perfrag.keys())
+    for fid in ref_perfrag:
+        c = np.asarray(cached.per_fragment_distance[fid])
+        r = np.asarray(ref_perfrag[fid])
+        assert c.shape == r.shape
+        assert np.allclose(c, r, atol=1e-6), fid
+
+
+def test_mining_cache_uses_eval_mode_no_jitter():
+    """The cached table must be built training=False (eval-mode, no jitter),
+    so mining is reproducible within an epoch. Two mining passes with the
+    SAME frozen weights must give byte-identical distances -- if jitter
+    leaked in, they would differ run to run."""
+    ctx = _toy_context_two_interfaces()
+    torch.manual_seed(0)
+    model = PointNetEncoder(out_dim=16, pair_input=True)
+    anchor_ids = {"A": np.array([0, 1, 2], dtype=np.int64)}
+    a = mine_epoch_hard_negatives(ctx, model, "C", anchor_ids,
+                                  n_points=8, k=4, device="cpu", seed=0)
+    b = mine_epoch_hard_negatives(ctx, model, "C", anchor_ids,
+                                  n_points=8, k=4, device="cpu", seed=0)
+    for key in a.lookup:
+        assert a.lookup[key] == b.lookup[key], (key, a.lookup[key], b.lookup[key])

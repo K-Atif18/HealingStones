@@ -35,6 +35,13 @@ pairs/hard_negative_pairs.json
 # Config backups
 config/*.bak.*
 
+# ─── Phase 5A training checkpoints (regenerable binary artifacts) ────────────
+# Model checkpoints from scripts/train_phase5a.py are throwaway per-fold
+# binaries (a full 7-fold run produces 7). The small per-fold history JSONs
+# ARE tracked as provenance for the numbers cited in PHASE5_RESULTS_LOG.md;
+# the .pt checkpoints are not.
+phase5a_runs/*.pt
+
 # ─── Source meshes excluded (kept out of the repo by request) ────────────────
 # The raw scans in data/ total ~99 MB. They are inputs, not outputs, and are
 # distributed separately. Place them in data/ locally to run the pipeline.

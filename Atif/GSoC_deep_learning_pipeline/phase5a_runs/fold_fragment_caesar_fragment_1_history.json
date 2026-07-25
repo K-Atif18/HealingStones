@@ -1,0 +1,75 @@
+{
+  "held_out": "fragment_caesar_fragment_1",
+  "epochs": [
+    {
+      "epoch": 0,
+      "train_loss_mean": 6.484936237335205,
+      "train_loss_per_step": [
+        6.5243072509765625,
+        6.490647315979004,
+        6.4989752769470215,
+        6.498435974121094,
+        6.510614395141602,
+        6.486385345458984,
+        6.479187965393066,
+        6.489933967590332,
+        6.485564231872559,
+        6.419809818267822,
+        6.480698585510254,
+        6.45467472076416
+      ],
+      "train_loss_first_step": 6.5243072509765625,
+      "train_loss_last_step": 6.45467472076416,
+      "val_loss": 5.517687494625787,
+      "improved": true,
+      "epochs_without_improvement": 0,
+      "mining_seconds": 18.17468237876892,
+      "training_seconds": 20.922508239746094,
+      "validation_seconds": 0.8502388000488281,
+      "epoch_seconds_total": 39.94742941856384,
+      "peak_gpu_mb": 956.888064,
+      "interface_draw_counts": {
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 661,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 1448,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 633,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 1542,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 1532,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 328
+      },
+      "interface_draw_fractions": {
+        "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.10758463541666667,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.23567708333333334,
+        "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.10302734375,
+        "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.2509765625,
+        "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.24934895833333334,
+        "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.053385416666666664
+      },
+      "deduped_hard_negatives_per_step_mean": 268.0833333333333,
+      "deduped_hard_negatives_per_step_min": 258,
+      "deduped_hard_negatives_per_step_max": 280,
+      "per_fragment_mined_distance_mean": {
+        "fragment_caesar_fragment_2": 0.026363687983230334,
+        "fragment_caesar_fragment_3": 0.02567651196761645,
+        "fragment_caesar_fragment_4": 0.025928797849166373,
+        "fragment_caesar_fragment_5": 0.04579759008742858,
+        "fragment_caesar_fragment_6": 0.048526386610972576,
+        "fragment_caesar_fragment_7": 0.024583109501502356
+      }
+    }
+  ],
+  "stopped_by": "epoch_cap",
+  "stopped_at_epoch": 0,
+  "interface_weights": {
+    "fragment_caesar_fragment_2-fragment_caesar_fragment_3": 0.10158305934398554,
+    "fragment_caesar_fragment_2-fragment_caesar_fragment_4": 0.24648238449950224,
+    "fragment_caesar_fragment_3-fragment_caesar_fragment_4": 0.24648238449950224,
+    "fragment_caesar_fragment_4-fragment_caesar_fragment_5": 0.10967331025760725,
+    "fragment_caesar_fragment_5-fragment_caesar_fragment_6": 0.24648238449950224,
+    "fragment_caesar_fragment_6-fragment_caesar_fragment_7": 0.049296476899900445
+  },
+  "n_train_interfaces": 6,
+  "n_val_pairs": 499,
+  "device": "cuda",
+  "batch_size": 512,
+  "steps_per_epoch": 12
+}

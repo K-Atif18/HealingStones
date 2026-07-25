@@ -5,9 +5,9 @@
 `scripts/generate_results_log.py` -- do not hand-edit numbers here; regenerate.
 Prose (deviations, decisions) is maintained in the generator template.
 
-- Generated: `2026-07-25T13:42:25.291034+00:00`
+- Generated: `2026-07-25T13:55:50.337283+00:00`
 - Source JSON `run_timestamp`: `2026-07-23T16:53:22.637596+00:00`
-- Git commit at generation: `9a0380a`
+- Git commit at generation: `9cf44cb`
 - Fragments: F1, F2, F3, F4, F5, F6, F7
 - Total patches: 6822 | Adjacent pairs: 11
 
@@ -339,6 +339,80 @@ the training command. `scripts/train_phase5a.py` gained `--max-epochs`
 All four fixes are covered by regression tests in
 `tests/phase5_encoder/test_sampler_mining.py`. Full targeted suite:
 **46 passed**. Full repo suite: **182 passed**.
+
+---
+
+## (g) Fold-1 dry run + mining optimization
+
+The human ran the 1-epoch fold-1 dry run
+(`--held-out fragment_caesar_fragment_1 --max-epochs 1`). This is a timing +
+plumbing gate ONLY; nothing here touches the six pre-registered conditions.
+
+### Measured vs the §9 estimate (the estimate was wrong; diagnosed, not retrofitted)
+
+| Component | prior estimate | measured (real fold 1) |
+|---|---:|---:|
+| Mining pass | ~3.4 s | 18.17 s |
+| Training (12 steps) | ~13.5 s | 20.92 s |
+| Validation | ~0.84 s | 0.85 s |
+| Per-epoch total | ~17.7 s | 39.95 s |
+| Peak GPU memory | 1436/3222 MB | 956.9 MB |
+
+**Root cause:** the mining estimate measured a SINGLE 4,000-patch pool
+encode, but the code encodes each of 6 anchor fragments' non-adjacent pools
+separately, and they overlap. Real work: 18,887 patch-encodes (15,466 pool
++ 3,421 anchor) vs only 5,822 distinct training patches -- ~3.2x redundant.
+
+### Recurring failure class (named explicitly)
+
+This is the FIFTH unit/scope mismatch in the project. The citation rule
+catches a wrong *location*; it does not catch a number correctly copied
+from a real measurement of the WRONG QUANTITY:
+
+| # | Symptom | wrong unit/scope |
+|---|---|---|
+| 1 | "batch 512" | per-*patch* memory used as per-*step* |
+| 2 | `val_fraction=0.10` | applied to *pairs*, reasoned as *patches* |
+| 3 | H=4 hard-neg ratio | per-*anchor* asserted, code mines per-*patch* |
+| 4 | mined-distance asymmetry | §2b pool sizes are *full-dataset*, no *fold* sees them |
+| 5 | ~17.7 s/epoch | measured *one* pool, code does *six* overlapping |
+
+**Added rule:** every measurement states its UNIT and SCOPE (per patch / per
+step / per epoch; per fold / full dataset; one pool / all pools), not just
+its source location.
+
+### Mining optimization (pure refactor, applied and proven identical)
+
+Encode all 5,822 distinct training patches once per epoch into an eval-mode
+cached table (`_encode_training_table`); pool and anchor accesses become
+index lookups. Proven mathematically identical to the per-anchor-pool path
+by `test_mining_cache_matches_uncached`; reproducible-within-epoch (no
+jitter leak) by `test_mining_cache_uses_eval_mode_no_jitter`. **Measured:
+mining 18.17 s -> 6.30 s** (2.9x). Corrected per-epoch ~28 s; 7 folds x 50
+epochs ~2.7 h (upper bound).
+
+### Deviation 2 closed (measured fact, not assumed)
+
+268.1 mean distinct deduped hard negatives/step (258-280) vs 512 anchors --
+~52% distinct. NOT dilution: the 268 are shared denominator candidates seen
+by every anchor (~34% of each anchor's denominator is hard). Whether 34%
+moves the easy-vs-hard AUC gap is condition 3's job, not a pre-tune.
+
+### Sampler verified
+
+Observed interface draw fractions matched the weights within sampling noise
+at 6,144 draws (F2-F4 obs 0.236 vs weight 0.246, etc.; 5*SE ~ 0.028). No
+sampler bug.
+
+### §2b prediction: PREDICTED, NOT OBSERVED (recheck post-training)
+
+§2b hypothesized larger pool -> closer mined negatives. Fold 1 showed the
+opposite (F5=0.046, F6=0.049 farther than F2/F3/F4/F7=0.025-0.026; F6 has
+the largest fold-1 pool yet mines farthest). On an untrained encoder this is
+random-embedding geometry, not interface signal -- so the §2b mechanism is
+unconfirmed and must be rechecked after real training. Also: F6's fold-1
+pool is 3,000, not the 4,000 in the §2b full-dataset table -- every LOFO
+fold shrinks the pool, so no fold sees the table's 2.2x asymmetry.
 
 ---
 
