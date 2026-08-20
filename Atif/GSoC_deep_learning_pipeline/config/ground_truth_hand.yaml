@@ -1,0 +1,22 @@
+# Phase 3: Ground Truth Generation Configuration for the HAND dataset
+
+# Input directories (from Phase 1 and Phase 2)
+dataset_dir: dataset_hand/
+patches_dir: patches_hand/
+
+# Output directory
+output_dir: pairs_hand/
+
+# Fragment adjacency threshold. Caesar used 3.67 mm (3x its 1.22 mm spacing).
+# The hand is normalized to the same target density, so the same threshold is a
+# reasonable starting point; revisit if adjacency counts look off.
+adjacency_threshold_mm: 3.67
+
+# Contact region threshold (points within this distance count as contact).
+contact_threshold_mm: 3.0
+
+# Minimum fraction of a patch's points that must be in the contact region.
+min_contact_overlap: 0.3
+
+# Positive:Negative ratio [hard_negative_ratio, random_negative_ratio].
+positive_negative_ratio: [1, 1]

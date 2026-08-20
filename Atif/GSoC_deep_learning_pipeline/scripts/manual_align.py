@@ -136,7 +136,8 @@ def _update_config_file(config_path, transforms):
 def main() -> int:
     parser = argparse.ArgumentParser(description="Assisted fragment alignment (point-picking + ICP).")
     parser.add_argument("--config", default="config/default.yaml")
-    parser.add_argument("--fragments", default="", help="Comma-separated fragment IDs (default: all).")
+    parser.add_argument("--fragments", default="", help="Comma-separated fragment IDs or substrings (default: all).")
+    parser.add_argument("--parts", default="", help="Comma-separated part numbers, e.g. 2,6,7 (matches 'part_NN' in fragment IDs). Short alternative to --fragments.")
     parser.add_argument("--min-points", type=int, default=3)
     args = parser.parse_args()
 
@@ -147,7 +148,47 @@ def main() -> int:
     model_pcd = _to_o3d_with_normals(model_pc, config.registration_params.normal_radius_mm)
 
     registry = assign_fragment_ids(config.fragment_paths)
-    selected = [s for s in args.fragments.split(",") if s] or list(registry.ids())
+    all_ids = list(registry.ids())
+
+    # Resolve the selection. Tokens from --fragments are matched as exact IDs
+    # first, then as substrings; --parts expands numbers like "6" to the
+    # fragment whose ID contains "part_06". Order preserved, de-duplicated.
+    selected: list[str] = []
+
+    def _add(fid: str) -> None:
+        if fid not in selected:
+            selected.append(fid)
+
+    for token in (t.strip() for t in args.fragments.split(",")):
+        if not token:
+            continue
+        if token in all_ids:
+            _add(token)
+            continue
+        matches = [fid for fid in all_ids if token in fid]
+        if matches:
+            for fid in matches:
+                _add(fid)
+        else:
+            print(f"    WARNING: no fragment matches '{token}'")
+
+    for num in (n.strip() for n in args.parts.split(",")):
+        if not num:
+            continue
+        try:
+            needle = f"part_{int(num):02d}"
+        except ValueError:
+            print(f"    WARNING: --parts value '{num}' is not a number")
+            continue
+        matches = [fid for fid in all_ids if needle in fid]
+        if matches:
+            for fid in matches:
+                _add(fid)
+        else:
+            print(f"    WARNING: no fragment matches '{needle}'")
+
+    if not selected:
+        selected = all_ids
 
     transforms = {}
     for fid in selected:

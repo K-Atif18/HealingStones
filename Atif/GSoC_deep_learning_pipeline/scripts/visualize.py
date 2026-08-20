@@ -34,7 +34,16 @@ from dataset_foundation.visualizer import MODEL_COLOR, assign_fragment_colors, v
 
 
 def _short_label(fragment_id: str) -> str:
-    """Human-friendly short label, e.g. 'fragment_caesar_fragment_2' -> 'Frag 2'."""
+    """Human-friendly short label.
+
+    'fragment_caesar_fragment_2'                 -> 'Frag 2'
+    'fragment_healing_stones_hand_part_07_P01H_01' -> 'Part 07'
+    """
+    import re
+
+    part = re.search(r"part_(\d+)", fragment_id)
+    if part:
+        return f"Part {part.group(1)}"
     tail = fragment_id.split("_")[-1]
     return f"Frag {tail}" if tail.isdigit() else fragment_id
 

@@ -1,0 +1,59 @@
+# Phase 4: Baseline Geometry Configuration for the HAND dataset.
+# Distances in millimetres, in the Phase 1 assembled coordinate frame.
+
+# ---------------------------------------------------------------------------
+# Inputs (produced by Phases 1-3, hand)
+# ---------------------------------------------------------------------------
+dataset_dir: dataset_hand/
+patches_dir: patches_hand/
+pairs_npz: pairs_hand/pairs.npz
+pairs_dataset_json: pairs_hand/dataset.json
+
+# Output root
+output_dir: baseline_results_hand/
+
+# ---------------------------------------------------------------------------
+# Descriptors
+# ---------------------------------------------------------------------------
+descriptors: [fpfh, shot]
+
+fpfh_radius_mm: 8.0
+fpfh_max_nn: 100
+
+normal_radius_mm: 4.0
+normal_max_nn: 30
+
+shot_radius_mm: 8.0
+shot_cos_bins: 11
+
+patch_pooling: mean
+
+# ---------------------------------------------------------------------------
+# Retrieval experiment
+# ---------------------------------------------------------------------------
+retrieval_k_values: [1, 5, 10, 20]
+retrieval_query_sample: 800
+pair_auc_sample: 200000
+
+# ---------------------------------------------------------------------------
+# Registration experiment
+# ---------------------------------------------------------------------------
+registration_descriptor: fpfh
+perturb_max_rotation_deg: 30.0
+perturb_max_translation_mm: 20.0
+perturb_seed: 42
+
+registration_voxel_mm: 1.5
+ransac_max_corr_dist_mm: 3.0
+ransac_n: 4
+ransac_max_iterations: 100000
+ransac_confidence: 0.999
+icp_max_corr_dist_mm: 3.0
+icp_max_iterations: 50
+success_rotation_deg: 15.0
+success_translation_mm: 10.0
+
+# ---------------------------------------------------------------------------
+# Validation gate
+# ---------------------------------------------------------------------------
+min_pair_auc: 0.5

@@ -1,0 +1,36 @@
+# Phase 2 (Patch Generation) configuration for the HAND dataset.
+# All spatial values are in millimeters in the Full_Model coordinate frame.
+
+# Phase 1 output directory (hand).
+dataset_dir: dataset_hand/
+
+# Phase 2 output directory for patch records, metadata, and visualizations.
+patch_dir: patches_hand/
+
+# Patch neighborhood radius in millimeters.
+patch_radius_mm: 8.0
+
+# Upper bound on points kept per patch.
+max_patch_points: 128
+
+# Number of FPS patch centers to select per fragment.
+target_center_count: 1000
+
+# Alternative center specification (density-based); null when count is set.
+target_center_density_per_mm2: null
+
+# Seed for deterministic farthest-point sampling.
+fps_seed: 42
+
+# Coverage validation threshold in [0, 1].
+coverage_threshold: 1.0
+
+# Minimum acceptable patch size (points).
+min_patch_size: 1
+
+# Off-screen visualization output path.
+image_output_path: patches_hand/visualization.png
+
+# Rendered image dimensions in pixels; each must be >= 1024.
+image_width: 1024
+image_height: 1024

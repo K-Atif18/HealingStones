@@ -47,3 +47,14 @@ phase5a_runs*/**/*.pt
 # The raw scans in data/ total ~99 MB. They are inputs, not outputs, and are
 # distributed separately. Place them in data/ locally to run the pipeline.
 data/*.ply
+
+# ─── Hand dataset pipeline outputs (regenerable, large binaries) ─────────────
+# Raw scans, processed fragments, patches, pairs, and baseline results for the
+# hand object. These are pipeline outputs — regenerate locally by running the
+# pipeline with the hand configs. Configs and scripts ARE tracked (see config/
+# and scripts/).
+raw_hand/
+dataset_hand/
+patches_hand/
+pairs_hand/
+baseline_results_hand/

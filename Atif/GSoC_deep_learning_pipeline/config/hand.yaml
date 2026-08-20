@@ -1,0 +1,146 @@
+full_model_path: raw_hand/healing_stones_hand_F_01_R_01_remeshed.ply
+fragment_paths:
+- raw_hand/healing_stones_hand_part_01_P01H_01.PLY
+- raw_hand/healing_stones_hand_part_02_P01H_01.PLY
+- raw_hand/healing_stones_hand_part_03_P01H_01.PLY
+- raw_hand/healing_stones_hand_part_04_P01H_01.PLY
+- raw_hand/healing_stones_hand_part_05_P01H_01.PLY
+- raw_hand/healing_stones_hand_part_06_P01H_01.PLY
+- raw_hand/healing_stones_hand_part_07_P01H_01.PLY
+- raw_hand/healing_stones_hand_part_08_P01H_01.PLY
+- raw_hand/healing_stones_hand_part_09_P01H_01.PLY
+- raw_hand/healing_stones_hand_part_10_P01H_01.PLY
+dataset_dir: dataset_hand/
+voxel_size_mm: 1.5
+target_density_pts_per_mm3: 1.0
+normal_params:
+  search_radius_mm: 3.0
+  max_neighbors: 30
+  orientation_neighbors: 15
+registration_params:
+  feature_voxel_size_mm: 2.5
+  fpfh_radius_mm: 12.5
+  fpfh_max_neighbors: 100
+  normal_radius_mm: 5.0
+  ransac_distance_mm: 3.75
+  ransac_max_iterations: 400000
+  ransac_confidence: 0.999
+  icp_max_distance_mm: 2.0
+  icp_max_iterations: 60
+  seed: 42
+alignment_error_threshold_mm: 5.0
+correspondence_distance_mm: 3.0
+reconstruction_error_threshold_mm: 5.0
+centering_enabled: false
+centering_offset:
+- 0.0
+- 0.0
+- 0.0
+scaling_enabled: false
+scale_factor: 1.0
+precomputed_transforms:
+  fragment_healing_stones_hand_part_02_P01H_01:
+  - - 0.04771173829034662
+    - -0.5827400697382372
+    - 0.8112568034542391
+    - -30.903043481560292
+  - - -0.8996709569667095
+    - -0.3779221853422194
+    - -0.21855660826606776
+    - -14.662535277490164
+  - - 0.4339536371778888
+    - -0.7194364690142131
+    - -0.5423056406054118
+    - -17.85874370264704
+  - - 0.0
+    - 0.0
+    - 0.0
+    - 1.0
+  fragment_healing_stones_hand_part_06_P01H_01:
+  - - 0.03995862316122047
+    - 0.9952092737243905
+    - 0.08922897471127483
+    - -35.886588359615125
+  - - 0.4767529199508773
+    - 0.059490383652760846
+    - -0.8770219766751327
+    - 8.460582967018562
+  - - -0.8781286703857072
+    - 0.0775847649078933
+    - -0.47209177338819935
+    - -46.088085701553055
+  - - 0.0
+    - 0.0
+    - 0.0
+    - 1.0
+  fragment_healing_stones_hand_part_08_P01H_01:
+  - - -0.7479827590954079
+    - 0.4461236816825679
+    - -0.4914218683961977
+    - 31.713372242432605
+  - - 0.663011367606392
+    - 0.4680670158921342
+    - -0.5842338530576047
+    - 18.558233192924625
+  - - -0.03062219000530652
+    - -0.7628151344040209
+    - -0.6458911303025099
+    - -81.32915939629592
+  - - 0.0
+    - 0.0
+    - 0.0
+    - 1.0
+  fragment_healing_stones_hand_part_09_P01H_01:
+  - - -0.4151423556511539
+    - 0.8087196498836932
+    - -0.41668855568206364
+    - 39.33620220601297
+  - - 0.7431554717503043
+    - 0.5656515385364439
+    - 0.3574329052548759
+    - 15.511781128587039
+  - - 0.5247635366067241
+    - -0.1612788418961093
+    - -0.8358303451087746
+    - -39.129801218484296
+  - - 0.0
+    - 0.0
+    - 0.0
+    - 1.0
+  fragment_healing_stones_hand_part_07_P01H_01:
+  - - -0.25270947645254327
+    - -0.7898818806621621
+    - -0.5587705567696734
+    - -15.394947530210777
+  - - 0.9491341439148804
+    - -0.3144989568237719
+    - 0.015322630705139197
+    - 18.103244971304278
+  - - -0.18783582556596717
+    - -0.526476040061054
+    - 0.8291807293199627
+    - -79.63138270049197
+  - - 0.0
+    - 0.0
+    - 0.0
+    - 1.0
+  fragment_healing_stones_hand_part_01_P01H_01:
+  - - -0.8213076141751747
+    - -0.20468128894102128
+    - 0.5325029322504456
+    - -3.5246650908323067
+  - - 0.5258655564359158
+    - 0.09026175757480047
+    - 0.8457648796644678
+    - -22.65502594667243
+  - - -0.22117689628943155
+    - 0.974658086242016
+    - 0.03350217113597288
+    - -17.09048218621225
+  - - 0.0
+    - 0.0
+    - 0.0
+    - 1.0
+image_output_path: dataset_hand/visualization.png
+image_width: 1920
+image_height: 1080
