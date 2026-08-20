@@ -373,6 +373,106 @@ and `baseline_report.json`.
 
 ---
 
+## Phase 5 — Patch Encoder (PointNet + Contrastive Learning) ✅
+
+**Goal.** Train a learned patch encoder that beats FPFH on interface-association
+retrieval and, more importantly, learns *complementarity* — so that break-surface
+patches from adjacent fragments rank each other above geometrically similar but
+non-adjacent patches.
+
+**Pre-registration.** Pass/fail thresholds were fixed in `PHASE5_PREREGISTRATION.md`
+*before* any encoder was trained — a six-condition Level-3 success definition
+covering retrieval (mAP, P@1), the easy-vs-hard AUC gap (the complementarity
+thesis), pose invariance, and fragment-identity leakage. See that file for exact
+wording; no condition was weakened after the fact.
+
+**What was built.**
+
+- `src/phase5_diagnostics/` — diagnostic harness: FPFH baseline measurements,
+  LOFO fold setup, shortcut battery (fragment-ID probe, boundary-openness,
+  distinctiveness correlation), hard-negative stratification.
+- `src/phase5_encoder/` — PointNet encoder with k-NN pairwise Point Pair
+  Features (PPF, `k=16`, exactly rotation+translation invariant), InfoNCE
+  contrastive loss, on-the-fly hard-negative mining, fragment-balanced LOFO
+  sampler with capped inverse-frequency interface weighting, LayerNorm
+  (not BatchNorm, to avoid distribution-shift confounds under LOFO).
+- `scripts/train_phase5a.py` — full 6-fold LOFO training pipeline.
+- `scripts/run_phase5_diagnostics.py` — FPFH baseline + diagnostic suite.
+- **186 tests** (up from 150; new suites cover PPF rigid invariance, pose gate,
+  sampler, mining cache correctness, and four regression tests for pre-training
+  bugs found and fixed before any run).
+
+**Architecture decisions (all measured, not assumed).**
+
+| Decision | Why |
+|----------|-----|
+| k-NN PPF features (`N×k×4`) instead of PCA/SHOT frame | PCA canonicalization fails the pose gate by ~4500×; PPF passes exactly (`max_dev=0.0`). Removes the confound between "PointNet can't learn interfaces" and "unstable input frame". |
+| LayerNorm over BatchNorm | BatchNorm eval-mode running stats fit only the 6 training fragments; a held-out fragment's distribution shift would be indistinguishable from a genuine retrieval failure. |
+| Per-epoch on-the-fly mining, full non-adjacent pool | Targets the measured FPFH pathology directly (easy-vs-hard AUC gap = 0.614). Cached mining table (`_encode_training_table`) reduces mining from 18 s → 6 s/epoch (2.9× speedup). |
+| Fragment-balanced sampler, capped inverse-frequency weighting | Raw interface pair counts span a 174× range; pure inverse-frequency overfits small interfaces. Cap at max_ratio=5 lifts the rarest interface to ~1.5× uniform draw rate without dominating. |
+
+**Training runs (honest record — 4 runs, single variable changed each time).**
+
+| Run | Change | Key finding |
+|-----|--------|-------------|
+| Run 1 | Baseline (50 epochs, steps_per_epoch=12) | val non-monotonic; mAP CI includes zero |
+| Run 2 | Distance-capped positives (16 mm) | Fold-1 mAP CI excludes zero, but arbitrary checkpoint + unit bug = not durable |
+| Run 3 | Unit fix: steps_per_epoch=12→7 (one anchor-pass), patience re-enabled | Patience fired ep10; val flat from ep2; working as intended |
+| Run 4 | Jitter fix: per-(seed,epoch,frag,pid) noise instead of frozen constant seed | Patience fired ep20 (delayed vs ep10); best val improved 5.529→5.452; augmentation functioning |
+
+**Defects found and fixed before/during training (documented, not hidden).**
+
+Eight failure classes were identified and corrected across the project; the Phase 5
+training loop contributed four new ones:
+
+- `val_fraction` applied to pairs, not patches → 49,569 val pairs (9.8 GB) → capped to 499.
+- Interface weighting inverted (measured: 55.4% draws to the rarest interface) → fixed, re-measured.
+- `steps_per_epoch=12` — an "epoch" was 1.4% of pairs, so patience spanned noise → corrected to one full anchor-pass.
+- Jitter augmentation used `seed=cfg.seed` (constant) → every patch saw identical noise every epoch → fixed to per-(seed,epoch,frag,pid) seeding.
+
+**Results — 6-fold LOFO on well-supported folds {F1, F2, F3, F4}.**
+
+| Fold | Enc mAP | FPFH mAP | Paired diff [95% CI] | Enc P@1 | FPFH P@1 |
+|------|:-------:|:--------:|----------------------|:-------:|:--------:|
+| F1 | 0.099 | 0.105 | −0.0067 [−0.010, −0.004] | 0.141 | 0.168 |
+| F2 | 0.107 | 0.139 | −0.0322 [−0.036, −0.029] | 0.128 | 0.194 |
+| F3 | 0.088 | 0.110 | −0.0220 [−0.024, −0.020] | 0.100 | 0.169 |
+| F4 | 0.112 | 0.128 | −0.0166 [−0.020, −0.013] | 0.109 | 0.184 |
+
+All four paired CIs exclude zero on the losing side. **Conditions 1–2 FAILED (0/4).**
+
+Complementarity probe (encoder-mined easy-vs-hard AUC, valid self-adversarial test):
+
+| Fold | Easy AUC | Hard AUC | Gap |
+|------|:--------:|:--------:|:---:|
+| F1 | 0.785 | 0.064 | 0.722 |
+| F2 | 0.545 | 0.022 | 0.523 |
+| F3 | 0.507 | 0.045 | 0.462 |
+| F4 | 0.608 | 0.039 | 0.569 |
+
+Hard-AUC is below chance on all four folds — the encoder ranks its own look-alikes
+as *more* positive-like than true partners. **Condition 3 (thesis) NOT MET.**
+
+Fragment-identity leakage (condition 6): encoder reduces FPFH's leakage by ~half
+across all folds (e.g. F1: 0.519 vs FPFH 0.895, base rate 0.147). Improved,
+but does not rescue conditions 1–3.
+
+**Verdict: pre-registered NEGATIVE Level-3 result.**
+
+> **What this means.** A PointNet encoder trained with symmetric co-membership
+> labels on ~100-point / 8 mm patches from one 7-fragment artifact does not beat
+> FPFH and does not learn complementarity. This is a clean, diagnosed result —
+> not a failure of engineering. The root cause is the supervision signal: symmetric
+> co-membership optimises for *similarity*, and a similarity metric cannot learn
+> *complementarity* by construction. This directly motivates Phase 5B's asymmetric
+> supervision (complementary-pair labels, not just co-membership) and validates
+> the founding hypothesis that similarity ≠ assembly compatibility.
+
+**Outputs:** `phase5_diagnostics_results/`, `phase5a_runs_6fold/`, `phase5a_runs_jitter/`,
+`PHASE5_RESULTS_LOG.md`, `PHASE5_PREREGISTRATION.md`.
+
+---
+
 ## Results at a glance
 
 | Phase | Deliverable | Key result | Gate |
@@ -381,8 +481,9 @@ and `baseline_report.json`.
 | 2 | Local patches | 6,822 patches, 100% coverage | ✅ |
 | 3 | Ground-truth pairs | 1.44M labelled pairs, 11 adjacencies | ✅ |
 | 4 | Non-learning baselines | FPFH AUC 0.708; contact registration 10/11 | ✅ |
+| 5 | Patch encoder (PointNet + contrastive) | NEGATIVE Level-3 result — diagnosed root cause | ✅ |
 
-**Tests:** 150 passing (unit + Hypothesis property + integration).
+**Tests:** 186 passing (unit + Hypothesis property + integration).
 
 ---
 
@@ -394,15 +495,17 @@ and `baseline_report.json`.
 | 2 | Patch Generation | ✅ Complete |
 | 3 | Ground Truth Generation | ✅ Complete |
 | 4 | Baseline Geometry | ✅ Complete |
-| 5 | Patch Encoder (PointNet++ + contrastive/triplet) | ⏳ Next |
+| 5 | Patch Encoder (PointNet + InfoNCE contrastive, 6-fold LOFO) | ✅ Complete (negative result) |
+| 5B | Patch Encoder with asymmetric / complementarity supervision | ⏳ Next |
 | 6 | Fragment Retrieval (embedding DB, neighbour ranking) | — |
 | 7 | Correspondence Learning (local matches + confidence) | — |
 | 8 | Transformation Estimation (rigid registration, outlier rejection) | — |
 | 9 | Assembly Graph (pose graph, global reconstruction) | — |
 
-Phase 5 must beat the Phase 4 bar (**FPFH AUC 0.708, mAP 0.109**) and, more
-importantly, learn *complementarity* so that break-surface patches match — using
-the hard negatives Phase 4 now provides.
+Phase 5 established the bar and the binding constraint: symmetric co-membership
+labels cannot train a complementarity-aware encoder. Phase 5B targets this
+directly with asymmetric supervision, using the hard negatives and diagnostic
+infrastructure already in place.
 
 ---
 
