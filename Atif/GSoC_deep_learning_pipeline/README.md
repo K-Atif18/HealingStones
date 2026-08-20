@@ -60,32 +60,38 @@ A recurring theme (and an empirically confirmed one — see Phase 4) is that
 
 ```
 Healing_Stones/
-├── data/                       # Source: caesar_full_model.ply + 7 fragment PLYs
-├── config/                     # YAML configs, one per phase
-│   ├── default.yaml            #   Phase 1
-│   ├── patch_generation.yaml   #   Phase 2
-│   ├── ground_truth.yaml       #   Phase 3
-│   └── baseline_geometry.yaml  #   Phase 4
+├── data/                           # Source: caesar_full_model.ply + 7 fragment PLYs
+├── config/                         # YAML configs, one per phase
+│   ├── default.yaml                #   Phase 1
+│   ├── patch_generation.yaml       #   Phase 2
+│   ├── ground_truth.yaml           #   Phase 3
+│   └── baseline_geometry.yaml      #   Phase 4
 ├── src/
-│   ├── dataset_foundation/     # Phase 1 modules
-│   ├── patch_generation/       # Phase 2 modules
-│   ├── ground_truth_generation/# Phase 3 modules
-│   └── baseline_geometry/      # Phase 4 modules (descriptors, retrieval, registration)
-├── scripts/                    # Pipelines, visualizers, interactive explorer
-├── tests/                      # 150 tests (unit + Hypothesis property + integration)
-├── dataset/                    # Phase 1 outputs (aligned/normalized clouds, transforms)
-├── patches/                    # Phase 2 outputs (per-fragment patch archives)
-├── pairs/  + phase3_final_review/  # Phase 3 outputs (labelled pairs, contact regions)
-├── baseline_results/           # Phase 4 outputs (descriptors, metrics, visualizations)
-├── assets/                     # Figures used in this README
-└── RESUME.md · QUICKSTART.md · COMMANDS.md · PHASE{2,3,4}_COMPLETE.md
+│   ├── dataset_foundation/         # Phase 1 modules
+│   ├── patch_generation/           # Phase 2 modules
+│   ├── ground_truth_generation/    # Phase 3 modules
+│   ├── baseline_geometry/          # Phase 4 modules (descriptors, retrieval, registration)
+│   ├── phase5_diagnostics/         # Phase 5 diagnostic harness (FPFH baseline, LOFO, probes)
+│   └── phase5_encoder/             # Phase 5 encoder (PointNet, PPF features, InfoNCE, mining)
+├── scripts/                        # Pipelines, visualizers, interactive explorer, training
+├── tests/                          # 186 tests (unit + Hypothesis property + integration)
+├── dataset/                        # Phase 1 outputs (aligned/normalized clouds, transforms)
+├── patches/                        # Phase 2 outputs (per-fragment patch archives)
+├── pairs/ + phase3_final_review/   # Phase 3 outputs (labelled pairs, contact regions)
+├── baseline_results/               # Phase 4 outputs (descriptors, metrics, visualizations)
+├── phase5_diagnostics_results/     # Phase 5 diagnostic outputs (baseline JSON, probes)
+├── phase5a_runs_6fold/             # Phase 5 LOFO training results (fold 2-4 eval JSONs)
+├── phase5a_runs_jitter/            # Phase 5 Run 4 (working jitter, fold 1 eval JSON)
+├── assets/                         # Figures used in this README
+└── QUICKSTART.md · COMMANDS.md · PHASE{2,3,4,5}_COMPLETE.md · PHASE5_RESULTS_LOG.md
 ```
 
 Documentation map:
 - **QUICKSTART.md** — one-page command cheat sheet
 - **COMMANDS.md** — complete, copy-pasteable command reference for every phase
-- **RESUME.md** — current status, lessons learned, roadmap
 - **PHASE{2,3,4}_COMPLETE.md** — detailed per-phase completion reports
+- **PHASE5_RESULTS_LOG.md** — single source of truth for all Phase 5 measurements
+- **PHASE5_PREREGISTRATION.md** — pass/fail thresholds fixed before any encoder was trained
 
 ---
 
@@ -135,6 +141,142 @@ PYTHONPATH=src python3 scripts/make_readme_figures.py             # Phase 1-3 fi
 PYTHONPATH=src python3 scripts/explore_fragment.py --fragment 5
 ```
 Each window prints a "what to look for" checklist so results can be validated by eye.
+
+---
+
+## Commands reference
+
+A complete copy-pasteable reference. All commands run from the repo root.
+
+### Phase 1 — Dataset Foundation
+
+**Run the pipeline** (loads fragments, imports transforms, estimates normals, normalizes, validates):
+```bash
+PYTHONPATH=src python3 -m dataset_foundation.pipeline --config config/default.yaml
+```
+
+**Visualize the aligned assembly** (interactive 3D window with labelled fragments):
+```bash
+PYTHONPATH=src python3 scripts/visualize.py --interactive
+```
+
+**Save an off-screen image** (no display required):
+```bash
+PYTHONPATH=src python3 scripts/visualize.py --save
+```
+
+**If alignment is wrong — re-align a fragment manually** (point-picking + ICP).
+Opens two windows in sequence: click ≥ 3 matching points on the fragment, then the same points on the model.
+```bash
+# Re-align a single fragment by name substring
+PYTHONPATH=src python3 scripts/manual_align.py --fragments caesar_fragment_2
+
+# Re-align by part number (shorthand)
+PYTHONPATH=src python3 scripts/manual_align.py --parts 2
+
+# Re-align multiple fragments
+PYTHONPATH=src python3 scripts/manual_align.py --parts 2,6,7
+
+# Re-align all fragments
+PYTHONPATH=src python3 scripts/manual_align.py
+```
+The tool writes the corrected transforms back into the config's `precomputed_transforms`; re-run the pipeline to regenerate outputs.
+
+---
+
+### Phase 2 — Patch Generation
+
+**Run the pipeline** (FPS centres, radius neighbourhoods, coverage analysis):
+```bash
+PYTHONPATH=src python3 -m patch_generation.pipeline --config config/patch_generation.yaml
+```
+
+**Visualize patches — random sample from a fragment:**
+```bash
+PYTHONPATH=src python3 scripts/visualize_patches.py \
+    --fragment fragment_caesar_fragment_1 --mode random --count 10
+```
+
+**Coverage heatmap** (how many patches cover each point):
+```bash
+PYTHONPATH=src python3 scripts/visualize_patches.py \
+    --fragment fragment_caesar_fragment_1 --mode heatmap
+```
+
+**Inspect a single patch in detail:**
+```bash
+PYTHONPATH=src python3 scripts/visualize_patches.py \
+    --fragment fragment_caesar_fragment_1 --mode single --patch-id 42
+```
+
+**Show all patch centres:**
+```bash
+PYTHONPATH=src python3 scripts/visualize_patches.py \
+    --fragment fragment_caesar_fragment_1 --mode centers
+```
+
+**Patch size distribution:**
+```bash
+PYTHONPATH=src python3 scripts/visualize_patches.py \
+    --fragment fragment_caesar_fragment_1 --mode sizes
+```
+
+---
+
+### Phase 3 — Ground Truth Generation
+
+**Run the pipeline** (adjacency detection, contact regions, positive/negative pair labelling):
+```bash
+PYTHONPATH=src python3 scripts/phase3_pipeline.py --config config/ground_truth.yaml
+```
+
+**Visualize contact regions:**
+```bash
+PYTHONPATH=src python3 scripts/visualize_phase3.py
+```
+
+---
+
+### Phase 4 — Baseline Geometry
+
+**Run the pipeline** (FPFH/SHOT descriptors, retrieval, registration):
+```bash
+PYTHONPATH=src python3 -m baseline_geometry.pipeline --config config/baseline_geometry.yaml
+```
+
+**Generate all Phase 4 diagnostic figures:**
+```bash
+PYTHONPATH=src python3 scripts/visualize_phase4.py --viz all
+```
+
+**Interactive per-fragment explorer** (rotatable 3D windows, one fragment at a time):
+```bash
+PYTHONPATH=src python3 scripts/explore_fragment.py --fragment 1   # 1..7
+```
+
+---
+
+### Phase 5 — Patch Encoder
+
+**Run the FPFH diagnostic baseline** (required before training):
+```bash
+PYTHONPATH=src python3 scripts/run_phase5_diagnostics.py
+```
+
+**Train the encoder — full 6-fold LOFO:**
+```bash
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+PYTHONPATH=src python3 scripts/train_phase5a.py \
+    --held-out fragment_caesar_fragment_1   # repeat for each fold 1..7
+```
+
+---
+
+### Tests
+```bash
+python3 -m pytest tests/ -q          # all 186 tests
+python3 -m pytest tests/ -q -x       # stop on first failure
+```
 
 ---
 
@@ -484,28 +626,6 @@ but does not rescue conditions 1–3.
 | 5 | Patch encoder (PointNet + contrastive) | NEGATIVE Level-3 result — diagnosed root cause | ✅ |
 
 **Tests:** 186 passing (unit + Hypothesis property + integration).
-
----
-
-## Roadmap
-
-| Phase | Title | Status |
-|:-----:|-------|:------:|
-| 1 | Dataset Foundation | ✅ Complete |
-| 2 | Patch Generation | ✅ Complete |
-| 3 | Ground Truth Generation | ✅ Complete |
-| 4 | Baseline Geometry | ✅ Complete |
-| 5 | Patch Encoder (PointNet + InfoNCE contrastive, 6-fold LOFO) | ✅ Complete (negative result) |
-| 5B | Patch Encoder with asymmetric / complementarity supervision | ⏳ Next |
-| 6 | Fragment Retrieval (embedding DB, neighbour ranking) | — |
-| 7 | Correspondence Learning (local matches + confidence) | — |
-| 8 | Transformation Estimation (rigid registration, outlier rejection) | — |
-| 9 | Assembly Graph (pose graph, global reconstruction) | — |
-
-Phase 5 established the bar and the binding constraint: symmetric co-membership
-labels cannot train a complementarity-aware encoder. Phase 5B targets this
-directly with asymmetric supervision, using the hard negatives and diagnostic
-infrastructure already in place.
 
 ---
 
