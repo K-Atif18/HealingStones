@@ -638,3 +638,20 @@ but does not rescue conditions 1–3.
   reference; a neural model must earn its complexity against them.
 - **Explicit failure analysis.** Each phase documents how it can fail on real and
   synthetic fractures, and how that failure would surface downstream.
+
+---
+
+## GSoC 2026 — Human AI Foundation
+
+This project was done as part of **Google Summer of Code 2026** for the
+[Human AI Foundation](https://humanai.foundation/) under the
+**Healing Stones** project.
+
+The complete source code, configs, results, and documentation are available in
+the project repository.
+
+| | Link |
+|---|------|
+| **Pull Request** | https://github.com/humanai-foundation/HealingStones/pull/40 |
+| **Personal Repository** | https://github.com/K-Atif18/HealingStones/tree/deep_learning/Atif/GSoC_deep_learning_pipeline |
+| **Blog Post** | https://medium.com/@atif.4024120/when-similarity-isnt-enough-lessons-from-reassembling-fractured-3d-artifacts-3315c253918f |
