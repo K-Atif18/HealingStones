@@ -653,5 +653,6 @@ the project repository.
 | | Link |
 |---|------|
 | **Pull Request** | https://github.com/humanai-foundation/HealingStones/pull/40 |
+| **Main Repository** | https://github.com/humanai-foundation/HealingStones/tree/main/Atif/GSoC_deep_learning_pipeline |
 | **Personal Repository** | https://github.com/K-Atif18/HealingStones/tree/deep_learning/Atif/GSoC_deep_learning_pipeline |
 | **Blog Post** | https://medium.com/@atif.4024120/when-similarity-isnt-enough-lessons-from-reassembling-fractured-3d-artifacts-3315c253918f |
